@@ -1,7 +1,7 @@
 CREATE DATABASE projectcalculatorDB;
-USE projectcalculatorDB
+USE projectcalculatorDB;
 
-CREATE TABLE user {
+CREATE TABLE user (
 userid INT PRIMARY KEY AUTO_INCREMENT,
 firstName VARCHAR(255) NOT NULL,
 lastName VARCHAR(255) NOT NULL,
@@ -9,11 +9,11 @@ username VARCHAR(255) NOT NULL,
 password VARCHAR(255) NOT NULL,
 email VARCHAR(255) NOT NULL,
 birthDate DATE NOT NULL,
-phoneNumber INT NOT NULL
-role ENUM('admin','leader','contributer')
-};
+phoneNumber INT NOT NULL,
+ROLE ENUM('admin','leader','contributer')
+);
 
-CREATE TABLE project {
+CREATE TABLE project (
 projectid INT PRIMARY KEY AUTO_INCREMENT,
 name VARCHAR(255) NOT NULL,
 description TEXT NOT NULL,
@@ -22,11 +22,11 @@ startDate DATE NOT NULL,
 endDate DATE NOT NULL,
 projectRank INT NOT NULL,
 isDone BOOLEAN NOT NULL
-};
+);
 
-CREATE TABLE users_projects {
+CREATE TABLE users_projects (
 userid INT NOT NULL,
 projectid INT NOT NULL,
-FOREIGN KEY userid REFERENCES users(userid),
-FOREIGN KEY projectid REFERENCES project(projectid)
-};
+FOREIGN KEY (userid) REFERENCES user(userid),
+FOREIGN KEY (projectid) REFERENCES project(projectid)
+);
