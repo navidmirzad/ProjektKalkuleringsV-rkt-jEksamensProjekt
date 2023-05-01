@@ -8,12 +8,12 @@ public class User {
     private String firstName;
     private String lastName;
     private String birthDate;
-    private Enum role;
+    private Role role;
     private String email;
     private int phoneNumber;
 
     public User(int userID, String userName, String userPassword, String firstName, String lastName,
-                String birthDate, Enum role, String email, int phoneNumber) {
+                String birthDate, Role role, String email, int phoneNumber) {
         this.userID = userID;
         this.userName = userName;
         this.userPassword = userPassword;
@@ -59,7 +59,7 @@ public class User {
         return birthDate;
     }
 
-    public Enum getRole() {
+    public Role getRole() {
         return role;
     }
 
@@ -95,7 +95,7 @@ public class User {
         this.birthDate = birthDate;
     }
 
-    public void setRole(Enum role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
