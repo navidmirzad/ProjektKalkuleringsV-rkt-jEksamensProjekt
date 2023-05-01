@@ -51,11 +51,22 @@ public class AccountController {
         return "redirect:/";
     }
 
+    @GetMapping("/youraccount/edit/{id}")
+    public String editAccount(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("user");
+        user = projectService.getUserById(user.getUserID());
+        model.addAttribute("user", user);
+        return "editaccount";
+    }
+
     @PostMapping("youraccount/edit/{id}")
     public String editedAccount(HttpSession session, User editedUser) {
         User user = (User) session.getAttribute("user");
         projectService.editAccount(user.getUserID(), editedUser);
         return "redirect:/youraccount";
     }
+
+
+
 
 }
