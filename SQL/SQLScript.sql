@@ -2,7 +2,7 @@ CREATE DATABASE projectcalculatorDB;
 USE projectcalculatorDB;
 
 CREATE TABLE user (
-userid INT PRIMARY KEY AUTO_INCREMENT,
+userID INT PRIMARY KEY AUTO_INCREMENT,
 firstName VARCHAR(255) NOT NULL,
 lastName VARCHAR(255) NOT NULL,
 userName VARCHAR(255) NOT NULL,
@@ -14,7 +14,7 @@ ROLE ENUM('admin','leader','contributer')
 );
 
 CREATE TABLE project (
-projectid INT PRIMARY KEY AUTO_INCREMENT,
+projectID INT PRIMARY KEY AUTO_INCREMENT,
 name VARCHAR(255) NOT NULL,
 description TEXT NOT NULL,
 estimatedTime VARCHAR(255) NOT NULL,
@@ -25,8 +25,8 @@ isDone BOOLEAN NOT NULL
 );
 
 CREATE TABLE users_projects (
-userid INT NOT NULL,
-projectid INT NOT NULL,
+userID INT NOT NULL,
+projectID INT NOT NULL,
 FOREIGN KEY (userid) REFERENCES user(userid),
 FOREIGN KEY (projectid) REFERENCES project(projectid)
 );

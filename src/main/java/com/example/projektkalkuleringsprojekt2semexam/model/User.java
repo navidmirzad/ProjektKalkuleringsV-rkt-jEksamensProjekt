@@ -7,8 +7,8 @@ public class User {
     private String userPassword;
     private String firstName;
     private String lastName;
-    private String birthdate;
-    private String gender;
+    private String birthDate;
+    private Enum role;
     private String email;
     private int phoneNumber;
 
@@ -19,8 +19,8 @@ public class User {
         this.userPassword = userPassword;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.birthdate = birthdate;
-        this.gender = gender;
+        this.birthDate = birthdate;
+        this.role = role;
         this.email = email;
         this.phoneNumber = phoneNumber;
     }
@@ -55,12 +55,12 @@ public class User {
         return lastName;
     }
 
-    public String getBirthdate() {
-        return birthdate;
+    public String getBirthDate() {
+        return birthDate;
     }
 
-    public String getGender() {
-        return gender;
+    public Enum getRole() {
+        return role;
     }
 
     public String getEmail() {
@@ -91,12 +91,12 @@ public class User {
         this.lastName = lastName;
     }
 
-    public void setBirthdate(String birthdate) {
-        this.birthdate = birthdate;
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
+    public void setRole(Enum role) {
+        this.role = role;
     }
 
     public void setEmail(String email) {
@@ -109,7 +109,7 @@ public class User {
 
     public String toString() {
         return userID + " " + userName + " " + userPassword + " " + firstName + " " + lastName + " "
-                + birthdate + " " + gender + " " + email + " " + phoneNumber + " ";
+                + birthDate + " " + role + " " + email + " " + phoneNumber + " ";
     }
 
 }
