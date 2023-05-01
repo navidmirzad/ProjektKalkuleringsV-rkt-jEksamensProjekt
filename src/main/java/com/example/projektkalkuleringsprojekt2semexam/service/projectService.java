@@ -9,8 +9,6 @@ public class projectService {
 
     private MainRepository mainRepository;
 
-    //  ACCOUNT RELATED SERVICE CALLS
-
     public void createUser(User user) {
         mainRepository.createUser(user);
     }
