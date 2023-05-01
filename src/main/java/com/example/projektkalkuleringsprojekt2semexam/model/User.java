@@ -13,13 +13,13 @@ public class User {
     private int phoneNumber;
 
     public User(int userID, String userName, String userPassword, String firstName, String lastName,
-                String birthdate, String gender, String email, int phoneNumber) {
+                String birthDate, Enum role, String email, int phoneNumber) {
         this.userID = userID;
         this.userName = userName;
         this.userPassword = userPassword;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.birthDate = birthdate;
+        this.birthDate = birthDate;
         this.role = role;
         this.email = email;
         this.phoneNumber = phoneNumber;
