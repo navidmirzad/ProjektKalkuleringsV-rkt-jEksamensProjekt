@@ -164,7 +164,7 @@ public class MainRepository {
     public User getUserById(int id) {
 
         try (Connection con = getConnection()) {
-            String sql = "SELECT * FROM users WHERE userid = ?";
+            String sql = "SELECT * FROM user WHERE userid = ?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -172,7 +172,7 @@ public class MainRepository {
 
             if (resultSet.next()) {
 
-                enumValue = resultSet.getString("role");
+                enumValue = resultSet.getString("role").toUpperCase();
 
                 return new User(resultSet.getInt("userid"),
                         resultSet.getString("userName"),
@@ -191,21 +191,31 @@ public class MainRepository {
         return null;
     }
 
+    public User getUserByUserNameAndPassword(String userName, String password) {
+
+        try (Connection con = getConnection()) {
+            String SQL = "SELECT userid, username, userpassword FROM user WHERE userName = ? AND userPassword = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(SQL);
+            preparedStatement.setString(1, userName);
+            preparedStatement.setString(2, password);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return new User(resultSet.getInt(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public void deleteAccount(int id) {
 
         try (Connection con = getConnection()){
 
-            String sqlWishes = "DELETE FROM wishes WHERE listid IN (SELECT listid FROM wish_lists WHERE userid = ?)";
-            PreparedStatement psWishes = con.prepareStatement(sqlWishes);
-            psWishes.setInt(1, id);
-            psWishes.executeUpdate();
-
-            String sqlWishlist = "DELETE FROM wish_lists WHERE userid = ?";
-            PreparedStatement preparedStatementList = con.prepareStatement(sqlWishlist);
-            preparedStatementList.setInt(1, id);
-            preparedStatementList.execute();
-
-            String sqlUser = "DELETE FROM users WHERE userid = ?";
+            String sqlUser = "DELETE FROM user WHERE userid = ?";
             PreparedStatement preparedStatementUser = con.prepareStatement(sqlUser);
             preparedStatementUser.setInt(1,id);
             preparedStatementUser.execute();

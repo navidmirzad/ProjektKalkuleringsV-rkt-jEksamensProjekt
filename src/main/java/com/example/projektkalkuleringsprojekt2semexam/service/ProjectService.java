@@ -35,6 +35,10 @@ public class ProjectService {
         mainRepository.deleteAccount(id);
     }
 
+    public User getUserByUserNameAndPassword(String userName, String password) {
+        return mainRepository.getUserByUserNameAndPassword(userName,password);
+    }
+
     public List<Project> getProjects(int id) {
         return mainRepository.getProjects(id);
     }

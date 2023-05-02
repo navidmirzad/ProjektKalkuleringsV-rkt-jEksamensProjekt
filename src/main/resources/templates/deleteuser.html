@@ -12,15 +12,13 @@
 </header>
 
 <main>
-    <form action="/"  method="POST">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="userName">
+    <form action="/deleteaccount"  method="POST">
+        <h3>Delete account</h3>
+        <label for="userName">Username:</label>
+        <input type="text" id="userName" name="userName">
         <label for="password">Password:</label>
-        <input type="password" id="password" name="userPassword">
-        <p th:if="${wrongLoginInfo}" class="error">Wrong username or password </p>
-        <button type="submit">Login</button> <br/>
-        <a th:href="@{/deleteaccount}" class="btn-btn-dark">Delete account</a>
-        <a th:href="@{/createuser}" class="btn-btn-dark">Create account</a>
+        <input type="password" id="password" name="password">
+        <button type="submit">Delete account</button> <br/>
     </form>
 
 </main>
@@ -28,8 +26,8 @@
 
 <style>
     body {
-        background-image: url("/images/mountains.jpg");
-        position: center;
+        background-image: url("");
+        background-size: cover;
     }
     header {
         display: flex;
@@ -46,9 +44,6 @@
         justify-content: center;
         align-items: center;
         height: calc(100vh - 100px);
-        justify-content: center;
-        align-items: center;
-        width: 100%;
     }
     form {
         display: flex;
