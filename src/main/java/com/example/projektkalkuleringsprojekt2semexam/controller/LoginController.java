@@ -48,7 +48,7 @@ public class LoginController {
                 // create session for user and set session timeout to 30 sec (container default: 15 min)
                 session.setAttribute("user", user);
                 session.setMaxInactiveInterval(300);
-                return "frontpage";
+                return "redirect:/frontpage";
             }
         // wrong login info
         model.addAttribute("wrongLoginInfo", true);

@@ -19,7 +19,6 @@
         <input type="password" id="password" name="userPassword">
         <p th:if="${wrongLoginInfo}" class="error">Wrong username or password </p>
         <button type="submit">Login</button> <br/>
-        <a th:href="@{/deleteaccount}" class="btn-btn-dark">Delete account</a>
         <a th:href="@{/createuser}" class="btn-btn-dark">Create account</a>
     </form>
 
