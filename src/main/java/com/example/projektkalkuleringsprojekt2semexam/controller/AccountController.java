@@ -68,6 +68,11 @@ public class AccountController {
         return "redirect:/youraccount";
     }
 
+    @GetMapping("/aboutUs")
+    public String aboutUs() {
+        return "aboutUs";
+    }
+
 
 
 

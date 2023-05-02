@@ -140,7 +140,7 @@ public class MainRepository {
         // User user = new User();
 
         try (Connection con = getConnection()) {
-            String SQL = "SELECT userid, userName, userPassword from users where userName = ?";
+            String SQL = "SELECT userid, userName, userPassword from user where userName = ?";
             PreparedStatement preparedStatement = con.prepareStatement(SQL);
             preparedStatement.setString(1, userName);
             ResultSet resultSet = preparedStatement.executeQuery();

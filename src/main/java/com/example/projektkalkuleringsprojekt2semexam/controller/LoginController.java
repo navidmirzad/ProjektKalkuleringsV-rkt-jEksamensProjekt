@@ -55,9 +55,13 @@ public class LoginController {
         return "index";
     }
 
+
     @GetMapping("/frontpage")
-    public String frontPage(HttpSession session) {
+    public String frontPage(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+       // model.addAttribute("projects", projectService.getProjects(user.getUserID()));
         return isLoggedIn(session) ? "frontpage" : "index";
+
     }
 
 
