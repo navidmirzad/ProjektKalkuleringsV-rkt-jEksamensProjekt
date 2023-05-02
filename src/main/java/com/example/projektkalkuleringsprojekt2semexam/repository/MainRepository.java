@@ -32,7 +32,7 @@ public class MainRepository {
         try (Connection con = getConnection()) {
 
 
-            String sql = "SELECT project.projectID, project.name, project.description, \n" +
+            String sql = "SELECT project.projectID, project.name, project.description, project.ImageURL, \n" +
                     "project.estimatedTime, project.startDate, project.endDate, project.projectRank, \n" +
                     "project.isDone, users_projects.userid from project join users_projects on project.projectid=users_projects.userid where userID = ?";
             PreparedStatement statement = con.prepareStatement(sql);
@@ -42,8 +42,8 @@ public class MainRepository {
             while (resultSet.next()) {
 
                 projects.add(new Project(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
-                        resultSet.getInt(4), resultSet.getString(5), resultSet.getString(6), resultSet.getInt(7),
-                        resultSet.getBoolean(8)));
+                        resultSet.getString(4), resultSet.getInt(5), resultSet.getString(6), resultSet.getString(7),
+                        resultSet.getInt(8), resultSet.getBoolean(9)));
             }
 
             return projects;
@@ -57,17 +57,18 @@ public class MainRepository {
 
         try (Connection con = getConnection()) {
 
-            String insertList = "INSERT INTO project (project.name, project.description, +\n" +
-                    "\"project.estimatedTime, project.startDate, project.endDate, project.projectRank, users_projects.userid\") VALUES(?, ?, ?, ?, ?, ?, ?)";
+            String insertList = "INSERT INTO project (project.name, project.description, project.ImageURL, +\n" +
+                    "\"project.estimatedTime, project.startDate, project.endDate, project.projectRank, users_projects.userid\") VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 
             PreparedStatement preparedStatement = con.prepareStatement(insertList);
             preparedStatement.setString(1, project.getName());
             preparedStatement.setString(2, project.getDescription());
-            preparedStatement.setInt(3, project.getEstimatedTime());
-            preparedStatement.setString(4, project.getStartDate());
-            preparedStatement.setString(5, project.getEndDate());
-            preparedStatement.setInt(6, project.getProjectRank());
-            preparedStatement.setInt(7, id);
+            preparedStatement.setString(3, project.getImageURL());
+            preparedStatement.setInt(4, project.getEstimatedTime());
+            preparedStatement.setString(5, project.getStartDate());
+            preparedStatement.setString(6, project.getEndDate());
+            preparedStatement.setInt(7, project.getProjectRank());
+            preparedStatement.setInt(8, id);
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
@@ -80,16 +81,17 @@ public class MainRepository {
         try (Connection con = getConnection()) {
 
             //find wishlist and set it to editedWishlist
-            String sql = "UPDATE project SET project.name = ?, project.description =?, project.estimatedTime = ?, " +
+            String sql = "UPDATE project SET project.name = ?, project.description = ?, project.ImageURL = ?, project.estimatedTime = ?, " +
                     "project.startDate = ?, project.endDate = ?, project.projectRank = ?, project.isDone = ? WHERE projectid = ?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             preparedStatement.setString(1, editedProject.getName());
             preparedStatement.setString(2, editedProject.getDescription());
-            preparedStatement.setInt(3, editedProject.getEstimatedTime());
-            preparedStatement.setString(4, editedProject.getStartDate());
-            preparedStatement.setString(5, editedProject.getEndDate());
-            preparedStatement.setInt(6, editedProject.getProjectRank());
-            preparedStatement.setBoolean(7, editedProject.isDone());
+            preparedStatement.setString(3, editedProject.getImageURL());
+            preparedStatement.setInt(4, editedProject.getEstimatedTime());
+            preparedStatement.setString(5, editedProject.getStartDate());
+            preparedStatement.setString(6, editedProject.getEndDate());
+            preparedStatement.setInt(7, editedProject.getProjectRank());
+            preparedStatement.setBoolean(8, editedProject.isDone());
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
@@ -222,7 +224,7 @@ public class MainRepository {
         try (Connection con = getConnection()) {
 
             //find wish and set it to editedWish
-            String sql = "UPDATE users SET firstName = ?, lastName = ?, userName = ?, userPassword = ?, email = ?, role = ?, birthDate = ?, phoneNumber = ?, role = ? WHERE userid = ?";
+            String sql = "UPDATE users SET firstName = ?, lastName = ?, userName = ?, userPassword = ?, email = ?, birthDate = ?, phoneNumber = ?, role = ? WHERE userid = ?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             preparedStatement.setString(1, editedUser.getFirstName());
             preparedStatement.setString(2, editedUser.getLastName());

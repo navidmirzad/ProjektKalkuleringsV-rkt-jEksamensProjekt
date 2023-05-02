@@ -17,6 +17,7 @@ CREATE TABLE project (
 projectID INT PRIMARY KEY AUTO_INCREMENT,
 name VARCHAR(255) NOT NULL,
 description TEXT NOT NULL,
+ImageURL VARCHAR(255),
 estimatedTime INT NOT NULL,
 startDate DATE NOT NULL,
 endDate DATE NOT NULL,

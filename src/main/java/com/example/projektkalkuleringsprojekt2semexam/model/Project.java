@@ -5,6 +5,7 @@ public class Project {
     private int projectid;
     private String name;
     private String description;
+    private String ImageURL;
     private int estimatedTime;
     private String startDate;
     private String endDate;
@@ -15,11 +16,11 @@ public class Project {
 
     }
 
-    public Project(int projectid, String name, String description, int estimatedTime, String startDate,
-                   String endDate, int projectRank, boolean isDone) {
+    public Project(int projectid, String name, String description, String imageURL, int estimatedTime, String startDate, String endDate, int projectRank, boolean isDone) {
         this.projectid = projectid;
         this.name = name;
         this.description = description;
+        ImageURL = imageURL;
         this.estimatedTime = estimatedTime;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -49,6 +50,14 @@ public class Project {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImageURL() {
+        return ImageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        ImageURL = imageURL;
     }
 
     public int getEstimatedTime() {
@@ -90,4 +99,20 @@ public class Project {
     public void setDone(boolean done) {
         isDone = done;
     }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "projectid=" + projectid +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", ImageURL='" + ImageURL + '\'' +
+                ", estimatedTime=" + estimatedTime +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", projectRank=" + projectRank +
+                ", isDone=" + isDone +
+                '}';
+    }
+
 }
