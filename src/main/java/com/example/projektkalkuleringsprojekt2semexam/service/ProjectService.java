@@ -1,8 +1,11 @@
 package com.example.projektkalkuleringsprojekt2semexam.service;
 
+import com.example.projektkalkuleringsprojekt2semexam.model.Project;
 import com.example.projektkalkuleringsprojekt2semexam.model.User;
 import com.example.projektkalkuleringsprojekt2semexam.repository.MainRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ProjectService {
@@ -30,6 +33,10 @@ public class ProjectService {
 
     public void deleteAccount(int id) {
         mainRepository.deleteAccount(id);
+    }
+
+    public List<Project> getProjects(int id) {
+        return mainRepository.getProjects(id);
     }
 
 

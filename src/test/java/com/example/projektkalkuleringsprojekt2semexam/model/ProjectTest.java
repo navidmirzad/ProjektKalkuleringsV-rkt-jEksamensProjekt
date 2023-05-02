@@ -8,9 +8,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ProjectTest {
 
-    List<Project> projects = List.of(new Project(1,"Project1","Desc for project1",15,
+    List<Project> projects = List.of(new Project(1,"Project1","Desc for project1","google.com", 15,
                     "2023-02-02","2023-03-03",1,true),
-            new Project(1,"Project2","Desc for project2",37,
+            new Project(1,"Project2","Desc for project2", "facebook.com", 37,
                     "2023-01-01","2023-13-12",1,true));
 
     @Test

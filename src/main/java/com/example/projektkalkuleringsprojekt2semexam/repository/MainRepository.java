@@ -31,10 +31,7 @@ public class MainRepository {
 
         try (Connection con = getConnection()) {
 
-
-            String sql = "SELECT project.projectID, project.name, project.description, project.ImageURL, \n" +
-                    "project.estimatedTime, project.startDate, project.endDate, project.projectRank, \n" +
-                    "project.isDone, users_projects.userid from project join users_projects on project.projectid=users_projects.userid where userID = ?";
+            String sql = "SELECT projectID, projectName, description, ImageURL, estimatedTime, startDate, endDate, projectRank, isDone FROM project WHERE userID = ?";
             PreparedStatement statement = con.prepareStatement(sql);
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
@@ -57,11 +54,11 @@ public class MainRepository {
 
         try (Connection con = getConnection()) {
 
-            String insertList = "INSERT INTO project (project.name, project.description, project.ImageURL, +\n" +
-                    "\"project.estimatedTime, project.startDate, project.endDate, project.projectRank, users_projects.userid\") VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+            String insertList = "INSERT INTO project (projectName, description, ImageURL, estimatedTime, " +
+                                "startDate, endDate, projectRank, userid VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 
             PreparedStatement preparedStatement = con.prepareStatement(insertList);
-            preparedStatement.setString(1, project.getName());
+            preparedStatement.setString(1, project.getProjectName());
             preparedStatement.setString(2, project.getDescription());
             preparedStatement.setString(3, project.getImageURL());
             preparedStatement.setInt(4, project.getEstimatedTime());
@@ -81,10 +78,10 @@ public class MainRepository {
         try (Connection con = getConnection()) {
 
             //find wishlist and set it to editedWishlist
-            String sql = "UPDATE project SET project.name = ?, project.description = ?, project.ImageURL = ?, project.estimatedTime = ?, " +
-                    "project.startDate = ?, project.endDate = ?, project.projectRank = ?, project.isDone = ? WHERE projectid = ?";
+            String sql = "UPDATE project SET projectName = ?, description = ?, ImageURL = ?, estimatedTime = ?, " +
+                    "startDate = ?,endDate = ?, projectRank = ?,isDone = ? WHERE projectid = ?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
-            preparedStatement.setString(1, editedProject.getName());
+            preparedStatement.setString(1, editedProject.getProjectName());
             preparedStatement.setString(2, editedProject.getDescription());
             preparedStatement.setString(3, editedProject.getImageURL());
             preparedStatement.setInt(4, editedProject.getEstimatedTime());

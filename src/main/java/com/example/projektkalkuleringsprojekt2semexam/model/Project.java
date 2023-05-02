@@ -3,7 +3,7 @@ package com.example.projektkalkuleringsprojekt2semexam.model;
 public class Project {
 
     private int projectid;
-    private String name;
+    private String projectName;
     private String description;
     private String ImageURL;
     private int estimatedTime;
@@ -16,11 +16,11 @@ public class Project {
 
     }
 
-    public Project(int projectid, String name, String description, String imageURL, int estimatedTime, String startDate, String endDate, int projectRank, boolean isDone) {
+    public Project(int projectid, String projectName, String description, String imageURL, int estimatedTime, String startDate, String endDate, int projectRank, boolean isDone) {
         this.projectid = projectid;
-        this.name = name;
+        this.projectName = projectName;
         this.description = description;
-        ImageURL = imageURL;
+        this.ImageURL = imageURL;
         this.estimatedTime = estimatedTime;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -36,12 +36,12 @@ public class Project {
         this.projectid = projectid;
     }
 
-    public String getName() {
-        return name;
+    public String getProjectName() {
+        return projectName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 
     public String getDescription() {
@@ -103,8 +103,8 @@ public class Project {
     @Override
     public String toString() {
         return "Project{" +
-                "projectid=" + projectid +
-                ", name='" + name + '\'' +
+                "projectID=" + projectid +
+                ", projectName='" + projectName + '\'' +
                 ", description='" + description + '\'' +
                 ", ImageURL='" + ImageURL + '\'' +
                 ", estimatedTime=" + estimatedTime +
