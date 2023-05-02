@@ -63,15 +63,16 @@ public class AccountController {
         return "redirect:/";
     }
 
-    @GetMapping("/youraccount/edit")
+    @GetMapping("/editaccount")
     public String editAccount(HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
         user = projectService.getUserById(user.getUserID());
         model.addAttribute("user", user);
+        model.addAttribute("roles", Role.values());
         return "editaccount";
     }
 
-    @PostMapping("youraccount/edit")
+    @PostMapping("editaccount")
     public String editedAccount(HttpSession session, User editedUser) {
         User user = (User) session.getAttribute("user");
         projectService.editAccount(user.getUserID(), editedUser);

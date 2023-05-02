@@ -231,7 +231,7 @@ public class MainRepository {
         try (Connection con = getConnection()) {
 
             //find wish and set it to editedWish
-            String sql = "UPDATE users SET firstName = ?, lastName = ?, userName = ?, userPassword = ?, email = ?, birthDate = ?, phoneNumber = ?, role = ? WHERE userid = ?";
+            String sql = "UPDATE user SET firstName = ?, lastName = ?, userName = ?, userPassword = ?, email = ?, birthDate = ?, phoneNumber = ?, role = ? WHERE userid = ?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             preparedStatement.setString(1, editedUser.getFirstName());
             preparedStatement.setString(2, editedUser.getLastName());
