@@ -222,16 +222,16 @@ public class MainRepository {
         try (Connection con = getConnection()) {
 
             //find wish and set it to editedWish
-            String sql = "UPDATE users SET userName = ?, userPassword = ?, firstName = ?, lastName = ?, birthDate = ?, gender = ?, email = ?, phoneNumber = ? WHERE userid = ?";
+            String sql = "UPDATE users SET firstName = ?, lastName = ?, userName = ?, userPassword = ?, email = ?, role = ?, birthDate = ?, phoneNumber = ?, role = ? WHERE userid = ?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
-            preparedStatement.setString(1, editedUser.getUserName());
-            preparedStatement.setString(2, editedUser.getUserPassword());
-            preparedStatement.setString(3, editedUser.getFirstName());
-            preparedStatement.setString(4, editedUser.getLastName());
-            preparedStatement.setString(5, editedUser.getBirthDate());
-            preparedStatement.setString(6, String.valueOf(editedUser.getRole()));
-            preparedStatement.setString(7, editedUser.getEmail());
-            preparedStatement.setInt(8, editedUser.getPhoneNumber());
+            preparedStatement.setString(1, editedUser.getFirstName());
+            preparedStatement.setString(2, editedUser.getLastName());
+            preparedStatement.setString(3, editedUser.getUserName());
+            preparedStatement.setString(4, editedUser.getUserPassword());
+            preparedStatement.setString(5, editedUser.getEmail());
+            preparedStatement.setString(6, editedUser.getBirthDate());
+            preparedStatement.setInt(7, editedUser.getPhoneNumber());
+            preparedStatement.setString(8, String.valueOf(editedUser.getRole()));
             preparedStatement.setInt(9, id);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
