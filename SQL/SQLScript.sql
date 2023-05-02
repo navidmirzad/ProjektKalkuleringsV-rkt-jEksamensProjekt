@@ -17,7 +17,7 @@ CREATE TABLE project (
 projectID INT PRIMARY KEY AUTO_INCREMENT,
 name VARCHAR(255) NOT NULL,
 description TEXT NOT NULL,
-estimatedTime VARCHAR(255) NOT NULL,
+estimatedTime INT NOT NULL,
 startDate DATE NOT NULL,
 endDate DATE NOT NULL,
 projectRank INT NOT NULL,

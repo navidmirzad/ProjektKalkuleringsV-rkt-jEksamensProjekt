@@ -117,18 +117,18 @@ public class MainRepository {
 
         try (Connection con = getConnection()) {
 
-            String insertUser = "INSERT INTO users(userName,userPassword,firstName,lastName,birthDate,gender,email,phoneNumber)\n" +
+            String insertUser = "INSERT INTO user(firstName,lastName,userName,userPassword,email,birthDate,phoneNumber,role)\n" +
                     "VALUES(?,?,?,?,?,?,?,?)";
 
             PreparedStatement preparedStatement = con.prepareStatement(insertUser);
-            preparedStatement.setString(1, user.getUserName());
-            preparedStatement.setString(2, user.getUserPassword());
-            preparedStatement.setString(3, user.getFirstName());
-            preparedStatement.setString(4, user.getLastName());
-            preparedStatement.setString(5, user.getBirthDate());
-            preparedStatement.setString(6, String.valueOf(user.getRole()));
-            preparedStatement.setString(7, user.getEmail());
-            preparedStatement.setInt(8, user.getPhoneNumber());
+            preparedStatement.setString(1, user.getFirstName());
+            preparedStatement.setString(2, user.getLastName());
+            preparedStatement.setString(3, user.getUserName());
+            preparedStatement.setString(4, user.getUserPassword());
+            preparedStatement.setString(5, user.getEmail());
+            preparedStatement.setString(6, user.getBirthDate());
+            preparedStatement.setInt(7, user.getPhoneNumber());
+            preparedStatement.setString(8, String.valueOf(user.getRole()));
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {

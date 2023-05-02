@@ -1,7 +1,8 @@
 package com.example.projektkalkuleringsprojekt2semexam.controller;
 
+import com.example.projektkalkuleringsprojekt2semexam.model.Role;
 import com.example.projektkalkuleringsprojekt2semexam.model.User;
-import com.example.projektkalkuleringsprojekt2semexam.service.projectService;
+import com.example.projektkalkuleringsprojekt2semexam.service.ProjectService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class AccountController {
 
-    private projectService projectService;
+    private ProjectService projectService;
 
     private boolean isLoggedIn(HttpSession session) {
         return session.getAttribute("user") != null;
     }
 
-    public AccountController(projectService projectService) {
+    public AccountController(ProjectService projectService) {
         this.projectService = projectService;
     }
 
@@ -27,6 +28,7 @@ public class AccountController {
     public String createUser(Model model) {
         User user = new User();
         model.addAttribute("user", user);
+        model.addAttribute("roles", Role.values());
         return "createUser";
     }
 

@@ -5,9 +5,13 @@ import com.example.projektkalkuleringsprojekt2semexam.repository.MainRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class projectService {
+public class ProjectService {
 
     private MainRepository mainRepository;
+
+    public ProjectService(MainRepository mainRepository) {
+        this.mainRepository = mainRepository;
+    }
 
     public void createUser(User user) {
         mainRepository.createUser(user);
