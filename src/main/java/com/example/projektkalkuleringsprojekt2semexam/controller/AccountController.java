@@ -46,9 +46,19 @@ public class AccountController {
         return isLoggedIn(session) ? "accountinfo" : "index";
     }
 
-    @PostMapping("/youraccount/delete")
-    public String deleteAccount(HttpSession session, @RequestParam("id") int id) {
-        projectService.deleteAccount(id);
+    @GetMapping("/deleteaccount")
+    public String deleteAccount() {
+
+        return "deleteuser";
+    }
+
+    @PostMapping("/deleteaccount")
+    public String deleteAccount(@RequestParam String userName,
+                                @RequestParam String password,
+                                HttpSession session,
+                                Model model) {
+        User user = projectService.getUserByUserNameAndPassword(userName, password);
+        projectService.deleteAccount(user.getUserID());
         session.invalidate();
         return "redirect:/";
     }
