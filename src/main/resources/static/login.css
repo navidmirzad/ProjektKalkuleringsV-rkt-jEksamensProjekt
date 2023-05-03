@@ -53,6 +53,7 @@ main {
     height: calc(100vh - 100px);
     width: 100%;
 }
+
 form {
     display: flex;
     flex-direction: column;
@@ -78,6 +79,7 @@ input[type="text"], input[type="password"] {
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
+
 button {
     width: 100%;
     padding: 10px;
@@ -92,69 +94,3 @@ button {
 button:hover {
     background-color: #0062cc;
 }
-
-* {
-    transition: all 0.3s ease-in-out;
-}
-
-.slider-frame {
-    overflow: hidden;
-    height: 600px;
-    width: 1200px;
-    margin-left: 360px;
-    margin-top: 100px;
-}
-
-@-webkit-keyframes slide_animation {
-    0% {left:0px;}
-    10% {left:0px;}
-    20% {left:1200px;}
-    30% {left:1200px;}
-    40% {left:2400px;}
-    50% {left:2400px;}
-    60% {left:1200px;}
-    70% {left:1200px;}
-    80% {left:0px;}
-    90% {left:0px;}
-    100% {left:0px;}
-}
-
-.slide-images {
-    width: 3600px;
-    height: 600px;
-    margin: 0 0 0 -2400px;
-    position: relative;
-    -webkit-animation-name: slide_animation;
-    -webkit-animation-duration: 33s;
-    -webkit-animation-iteration-count: infinite;
-    -webkit-animation-direction: alternate;
-    -webkit-animation-play-state: running;
-}
-
-.img-container {
-    height: 600px;
-    width: 1200px;
-    position: relative;
-    float: left;
-
-}
-
-@media screen and (max-width: 750px) {
-    .logo{
-        display: none;
-    }
-
-    ul li{
-        display: none;
-        padding: 5rem;
-    }
-}
-
-/*-------------------END OF ANIMATION PART-------------------- */
-
-
-
-
-
-
-

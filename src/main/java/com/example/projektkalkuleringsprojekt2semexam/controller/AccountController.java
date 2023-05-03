@@ -43,7 +43,7 @@ public class AccountController {
         User user = (User) session.getAttribute("user");
         user = projectService.getUserById(user.getUserID());
         model.addAttribute("user", user);
-        return isLoggedIn(session) ? "accountinfo" : "index";
+        return isLoggedIn(session) ? "accountinfo" : "login";
     }
 
     @GetMapping("/deleteaccount")

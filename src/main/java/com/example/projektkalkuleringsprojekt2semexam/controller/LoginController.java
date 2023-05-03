@@ -26,7 +26,7 @@ public class LoginController {
     public String logout(HttpSession session) {
         // invalidate session and return to login page
         session.invalidate();
-        return "index";
+        return "login";
     }
 
 
@@ -35,7 +35,12 @@ public class LoginController {
         return "index";
     }
 
-    @PostMapping("/") // index is loginPage
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @PostMapping("/login")
     public String index(@RequestParam("userName") String userName,
                         @RequestParam("userPassword") String userPassword,
                         HttpSession session,
@@ -52,7 +57,7 @@ public class LoginController {
             }
         // wrong login info
         model.addAttribute("wrongLoginInfo", true);
-        return "index";
+        return "login";
     }
 
 
@@ -60,7 +65,7 @@ public class LoginController {
     public String frontPage(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
        // model.addAttribute("projects", projectService.getProjects(user.getUserID()));
-        return isLoggedIn(session) ? "frontpage" : "index";
+        return isLoggedIn(session) ? "frontpage" : "login";
 
     }
 
