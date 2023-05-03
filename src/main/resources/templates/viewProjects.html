@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Projects</title>
+  <link href="/static/yourProjects.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="navbar">
+  <img class="navbar-logo" src="path/to/logo.png" alt="Logo">
+  <a class="navbar-home-button" href="/">Home</a>
+  <div class="navbar-buttons">
+    <a class="navbar-button" href="/account-details">Account Details</a>
+    <form action="/logout" method="post">
+      <button class="navbar-button navbar-logout-button" type="submit">Log out</button>
+    </form>
+  </div>
+</div>
+<div>
+  <div id="current-date"></div>
+  <script>
+    const now = new Date();
+    const formattedDate = now.toLocaleDateString();
+    const currentDateElement = document.getElementById("current-date");
+    currentDateElement.innerHTML = formattedDate;
+  </script>
+
+  <form action="/new-project" method="post" id="new-project">
+    <button type="submit">Create project</button>
+  </form>
+
+  <div class="notepad">
+    <textarea placeholder="Write your notes here"></textarea>
+  </div>
+
+  <div th:each="project : ${projects}" class="clickable-box" th:onclick="'/project-details/' + ${project.projectid}">
+    <p th:text="${project.projectid + ' - ' + project.name}"></p>
+  </div>
+</div>
+</body>
+</html>
