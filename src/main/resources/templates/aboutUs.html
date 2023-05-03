@@ -5,6 +5,7 @@
   <title>Project Management frontpage</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 
+  <link rel="stylesheet" type="text/css" href="aboutUs.css">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Oxygen&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
@@ -23,7 +24,13 @@
     <ul>
       <a href="/frontpage"><li>Home</li></a>
       <a href="/createproject"><li>Create project</li></a>
-      <a href="/youraccount"><li>Account</li></a>
+      <li class="dropdown">
+        <a href="#" class="dropbtn">Account</a>
+        <div class="dropdown-content">
+          <a href="/editaccount">Edit</a>
+          <a href="/deleteaccount">Delete</a>
+        </div>
+      </li>
       <a href="/aboutUs"><li>About Us</li></a>
       <a href="/logout"><li>Logout</li></a>
 
@@ -73,151 +80,6 @@
   <p>navi0221@stud.kea.dk</p>
   <p>math92n4@stud.kea.dk</p>
 </section>
-
-<style>
-
-  * {
-    transition: all 0.3s ease-in-out;
-  }
-
-  .aboutUs {
-    position: relative;
-    width: 100%;
-    margin: 0 auto;
-    text-align: center;
-  }
-
-  .aboutUs img {
-    position: center;
-    max-width: 1600px;
-    padding-left: 120px;
-    padding-right: 120px;
-    padding-bottom: 80px;
-    justify-content: center;
-  }
-
-  .text {
-    position: absolute;
-    top: 35%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    color: Black;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
-  .text h2 {
-    text-align: center;
-  }
-
-  body {
-    background-color: floralwhite;
-    background-image: linear-gradient(floralwhite, beige);
-  }
-
-  h1 {
-    margin-top: 50px;
-    margin-left: 510px;
-    margin-bottom: 50px;
-    font-size: 60px;
-    font-family: 'Oxygen', sans-serif;
-    font-weight: lighter;
-  }
-
-  .container {
-    padding-top: 1%;
-  }
-
-  nav {
-    float: right;
-    padding: 2rem;
-    padding-top: 2%;
-  }
-
-  .logo img {
-    height: 100px;
-    width: 100px;
-    float: left;
-    display: flex;
-    justify-content: center;
-  }
-
-  ul li {
-    font-family: 'Oxygen', sans-serif;
-    display: inline-block;
-    padding: 10px;
-    font-size: 20px;
-    color: #534741;
-  }
-
-  ul li:hover {
-    color: orange;
-  }
-
-  .footer {
-    padding: 10px 0;
-    background-color: lightgray;
-  }
-
-  .footer .social {
-    text-align: center;
-    padding-bottom: 25px;
-    color: dodgerblue;
-  }
-
-  .footer .social a {
-    font-size: 24px;
-    color: inherit;
-    border: 1px solid #ccc;
-    width: 40px;
-    height: 40px;
-    line-height: 38px;
-    display: inline-block;
-    text-align: center;
-    border-radius: 50%;
-    margin: 0 8px;
-    opacity: 90%;
-  }
-
-  .footer .social a:hover {
-    opacity: 120%;
-  }
-
-  .footer ul {
-    margin-top: 0;
-    padding: 0;
-    list-style: none;
-    font-size: 18px;
-    line-height: 1.6;
-    margin-bottom: 0;
-    text-align: center;
-  }
-
-  .footer ul li a {
-    color: inherit;;
-    text-decoration: none;
-    opacity: 80%;
-  }
-
-  .footer ul li {
-    display: inline-block;
-    padding: 0 15px;
-  }
-
-  .footer .copyright {
-    margin-top: 15px;
-    text-align: center;
-    font-size: 15px;
-  }
-
-  .footer p {
-    margin-top: 15px;
-    text-align: center;
-    font-size: 15px;
-  }
-
-</style>
 
 </body>
 </html>

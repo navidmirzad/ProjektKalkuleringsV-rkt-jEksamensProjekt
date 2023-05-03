@@ -1,0 +1,175 @@
+
+
+* {
+    transition: all 0.3s ease-in-out;
+}
+
+img {
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: center;
+    display: block;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    background-color: floralwhite;
+}
+
+h1 {
+    margin-top: 50px;
+    margin-left: 510px;
+    margin-bottom: 50px;
+    font-size: 60px;
+    font-family: 'Oxygen', sans-serif;
+    font-weight: lighter;
+}
+
+
+.container {
+    padding-top: 1%;
+}
+
+nav {
+    float: right;
+    padding: 2rem;
+    padding-top: 2%;
+
+}
+
+.logo img {
+    height: 100px;
+    width: 100px;
+    float: left;
+    display: flex;
+    justify-content: center;
+}
+
+ul li {
+    font-family: 'Oxygen', sans-serif;
+    display: inline-block;
+    padding: 10px;
+    font-size: 20px;
+    color: #534741;
+}
+
+ul li:hover {
+    color: orange;
+}
+
+
+@media screen and (max-width: 750px) {
+    .logo{
+        display: none;
+    }
+
+    ul li{
+        display: none;
+        padding: 5rem;
+    }
+}
+
+.footer {
+    padding: 10px 0;
+    background-color: lightgray;
+}
+
+.footer .social {
+    text-align: center;
+    padding-bottom: 25px;
+    color: dodgerblue;
+}
+
+.footer .social a {
+    font-size: 24px;
+    color: inherit;
+    border: 1px solid #ccc;
+    width: 40px;
+    height: 40px;
+    line-height: 38px;
+    display: inline-block;
+    text-align: center;
+    border-radius: 50%;
+    margin: 0 8px;
+    opacity: 90%;
+}
+
+.footer .social a:hover {
+    opacity: 120%;
+}
+
+.footer ul {
+    margin-top: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.footer ul li a {
+    color: inherit;;
+    text-decoration: none;
+    opacity: 80%;
+}
+
+.footer ul li {
+    display: inline-block;
+    padding: 0 15px;
+}
+
+
+.footer .copyright {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 15px;
+}
+
+.footer p {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 15px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropbtn {
+    font-family: 'Oxygen', sans-serif;
+    padding: 12px 16px;
+    color: #534741;
+    text-decoration: none;
+    display: block;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
