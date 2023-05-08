@@ -17,7 +17,7 @@
 
 <div class="container">
   <div class="logo">
-   <img src="/images/EstiMateLogo.PNG" alt="" width="160" />
+<!--   <img src="/images/EstiMateLogo.PNG" alt="" width="160" />-->
     </a>
   </div>
   <nav>
@@ -48,20 +48,35 @@
     <h2>Create project</h2>
   </header>
   <main>
-
-
-<!--    <form action="#" th:action="@{/frontpage}"  method="post" th:object="${project}">
+    <form action="#" th:action="@{/frontpage}" method="post" th:object="${project}">
 
       <label>Project Name:</label>
-      <input type="text" th:field="*{name}" required /> <br/>
+      <input type="text" th:field="*{projectName}" required/> <br/>
+
+      <label>Description:</label>
+      <input type="text" th:field="*{description}" required/> <br/>
 
       <label>Wishlist Image URL:</label>
-      <input type="text" th:field="*{ImageURL}" required /> <br/>
+      <input type="text" th:field="*{imageURL}" required/> <br/>
+
+      <label>Estimated time:</label>
+      <input type="date" th:field="*{estimatedTime}" required/> <br/>
+
+      <label>Start date:</label>
+      <input type="date" th:field="*{startDate}" required/> <br/>
+
+      <label>End date:</label>
+      <input type="text" th:field="*{endDate}" required/> <br/>
+
+      <label>Project rank:</label>
+      <input type="text" th:field="*{projectRank}" required/> <br/>
+
+      <label>Is done:</label>
+      <input type="text" th:field="*{isDone()}" required/> <br/>
 
       <form th:action="@{/createProject}" method="post" th:object="${project}">
         <button type="submit" class="btn btn-dark">Create Wishlist</button>
-      </form>-->
-
+      </form>
 
     </form>
   </main>

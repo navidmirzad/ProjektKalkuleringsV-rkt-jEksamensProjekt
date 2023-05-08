@@ -26,6 +26,213 @@ public class MainRepository {
         return DriverManager.getConnection(db_url, uid, pwd);
     }
 
+    // Project section test2 (trying to fix error400 + 500)
+
+    public void createProject(Project project) {
+
+        try (Connection con = getConnection()) {
+            // ID's
+            int projectID = 0;
+
+            // find projectID
+            String findUserID = "select projectID from users_projects where userID = ?;";
+            PreparedStatement pstmt = con.prepareStatement(findUserID);
+            pstmt.setInt(1, project.getProjectID());
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                projectID = rs.getInt("projectID");
+            }
+
+            String createProject = "insert into project (projectID, projectName, description, ImageURL, " +
+                                    "estimatedTime, startDate, endDate, projectRank, isDone) "
+                                     + "values(?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+            pstmt = con.prepareStatement(createProject, Statement.RETURN_GENERATED_KEYS); // return autoincremented keys
+            pstmt.setInt(1, projectID);
+            pstmt.setString(2, project.getProjectName());
+            pstmt.setString(3, project.getDescription());
+            pstmt.setString(4, project.getImageURL());
+            pstmt.setInt(5, project.getEstimatedTime());
+            pstmt.setDate(6, (Date) project.getStartDate());
+            pstmt.setDate(7, (Date) project.getEndDate());
+            pstmt.setInt(8, project.getProjectRank());
+            pstmt.setBoolean(9, project.isDone());
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<Project> getWishes(int projectID) {
+
+        List<Project> projects = new ArrayList<>();
+
+        try (Connection con = getConnection()) {
+            String sql = "SELECT projectID, projectName, description, ImageURL," +
+                        " estimatedTime, startDate, endDate, projectRank, isDone " +
+                        "FROM project WHERE projectID = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setInt(1, projectID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+
+                projects.add(new Project(resultSet.getInt(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getInt(5),
+                        resultSet.getDate(6),
+                        resultSet.getDate(7),
+                        resultSet.getInt(8),
+                        resultSet.getBoolean(9)));
+
+            }
+            return projects;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Project findProjectByID(int id) {
+
+        Project project = null;
+
+        try (Connection con = getConnection()) {
+            String sql = "SELECT * FROM project WHERE projectID = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                project = new Project();
+                project.setProjectID(resultSet.getInt("projectID"));
+                project.setProjectName(resultSet.getString("projectName"));
+                project.setDescription(resultSet.getString("description"));
+                project.setImageURL(resultSet.getString("ImageURL"));
+                project.setEstimatedTime(resultSet.getInt("estimatedTime"));
+                project.setStartDate(resultSet.getDate("startDate"));
+                project.setEndDate(resultSet.getDate("endDate"));
+                project.setProjectRank(resultSet.getInt("projectRank"));
+                project.setDone(resultSet.getBoolean("isDone"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return project;
+    }
+
+    public void editProject(int id, Project editedProject) {
+
+
+        try (Connection con = getConnection()) {
+
+            // ID's
+            int projectID = 0;
+
+            // find listID
+            String findProjectID = "select projectID from users_projects where projectID = ?;";
+            PreparedStatement pstmt = con.prepareStatement(findProjectID);
+            pstmt.setInt(1, editedProject.getProjectID());
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                projectID = rs.getInt("projectID");
+            }
+
+            //find wish and set it to editedWish
+            String sql = "UPDATE project SET projectID = ?, projectName = ?, description = ?, ImageURL = ?, " +
+                            "estimatedTime = ?, startDate = ?, endDate = ?, projectRank = ?," +
+                                "isDone = ?,  WHERE projectID = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setInt(1, projectID);
+            preparedStatement.setString(2, editedProject.getProjectName());
+            preparedStatement.setString(3, editedProject.getDescription());
+            preparedStatement.setString(4, editedProject.getImageURL());
+            preparedStatement.setInt(5, editedProject.getEstimatedTime());
+            preparedStatement.setDate(6, (Date) editedProject.getStartDate());
+            preparedStatement.setDate(7, (Date) editedProject.getEndDate());
+            preparedStatement.setInt(8, editedProject.getProjectRank());
+            preparedStatement.setInt(9, id);
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Update failed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteProject(int id) {
+
+        try (Connection con = getConnection()) {
+            String sql = "DELETE FROM project WHERE projectID = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    // Project section
+
+   /* public void createProject(int id, Project project) {
+
+        try (Connection con = getConnection()) {
+
+            String insertList = "INSERT INTO project (projectName, description, ImageURL, estimatedTime, " +
+                    "startDate, endDate, projectRank, userid VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+
+            PreparedStatement preparedStatement = con.prepareStatement(insertList);
+            preparedStatement.setString(1, project.getProjectName());
+            preparedStatement.setString(2, project.getDescription());
+            preparedStatement.setString(3, project.getImageURL());
+            preparedStatement.setInt(4, project.getEstimatedTime());
+            preparedStatement.setString(5, project.getStartDate());
+            preparedStatement.setString(6, project.getEndDate());
+            preparedStatement.setInt(7, project.getProjectRank());
+            preparedStatement.setInt(8, id);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Project findProjectByID(int projectID) {
+
+        Project project = null;
+
+        try (Connection con = getConnection()) {
+            String sql = "SELECT * FROM project WHERE projectID = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setInt(1, projectID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                project = new Project();
+                project.setProjectID(resultSet.getInt("projectID"));
+                project.setProjectName(resultSet.getString("projectName"));
+                project.setDescription(resultSet.getString("description"));
+                project.setImageURL(resultSet.getString("ImageURL"));
+                project.setEstimatedTime(resultSet.getInt("estimatedTime"));
+                project.setStartDate(resultSet.getString("startDate"));
+                project.setEndDate(resultSet.getString("endDate"));
+                project.setProjectRank(resultSet.getInt("projectRank"));
+                project.setDone(resultSet.getBoolean("isDone"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return project;
+    }
+
     public List<Project> getProjects(int id) {
         List<Project> projects = new ArrayList<>();
 
@@ -50,36 +257,13 @@ public class MainRepository {
         }
     }
 
-    public void createProject(int id, Project project) {
+    public void editProject(int projectID, Project editedProject) {
 
         try (Connection con = getConnection()) {
 
-            String insertList = "INSERT INTO project (projectName, description, ImageURL, estimatedTime, " +
-                                "startDate, endDate, projectRank, userid VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
-
-            PreparedStatement preparedStatement = con.prepareStatement(insertList);
-            preparedStatement.setString(1, project.getProjectName());
-            preparedStatement.setString(2, project.getDescription());
-            preparedStatement.setString(3, project.getImageURL());
-            preparedStatement.setInt(4, project.getEstimatedTime());
-            preparedStatement.setString(5, project.getStartDate());
-            preparedStatement.setString(6, project.getEndDate());
-            preparedStatement.setInt(7, project.getProjectRank());
-            preparedStatement.setInt(8, id);
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void editProject(int listid, Project editedProject) {
-
-        try (Connection con = getConnection()) {
-
-            //find wishlist and set it to editedWishlist
+            // find wishlist and set it to editedWishlist
             String sql = "UPDATE project SET projectName = ?, description = ?, ImageURL = ?, estimatedTime = ?, " +
-                    "startDate = ?,endDate = ?, projectRank = ?,isDone = ? WHERE projectid = ?";
+                    "startDate = ?,endDate = ?, projectRank = ?,isDone = ? WHERE projectID = ?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             preparedStatement.setString(1, editedProject.getProjectName());
             preparedStatement.setString(2, editedProject.getDescription());
@@ -89,6 +273,7 @@ public class MainRepository {
             preparedStatement.setString(6, editedProject.getEndDate());
             preparedStatement.setInt(7, editedProject.getProjectRank());
             preparedStatement.setBoolean(8, editedProject.isDone());
+            preparedStatement.setInt(9, projectID);
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
@@ -103,14 +288,17 @@ public class MainRepository {
 
         try (Connection conn = getConnection()) {
 
-            try (PreparedStatement pstmt2 = conn.prepareStatement("DELETE FROM project WHERE projectid = ?")) {
+            try (PreparedStatement pstmt2 = conn.prepareStatement("DELETE FROM project WHERE projectID = ?")) {
                 pstmt2.setInt(1, id);
                 pstmt2.execute();
             }
         } catch (SQLException e) {
 
         }
-    }
+    }*/
+
+
+    // Account section
 
     public void createUser(User user) {
 
@@ -151,7 +339,7 @@ public class MainRepository {
                 String userName1 = resultSet.getString("userName");
                 String userPassword1 = resultSet.getString("userPassword");
                 if (userName1.equals(userName)) {
-                    return new User(userID,userName1,userPassword1);
+                    return new User(userID, userName1, userPassword1);
                 }
             }
 
@@ -211,21 +399,6 @@ public class MainRepository {
         return null;
     }
 
-    public void deleteAccount(int id) {
-
-        try (Connection con = getConnection()){
-
-            String sqlUser = "DELETE FROM user WHERE userid = ?";
-            PreparedStatement preparedStatementUser = con.prepareStatement(sqlUser);
-            preparedStatementUser.setInt(1,id);
-            preparedStatementUser.execute();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     public void editAccount(int id, User editedUser) {
 
         try (Connection con = getConnection()) {
@@ -246,6 +419,21 @@ public class MainRepository {
             if (affectedRows == 0) {
                 throw new SQLException("Update failed");
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void deleteAccount(int id) {
+
+        try (Connection con = getConnection()) {
+
+            String sqlUser = "DELETE FROM user WHERE userid = ?";
+            PreparedStatement preparedStatementUser = con.prepareStatement(sqlUser);
+            preparedStatementUser.setInt(1, id);
+            preparedStatementUser.execute();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

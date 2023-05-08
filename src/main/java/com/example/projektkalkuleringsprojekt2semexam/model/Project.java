@@ -1,14 +1,16 @@
 package com.example.projektkalkuleringsprojekt2semexam.model;
 
+import java.util.Date;
+
 public class Project {
 
-    private int projectid;
+    private int projectID;
     private String projectName;
     private String description;
     private String ImageURL;
     private int estimatedTime;
-    private String startDate;
-    private String endDate;
+    private Date startDate;
+    private Date endDate;
     private int projectRank;
     private boolean isDone;
 
@@ -16,8 +18,9 @@ public class Project {
 
     }
 
-    public Project(int projectid, String projectName, String description, String imageURL, int estimatedTime, String startDate, String endDate, int projectRank, boolean isDone) {
-        this.projectid = projectid;
+    public Project(int projectID, String projectName, String description, String imageURL,
+                   int estimatedTime, Date startDate, Date endDate, int projectRank, boolean isDone) {
+        this.projectID = projectID;
         this.projectName = projectName;
         this.description = description;
         this.ImageURL = imageURL;
@@ -28,12 +31,12 @@ public class Project {
         this.isDone = isDone;
     }
 
-    public int getProjectid() {
-        return projectid;
+    public int getProjectID() {
+        return projectID;
     }
 
-    public void setProjectid(int projectid) {
-        this.projectid = projectid;
+    public void setProjectID(int projectID) {
+        this.projectID = projectID;
     }
 
     public String getProjectName() {
@@ -68,19 +71,19 @@ public class Project {
         this.estimatedTime = estimatedTime;
     }
 
-    public String getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public String getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(String endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 
@@ -103,7 +106,7 @@ public class Project {
     @Override
     public String toString() {
         return "Project{" +
-                "projectID=" + projectid +
+                "projectID=" + projectID +
                 ", projectName='" + projectName + '\'' +
                 ", description='" + description + '\'' +
                 ", ImageURL='" + ImageURL + '\'' +
