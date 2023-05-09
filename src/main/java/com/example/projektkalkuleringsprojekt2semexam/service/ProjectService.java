@@ -16,7 +16,6 @@ public class ProjectService {
     private PasswordEncoder passwordEncoder;
     private MainRepository mainRepository;
 
-
     // Account
 
     public ProjectService(MainRepository mainRepository) {
@@ -68,7 +67,7 @@ public class ProjectService {
     }
 
     public List<Project> getProject(int projectID) {
-        return mainRepository.getWishes(projectID);
+        return mainRepository.getProjects(projectID);
     }
 
     public Project findProjectByID(int id) {

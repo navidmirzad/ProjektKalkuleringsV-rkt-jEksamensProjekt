@@ -43,7 +43,7 @@
   <img src="/images/mountains.jpg" alt="Picture of mountains">
 </div>
 
-<div>
+<div class="createProjectDiv">
   <header>
     <h2>Create project</h2>
   </header>
@@ -60,22 +60,23 @@
       <input type="text" th:field="*{imageURL}" required/> <br/>
 
       <label>Estimated time:</label>
-      <input type="date" th:field="*{estimatedTime}" required/> <br/>
+      <input type="text" th:field="*{estimatedTime}" required/> <br/>
 
       <label>Start date:</label>
       <input type="date" th:field="*{startDate}" required/> <br/>
 
       <label>End date:</label>
-      <input type="text" th:field="*{endDate}" required/> <br/>
+      <input type="date" th:field="*{endDate}" required/> <br/>
 
       <label>Project rank:</label>
       <input type="text" th:field="*{projectRank}" required/> <br/>
 
       <label>Is done:</label>
-      <input type="text" th:field="*{isDone()}" required/> <br/>
+      <input type="checkbox" th:field="*{done}" th:checked="*{true}"> <br/>
+
 
       <form th:action="@{/createProject}" method="post" th:object="${project}">
-        <button type="submit" class="btn btn-dark">Create Wishlist</button>
+        <button type="submit" class="btn btn-dark">Create Project</button>
       </form>
 
     </form>

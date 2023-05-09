@@ -65,7 +65,7 @@ public class MainRepository {
         }
     }
 
-    public List<Project> getWishes(int projectID) {
+    public List<Project> getProjects(int projectID) {
 
         List<Project> projects = new ArrayList<>();
 
