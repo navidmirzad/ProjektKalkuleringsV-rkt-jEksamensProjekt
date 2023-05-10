@@ -70,9 +70,8 @@ public class MainRepository {
         List<Project> projects = new ArrayList<>();
 
         try (Connection con = getConnection()) {
-            String sql = "SELECT projectID, projectName, description, ImageURL," +
-                        "estimatedTime, startDate, endDate, projectRank" +
-                        "FROM project";
+            String sql = "SELECT projectID, projectName, description, imageURL," +
+                        "estimatedTime, startDate, endDate, projectRank FROM project";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
