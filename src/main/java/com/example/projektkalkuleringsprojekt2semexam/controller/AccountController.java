@@ -47,8 +47,9 @@ public class AccountController {
     }
 
     @GetMapping("/deleteaccount")
-    public String deleteAccount() {
-
+    public String deleteAccount(HttpSession session, @RequestParam("id") int id) {
+        projectService.deleteAccount(id);
+        session.invalidate();
         return "deleteuser";
     }
 

@@ -66,8 +66,8 @@ public class ProjectService {
         mainRepository.createProject(project);
     }
 
-    public List<Project> getProject(int projectID) {
-        return mainRepository.getProjects(projectID);
+    public List<Project> getProject() {
+        return mainRepository.getProjects();
     }
 
     public Project findProjectByID(int id) {

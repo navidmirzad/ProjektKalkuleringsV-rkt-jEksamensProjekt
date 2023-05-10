@@ -17,12 +17,11 @@ CREATE TABLE project (
 projectID INT PRIMARY KEY AUTO_INCREMENT,
 projectName VARCHAR(255) NOT NULL,
 description TEXT,
-ImageURL VARCHAR(255),
+imageURL VARCHAR(255),
 estimatedTime INT,
 startDate DATE NOT NULL,
 endDate DATE NOT NULL,
 projectRank INT NOT NULL,
-isDone BOOLEAN
 );
 
 CREATE TABLE users_projects (

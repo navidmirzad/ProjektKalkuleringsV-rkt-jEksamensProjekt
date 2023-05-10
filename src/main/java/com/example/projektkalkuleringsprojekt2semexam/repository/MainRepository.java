@@ -46,8 +46,8 @@ public class MainRepository {
             }
 
             String createProject = "insert into project (projectID, projectName, description, ImageURL, " +
-                                    "estimatedTime, startDate, endDate, projectRank, isDone) "
-                                     + "values(?, ?, ?, ?, ?, ?, ?, ?, ?);";
+                                    "estimatedTime, startDate, endDate, projectRank) "
+                                     + "values(?, ?, ?, ?, ?, ?, ?, ?);";
 
             pstmt = con.prepareStatement(createProject, Statement.RETURN_GENERATED_KEYS); // return autoincremented keys
             pstmt.setInt(1, projectID);
@@ -55,10 +55,9 @@ public class MainRepository {
             pstmt.setString(3, project.getDescription());
             pstmt.setString(4, project.getImageURL());
             pstmt.setInt(5, project.getEstimatedTime());
-            pstmt.setDate(6, (Date) project.getStartDate());
-            pstmt.setDate(7, (Date) project.getEndDate());
+            pstmt.setDate(6, project.getStartDate());
+            pstmt.setDate(7, project.getEndDate());
             pstmt.setInt(8, project.getProjectRank());
-            pstmt.setBoolean(9, project.isDone());
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -66,16 +65,15 @@ public class MainRepository {
         }
     }
 
-    public List<Project> getProjects(int projectID) {
+    public List<Project> getProjects() {
 
         List<Project> projects = new ArrayList<>();
 
         try (Connection con = getConnection()) {
             String sql = "SELECT projectID, projectName, description, ImageURL," +
-                        " estimatedTime, startDate, endDate, projectRank, isDone " +
-                        "FROM project WHERE projectID = ?";
+                        "estimatedTime, startDate, endDate, projectRank" +
+                        "FROM project";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
-            preparedStatement.setInt(1, projectID);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
 
@@ -86,8 +84,7 @@ public class MainRepository {
                         resultSet.getInt(5),
                         resultSet.getDate(6),
                         resultSet.getDate(7),
-                        resultSet.getInt(8),
-                        resultSet.getBoolean(9)));
+                        resultSet.getInt(8)));
 
             }
             return projects;
@@ -117,7 +114,6 @@ public class MainRepository {
                 project.setStartDate(resultSet.getDate("startDate"));
                 project.setEndDate(resultSet.getDate("endDate"));
                 project.setProjectRank(resultSet.getInt("projectRank"));
-                project.setDone(resultSet.getBoolean("isDone"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -146,8 +142,7 @@ public class MainRepository {
 
             //find wish and set it to editedWish
             String sql = "UPDATE project SET projectID = ?, projectName = ?, description = ?, ImageURL = ?, " +
-                            "estimatedTime = ?, startDate = ?, endDate = ?, projectRank = ?," +
-                                "isDone = ?,  WHERE projectID = ?";
+                            "estimatedTime = ?, startDate = ?, endDate = ?, projectRank = ?, WHERE projectID = ?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             preparedStatement.setInt(1, projectID);
             preparedStatement.setString(2, editedProject.getProjectName());
@@ -179,7 +174,6 @@ public class MainRepository {
         }
 
     }
-
 
     // Project (backup)
    /* public void createProject(int id, Project project) {
