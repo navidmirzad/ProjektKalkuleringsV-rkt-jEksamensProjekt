@@ -21,7 +21,7 @@ imageURL VARCHAR(255),
 estimatedTime INT,
 startDate DATE NOT NULL,
 endDate DATE NOT NULL,
-projectRank INT NOT NULL,
+projectRank INT NOT NULL
 );
 
 CREATE TABLE users_projects (

@@ -23,6 +23,8 @@ public class ProjectController {
         return session.getAttribute("user") != null;
     }
 
+
+    // showProjects method or frontpage GetMapping lets us create project, make HttpSession with userID and shows projects
     @GetMapping("/frontpage")
     public String showProjects(Model model, HttpSession session) {
         Project project = new Project();
@@ -45,11 +47,6 @@ public class ProjectController {
         return "insideproject";
     }
 
-    /*@GetMapping("frontpage")
-    public String getProjects(Model model, HttpSession session, @PathVariable int projectID) {
-        model.addAttribute("projects", projectService.getProject(projectID));
-        return isLoggedIn(session) ? "frontpage" : "index";
-    }*/
 
 
     /*@GetMapping("/editProject/{id}")
