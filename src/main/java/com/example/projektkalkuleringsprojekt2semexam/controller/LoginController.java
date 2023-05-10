@@ -26,9 +26,8 @@ public class LoginController {
     public String logout(HttpSession session) {
         // invalidate session and return to login page
         session.invalidate();
-        return "login";
+        return "index";
     }
-
 
     @GetMapping("/")
     public String index() {

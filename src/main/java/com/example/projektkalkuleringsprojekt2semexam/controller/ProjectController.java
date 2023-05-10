@@ -24,19 +24,19 @@ public class ProjectController {
     }
 
     @GetMapping("/frontpage")
-    public String createProject(Model model, HttpSession session) {
+    public String showProjects(Model model, HttpSession session) {
         Project project = new Project();
         User user = (User) session.getAttribute("user");
-        model.addAttribute("project", project);
 
+        model.addAttribute("project", project);
         model.addAttribute("usersProjects", projectService.getUserById(user.getUserID()));
         return isLoggedIn(session) ? "frontpage" : "index";
     }
 
     @PostMapping("/frontpage")
-    public String createdProject(@ModelAttribute("project") Project project) {
+    public String createProject(@ModelAttribute("project") Project project, HttpSession session) {
         projectService.createProject(project);
-        return "redirect:/frontpage";
+        return "redirect:/insideproject}";
     }
 
     @GetMapping("/getProjects/{projectID}")
@@ -54,10 +54,10 @@ public class ProjectController {
         return isLoggedIn(session) ? "frontpage" : "index";
     }
 
-    @PostMapping("/edit/wish/{id}")
+    @PostMapping("/editProject/{id}")
     public String editedProject(@PathVariable int id, @ModelAttribute Project editedProject) {
         projectService.editProject(id, editedProject);
-        return "redirect:/wishlist/seewishes";
+        return "redirect:/frontpage";
     }
 
     @PostMapping("/deleteProject")
@@ -65,14 +65,6 @@ public class ProjectController {
         projectService.deleteProject(id);
         return "redirect:/frontpage";
     }
-
-
-
-
-
-
-
-
 
 /*@GetMapping("/createproject")
     public String createProject(Model model, HttpSession session) {

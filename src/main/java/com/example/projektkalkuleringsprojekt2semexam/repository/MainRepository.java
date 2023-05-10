@@ -26,7 +26,8 @@ public class MainRepository {
         return DriverManager.getConnection(db_url, uid, pwd);
     }
 
-    // Project section test2 (trying to fix error400 + 500)
+
+    // Project #1
 
     public void createProject(Project project) {
 
@@ -180,8 +181,7 @@ public class MainRepository {
     }
 
 
-    // Project section
-
+    // Project (backup)
    /* public void createProject(int id, Project project) {
 
         try (Connection con = getConnection()) {
@@ -296,7 +296,6 @@ public class MainRepository {
 
         }
     }*/
-
 
     // Account section
 
