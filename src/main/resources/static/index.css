@@ -21,11 +21,8 @@ nav {
 }
 
 .logo img {
-    height: 100px;
-    width: 100px;
-    float: left;
-    display: flex;
-    justify-content: center;
+    position: absolute;
+    width: 200%;
 }
 
 ul li {
@@ -45,6 +42,7 @@ ul li:hover {
 img {
     height: 100%;
 }
+
 main {
     display: flex;
     flex-direction: column;
@@ -135,7 +133,6 @@ button:hover {
     width: 1200px;
     position: relative;
     float: left;
-
 }
 
 @media screen and (max-width: 750px) {

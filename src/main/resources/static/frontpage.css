@@ -2,7 +2,7 @@
     transition: all 0.3s ease-in-out;
 }
 
-img {
+.frontpagePicture img {
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -11,20 +11,29 @@ img {
     margin: auto;
     align-items: center;
     justify-content: center;
-    opacity: 70%;
+    opacity: 0%;
 }
 
 .createProjectDiv {
     position: relative;
-    position: center;
-    z-index: 1;
-
+}
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
+
 body {
-    padding: 0;
-    margin: 0;
-    background-color: floralwhite;
+    background-image: url("/images/mountains.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 h1 {
@@ -45,7 +54,6 @@ nav {
     float: right;
     padding: 2rem;
     padding-top: 2%;
-
 }
 
 .logo img {
@@ -54,18 +62,21 @@ nav {
     float: left;
     display: flex;
     justify-content: center;
+    padding-top: 15px;
 }
 
 ul li {
     font-family: 'Oxygen', sans-serif;
     display: inline-block;
     padding: 10px;
-    font-size: 20px;
+    font-size: 30px;
     color: #534741;
 }
 
 ul li:hover {
-    color: orange;
+    color: white;
+    border-radius: 10px;
+    background: gray;
 }
 
 

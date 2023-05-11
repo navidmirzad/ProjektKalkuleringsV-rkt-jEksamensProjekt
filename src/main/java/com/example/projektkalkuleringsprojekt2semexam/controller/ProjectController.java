@@ -23,7 +23,6 @@ public class ProjectController {
         return session.getAttribute("user") != null;
     }
 
-
     // showProjects method or frontpage GetMapping lets us create project, make HttpSession with userID and shows projects
     @GetMapping("/frontpage")
     public String showProjects(Model model, HttpSession session) {
@@ -116,7 +115,6 @@ public class ProjectController {
         projectService.deleteProject(id);
         return "redirect:/frontpage";
     }*/
-
 
     @GetMapping("/aboutUs")
     public String aboutUs() {
