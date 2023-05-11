@@ -116,6 +116,17 @@ public class ProjectController {
         return "redirect:/frontpage";
     }*/
 
+    @GetMapping("/viewProjects")
+    public String viewProjects(Model model, HttpSession session) {
+        Project project = new Project();
+        User user = (User) session.getAttribute("user");
+
+        model.addAttribute("project", project);
+        model.addAttribute("usersProjects", projectService.getUserById(user.getUserID()));
+        return isLoggedIn(session) ? "viewProjects" : "index";
+    }
+
+
     @GetMapping("/aboutUs")
     public String aboutUs() {
         return "aboutUs";
