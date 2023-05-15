@@ -62,12 +62,16 @@ public class ProjectService {
 
     // Project (wish)
 
-    public void createProject(Project project) {
-        mainRepository.createProject(project);
+    public void createProject(Project project, int userid) {
+        mainRepository.createProject(project, userid);
     }
 
     public List<Project> getProject() {
         return mainRepository.getProjects();
+    }
+
+    public List<Project> getProjectsByUserId(int id) {
+        return mainRepository.getProjectsByUserId(id);
     }
 
     public Project findProjectByID(int id) {
