@@ -43,10 +43,17 @@ public class ProjectController {
 
     @GetMapping("/createdProject")
     public String insideCreatedProject(HttpSession session) {
-        return "insideproject";
+        return isLoggedIn(session) ? "insideproject" : "index";
     }
 
-
+    /*@GetMapping("/editProject/{id}")
+    public String editProject(@PathVariable int id, Model model, HttpSession session, Project editedProject) {
+        projectService.editProject(id, editedProject);
+        User user = (User) session.getAttribute("user");
+        model.addAttribute("project", editedProject);
+        model.addAttribute("usersProjects", projectService.getProject(user.getUserID()));
+        return isLoggedIn(session) ? "frontpage" : "index";
+    }*/
 
     /*@GetMapping("/editProject/{id}")
     public String editProject(@PathVariable int id, Model model, HttpSession session) {

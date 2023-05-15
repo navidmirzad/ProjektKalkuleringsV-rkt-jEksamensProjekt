@@ -21,8 +21,8 @@ nav {
 }
 
 .logo img {
-    position: absolute;
-    width: 200%;
+    float: left;
+    width: 100%;
 }
 
 ul li {
