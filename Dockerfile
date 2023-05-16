@@ -23,7 +23,7 @@ CMD set -eux; \
     java -jar /app/*.jar;
 
 # Build like this:
-# docker build -t ProjektKalkuleringsV-rkt-jEksamensProjekt .
+# docker build  -t eksamensprojekt .
 
 # Run like this:
 # docker run -it --rm --name eksamensprojekt --pid=host -p 8080:8080 -e MYSQL_ROOT_PASSWORD=root eksamensprojekt
