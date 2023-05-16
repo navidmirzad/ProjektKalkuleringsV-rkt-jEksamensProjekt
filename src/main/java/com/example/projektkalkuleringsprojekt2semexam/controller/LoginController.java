@@ -47,9 +47,10 @@ public class LoginController {
         // find user in repo - return loggedIn if succes
         User user = projectService.getUserByUserNameAndPassword(userName, userPassword);
         if (user != null) {
+
             // create session for user and set session timeout to 30 sec (container default: 15 min)
             session.setAttribute("user", user);
-            session.setMaxInactiveInterval(300);
+            session.setMaxInactiveInterval(60);
             return "redirect:/frontpage";
         }
         // wrong login info
