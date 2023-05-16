@@ -166,18 +166,17 @@ public class MainRepository {
             }
 
             //find wish and set it to editedWish
-            String sql = "UPDATE project SET projectID = ?, projectName = ?, description = ?, ImageURL = ?, " +
-                            "estimatedTime = ?, startDate = ?, endDate = ?, projectRank = ?, WHERE projectID = ?";
+            String sql = "UPDATE project SET projectName = ?, description = ?, ImageURL = ?, " +
+                            "estimatedTime = ?, startDate = ?, endDate = ?, projectRank = ? WHERE projectID = ?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
-            preparedStatement.setInt(1, projectID);
-            preparedStatement.setString(2, editedProject.getProjectName());
-            preparedStatement.setString(3, editedProject.getDescription());
-            preparedStatement.setString(4, editedProject.getImageURL());
-            preparedStatement.setInt(5, editedProject.getEstimatedTime());
-            preparedStatement.setDate(6, (Date) editedProject.getStartDate());
-            preparedStatement.setDate(7, (Date) editedProject.getEndDate());
-            preparedStatement.setInt(8, editedProject.getProjectRank());
-            preparedStatement.setInt(9, id);
+            preparedStatement.setString(1, editedProject.getProjectName());
+            preparedStatement.setString(2, editedProject.getDescription());
+            preparedStatement.setString(3, editedProject.getImageURL());
+            preparedStatement.setInt(4, editedProject.getEstimatedTime());
+            preparedStatement.setDate(5, (Date) editedProject.getStartDate());
+            preparedStatement.setDate(6, (Date) editedProject.getEndDate());
+            preparedStatement.setInt(7, editedProject.getProjectRank());
+            preparedStatement.setInt(8, id);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Update failed");

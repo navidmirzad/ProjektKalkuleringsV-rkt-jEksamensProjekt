@@ -48,20 +48,21 @@ public class ProjectController {
         return isLoggedIn(session) ? "insideproject" : "index";
     }
 
-    @GetMapping("/editProject/{id}")
-    public String editProject(@PathVariable int id, Model model, HttpSession session, Project editedProject) {
-        projectService.editProject(id, editedProject);
+    @GetMapping("/editProject/{projectID}")
+    public String editProject(Model model, HttpSession session, @PathVariable int projectID) {
         User user = (User) session.getAttribute("user");
 
-        model.addAttribute("project", editedProject);
         if (isLoggedIn(session)) {
+            Project project = projectService.findProjectByID(projectID);
+            model.addAttribute("project", project);
+
             model.addAttribute("usersProjects", projectService.getProjectsByUserId(user.getUserID()));
-        } return isLoggedIn(session) ? "frontpage" : "index";
+        } return isLoggedIn(session) ? "editProject" : "index";
     }
 
-    @PostMapping("/editProject/{id}")
-    public String editedProject(@PathVariable int id, @ModelAttribute Project editedProject) {
-        projectService.editProject(id, editedProject);
+    @PostMapping("/editProject/{projectID}")
+    public String editedProject(@PathVariable int projectID, @ModelAttribute Project editedProject) {
+        projectService.editProject(projectID, editedProject);
         return "redirect:/frontpage";
     }
 
