@@ -120,7 +120,6 @@ public class MainRepository {
         }
     }
 
-
     public Project findProjectByID(int id) {
 
         Project project = null;
@@ -151,13 +150,12 @@ public class MainRepository {
 
     public void editProject(int id, Project editedProject) {
 
-
         try (Connection con = getConnection()) {
 
             // ID's
             int projectID = 0;
 
-            // find listID
+            // find projectID
             String findProjectID = "select projectID from users_projects where projectID = ?;";
             PreparedStatement pstmt = con.prepareStatement(findProjectID);
             pstmt.setInt(1, editedProject.getProjectID());
@@ -192,10 +190,15 @@ public class MainRepository {
     public void deleteProject(int id) {
 
         try (Connection con = getConnection()) {
-            String sql = "DELETE FROM project WHERE projectID = ?";
-            PreparedStatement preparedStatement = con.prepareStatement(sql);
-            preparedStatement.setInt(1, id);
-            preparedStatement.execute();
+            try (PreparedStatement pstmt = con.prepareStatement("DELETE FROM users_projects where projectID = ?")) {
+                pstmt.setInt(1, id);
+                pstmt.execute();
+            }
+
+            try (PreparedStatement pstmt2 = con.prepareStatement("DELETE FROM project where projectID = ?")) {
+                pstmt2.setInt(1, id);
+                pstmt2.execute();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

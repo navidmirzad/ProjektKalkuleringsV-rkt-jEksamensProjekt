@@ -114,7 +114,21 @@
         <td th:text="${project.startDate}"></td>
         <td th:text="${project.endDate}"></td>
         <td th:text="${project.projectRank}"></td>
+
+        <td>
+            <a th:href="@{/editProject/{id}(id=${project.projectID})}" class="btn btn-warning">Edit</a>
+        </td>
+
+        <td>
+            <form action="#" th:action="@{/deleteProject}" method="post">
+                <input type="hidden" th:name="id" th:value="${project.projectID}"/>
+                <button class="btn btn-danger">Delete</button>
+            </form>
+        </td>
+
     </tr>
+
+
     </tbody>
 
 </table>
