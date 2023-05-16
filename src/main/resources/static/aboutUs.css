@@ -1,3 +1,13 @@
+body {
+    background-image: url("/images/mountains.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+img {
+    height: 100%;
+}
 
 * {
     transition: all 0.3s ease-in-out;
@@ -5,15 +15,6 @@
 
 .aboutUs {
     text-align: center;
-}
-
-.aboutUs img {
-    position: center;
-    max-width: 1600px;
-    padding-left: 120px;
-    padding-right: 120px;
-    padding-bottom: 80px;
-    justify-content: center;
 }
 
 .text {
@@ -31,11 +32,6 @@
     text-align: center;
 }
 
-body {
-    background-color: floralwhite;
-    background-image: linear-gradient(floralwhite, beige);
-}
-
 h1 {
     margin-top: 50px;
     margin-left: 510px;
@@ -44,6 +40,7 @@ h1 {
     font-family: 'Oxygen', sans-serif;
     font-weight: lighter;
 }
+
 
 .container {
     padding-top: 1%;
@@ -61,18 +58,33 @@ nav {
     float: left;
     display: flex;
     justify-content: center;
+    padding-top: 15px;
 }
 
 ul li {
     font-family: 'Oxygen', sans-serif;
     display: inline-block;
     padding: 10px;
-    font-size: 20px;
+    font-size: 30px;
     color: #534741;
 }
 
 ul li:hover {
-    color: orange;
+    color: white;
+    border-radius: 10px;
+    background: gray;
+}
+
+
+@media screen and (max-width: 750px) {
+    .logo{
+        display: none;
+    }
+
+    ul li{
+        display: none;
+        padding: 5rem;
+    }
 }
 
 .footer {

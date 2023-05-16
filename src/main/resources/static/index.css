@@ -22,7 +22,6 @@ nav {
 
 .logo img {
     float: left;
-    width: 100%;
 }
 
 ul li {
@@ -49,7 +48,7 @@ main {
     justify-content: center;
     align-items: center;
     height: calc(100vh - 100px);
-    width: 100%;
+    width: 87%;
 }
 form {
     display: flex;
