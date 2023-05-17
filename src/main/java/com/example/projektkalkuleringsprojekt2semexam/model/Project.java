@@ -1,39 +1,40 @@
 package com.example.projektkalkuleringsprojekt2semexam.model;
 
+import java.util.Date;
+
 public class Project {
 
-    private int projectid;
+    private int projectID;
     private String projectName;
     private String description;
-    private String ImageURL;
+    private String imageURL;
     private int estimatedTime;
-    private String startDate;
-    private String endDate;
+    private Date startDate;
+    private Date endDate;
     private int projectRank;
-    private boolean isDone;
 
     public Project() {
 
     }
 
-    public Project(int projectid, String projectName, String description, String imageURL, int estimatedTime, String startDate, String endDate, int projectRank, boolean isDone) {
-        this.projectid = projectid;
+    public Project(int projectID, String projectName, String description, String imageURL,
+                   int estimatedTime, Date startDate, Date endDate, int projectRank) {
+        this.projectID = projectID;
         this.projectName = projectName;
         this.description = description;
-        this.ImageURL = imageURL;
+        this.imageURL = imageURL;
         this.estimatedTime = estimatedTime;
         this.startDate = startDate;
         this.endDate = endDate;
         this.projectRank = projectRank;
-        this.isDone = isDone;
     }
 
-    public int getProjectid() {
-        return projectid;
+    public int getProjectID() {
+        return projectID;
     }
 
-    public void setProjectid(int projectid) {
-        this.projectid = projectid;
+    public void setProjectID(int projectID) {
+        this.projectID = projectID;
     }
 
     public String getProjectName() {
@@ -53,11 +54,11 @@ public class Project {
     }
 
     public String getImageURL() {
-        return ImageURL;
+        return imageURL;
     }
 
     public void setImageURL(String imageURL) {
-        ImageURL = imageURL;
+        this.imageURL = imageURL;
     }
 
     public int getEstimatedTime() {
@@ -68,19 +69,19 @@ public class Project {
         this.estimatedTime = estimatedTime;
     }
 
-    public String getStartDate() {
-        return startDate;
+    public java.sql.Date getStartDate() {
+        return (java.sql.Date) startDate;
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public String getEndDate() {
-        return endDate;
+    public java.sql.Date getEndDate() {
+        return (java.sql.Date) endDate;
     }
 
-    public void setEndDate(String endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 
@@ -91,27 +92,17 @@ public class Project {
     public void setProjectRank(int projectRank) {
         this.projectRank = projectRank;
     }
-
-    public boolean isDone() {
-        return isDone;
-    }
-
-    public void setDone(boolean done) {
-        isDone = done;
-    }
-
     @Override
     public String toString() {
         return "Project{" +
-                "projectID=" + projectid +
+                "projectID=" + projectID +
                 ", projectName='" + projectName + '\'' +
                 ", description='" + description + '\'' +
-                ", ImageURL='" + ImageURL + '\'' +
+                ", ImageURL='" + imageURL + '\'' +
                 ", estimatedTime=" + estimatedTime +
                 ", startDate='" + startDate + '\'' +
                 ", endDate='" + endDate + '\'' +
                 ", projectRank=" + projectRank +
-                ", isDone=" + isDone +
                 '}';
     }
 

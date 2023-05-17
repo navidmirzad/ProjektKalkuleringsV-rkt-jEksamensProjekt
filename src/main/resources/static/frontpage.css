@@ -1,24 +1,38 @@
-
-
 * {
     transition: all 0.3s ease-in-out;
 }
 
-img {
+.frontpagePicture img {
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
-    position: center;
+    position: relative;
     display: block;
     margin: auto;
     align-items: center;
     justify-content: center;
 }
 
+.createProjectDiv {
+    position: relative;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+
 body {
-    padding: 0;
-    margin: 0;
-    background-color: floralwhite;
+    background-image: url("/images/mountains.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 h1 {
@@ -39,7 +53,6 @@ nav {
     float: right;
     padding: 2rem;
     padding-top: 2%;
-
 }
 
 .logo img {
@@ -48,18 +61,21 @@ nav {
     float: left;
     display: flex;
     justify-content: center;
+    padding-top: 15px;
 }
 
 ul li {
     font-family: 'Oxygen', sans-serif;
     display: inline-block;
     padding: 10px;
-    font-size: 20px;
+    font-size: 30px;
     color: #534741;
 }
 
 ul li:hover {
-    color: orange;
+    color: white;
+    border-radius: 10px;
+    background: gray;
 }
 
 
@@ -171,5 +187,43 @@ ul li:hover {
 
 .dropdown-content a:hover {
     background-color: #f1f1f1;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
 

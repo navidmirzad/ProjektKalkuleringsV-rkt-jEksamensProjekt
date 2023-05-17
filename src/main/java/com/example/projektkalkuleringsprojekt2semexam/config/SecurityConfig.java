@@ -9,15 +9,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 @EnableWebSecurity
 public class SecurityConfig implements WebSecurityConfigurer<WebSecurity> {
 
-
     @Override
     public void init(WebSecurity builder) throws Exception {
 
     }
 
     @Override
-    public void configure(WebSecurity builder) throws Exception {
-        builder.ignoring()
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring()
                 .anyRequest();
     }
+
 }

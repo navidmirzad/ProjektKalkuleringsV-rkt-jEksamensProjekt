@@ -29,39 +29,41 @@ public class LoginController {
         return "index";
     }
 
-
     @GetMapping("/")
     public String index() {
         return "index";
     }
 
-    @PostMapping("/") // index is loginPage
-    public String index(@RequestParam("userName") String userName,
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestParam("userName") String userName,
                         @RequestParam("userPassword") String userPassword,
                         HttpSession session,
-                        Model model)
-    {
+                        Model model) {
         // find user in repo - return loggedIn if succes
         User user = projectService.getUserByUserNameAndPassword(userName, userPassword);
         if (user != null) {
+
             // create session for user and set session timeout to 30 sec (container default: 15 min)
             session.setAttribute("user", user);
-            session.setMaxInactiveInterval(300);
+            session.setMaxInactiveInterval(60);
             return "redirect:/frontpage";
         }
         // wrong login info
         model.addAttribute("wrongLoginInfo", true);
-        return "index";
+        return "login";
     }
 
-
-    @GetMapping("/frontpage")
+    /*@GetMapping("/frontpage")
     public String frontPage(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
        // model.addAttribute("projects", projectService.getProjects(user.getUserID()));
-        return isLoggedIn(session) ? "frontpage" : "index";
-
-    }
+        return isLoggedIn(session) ? "frontpage" : "login";
+    }*/
 
 
 

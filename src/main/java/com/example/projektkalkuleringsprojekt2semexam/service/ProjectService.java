@@ -16,6 +16,7 @@ public class ProjectService {
     private PasswordEncoder passwordEncoder;
     private MainRepository mainRepository;
 
+    // Account
 
     public ProjectService(MainRepository mainRepository) {
         this.mainRepository = mainRepository;
@@ -50,18 +51,61 @@ public class ProjectService {
 
         if (user != null) {
             String encodedPassword = user.getUserPassword();
-            boolean passWordMatch = passwordEncoder.matches(password, encodedPassword);
-            if (passWordMatch) {
+            boolean passwordMatch = passwordEncoder.matches(password, encodedPassword);
+            if (passwordMatch) {
                 return user;
             }
         }
         return null;
     }
 
+
+    // Project (wish)
+
+    public void createProject(Project project, int userid) {
+        mainRepository.createProject(project, userid);
+    }
+
+    public List<Project> getProject() {
+        return mainRepository.getProjects();
+    }
+
+    public List<Project> getProjectsByUserId(int id) {
+        return mainRepository.getProjectsByUserId(id);
+    }
+
+    public Project findProjectByID(int id) {
+        return mainRepository.findProjectByID(id);
+    }
+
+    public void editProject(int id, Project editedProject) {
+        mainRepository.editProject(id, editedProject);
+    }
+
+    public void deleteProject(int id) {
+        mainRepository.deleteProject(id);
+    }
+
+
+  /*  public void createProject(int id, Project project) {
+        mainRepository.createProject(id, project);
+    }
+
+    public Project findProjectByID(int projectID) {
+        return mainRepository.findProjectByID(projectID);
+    }
+
     public List<Project> getProjects(int id) {
         return mainRepository.getProjects(id);
     }
 
+    public void editProject(int listid, Project project) {
+        mainRepository.editProject(listid, project);
+    }
+
+    public void deleteProject(int id) {
+        mainRepository.deleteProject(id);
+    }*/
 
 
 }

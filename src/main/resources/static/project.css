@@ -21,7 +21,11 @@ nav {
 }
 
 .logo img {
+    height: 100px;
+    width: 100px;
     float: left;
+    display: flex;
+    justify-content: center;
 }
 
 ul li {
@@ -41,15 +45,14 @@ ul li:hover {
 img {
     height: 100%;
 }
-
 main {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: calc(100vh - 100px);
+    width: 100%;
 }
-
 form {
     display: flex;
     flex-direction: column;
@@ -100,56 +103,5 @@ button:hover {
     margin-left: 360px;
     margin-top: 100px;
 }
-
-@-webkit-keyframes slide_animation {
-    0% {left:0px;}
-    10% {left:0px;}
-    20% {left:1200px;}
-    30% {left:1200px;}
-    40% {left:2400px;}
-    50% {left:2400px;}
-    60% {left:1200px;}
-    70% {left:1200px;}
-    80% {left:0px;}
-    90% {left:0px;}
-    100% {left:0px;}
-}
-
-.slide-images {
-    width: 3600px;
-    height: 600px;
-    margin: 0 0 0 -2400px;
-    position: relative;
-    -webkit-animation-name: slide_animation;
-    -webkit-animation-duration: 33s;
-    -webkit-animation-iteration-count: infinite;
-    -webkit-animation-direction: alternate;
-    -webkit-animation-play-state: running;
-}
-
-.img-container {
-    height: 600px;
-    width: 1200px;
-    position: relative;
-    float: left;
-}
-
-@media screen and (max-width: 750px) {
-    .logo{
-        display: none;
-    }
-
-    ul li{
-        display: none;
-        padding: 5rem;
-    }
-}
-
-/*-------------------END OF ANIMATION PART-------------------- */
-
-
-
-
-
 
 

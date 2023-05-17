@@ -43,12 +43,13 @@ public class AccountController {
         User user = (User) session.getAttribute("user");
         user = projectService.getUserById(user.getUserID());
         model.addAttribute("user", user);
-        return isLoggedIn(session) ? "accountinfo" : "index";
+        return isLoggedIn(session) ? "accountinfo" : "login";
     }
 
     @GetMapping("/deleteaccount")
-    public String deleteAccount() {
-
+    public String deleteAccount(HttpSession session, @RequestParam("id") int id) {
+        projectService.deleteAccount(id);
+        session.invalidate();
         return "deleteuser";
     }
 
@@ -78,13 +79,6 @@ public class AccountController {
         projectService.editAccount(user.getUserID(), editedUser);
         return "redirect:/frontpage";
     }
-
-    @GetMapping("/aboutUs")
-    public String aboutUs() {
-        return "aboutUs";
-    }
-
-
 
 
 }
