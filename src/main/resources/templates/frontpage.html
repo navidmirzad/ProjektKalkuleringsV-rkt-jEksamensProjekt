@@ -98,20 +98,24 @@
         <th scope="col">Estimated Time</th>
         <th scope="col">Start Date</th>
         <th scope="col">End date</th>
-        <th scope="col">Project Rank</th>
     </tr>
     </thead>
 
     <tbody>
     <tr th:each="project : ${projects}">
-        <td th:text="${project.projectName}"></td>
+
+        <td>
+            <a th:href="@{/seeproject/{projectID}(projectID=${project.projectID})}">
+                <span th:text="${project.projectName}"></span>
+            </a>
+        </td>
+
         <td th:text="${project.description}"></td>
         <td><img th:src="${project.imageURL}" alt="Wishlist image"
                  style="max-width: 100%; max-height: 100px;"></td>
         <td th:text="${project.estimatedTime}"></td>
         <td th:text="${project.startDate}"></td>
         <td th:text="${project.endDate}"></td>
-        <td th:text="${project.projectRank}"></td>
 
         <td>
         <td>

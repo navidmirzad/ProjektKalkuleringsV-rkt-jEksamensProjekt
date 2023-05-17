@@ -2,6 +2,7 @@ package com.example.projektkalkuleringsprojekt2semexam.repository;
 
 import com.example.projektkalkuleringsprojekt2semexam.model.Project;
 import com.example.projektkalkuleringsprojekt2semexam.model.Role;
+import com.example.projektkalkuleringsprojekt2semexam.model.Subproject;
 import com.example.projektkalkuleringsprojekt2semexam.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -341,4 +342,129 @@ public class MainRepository {
         }
 
     }
+
+    // Subproject
+
+    public void createSubproject(int userid, int projectid, Subproject subproject) {
+
+        try (Connection con = getConnection()) {
+            String insertSubproject = "INSERT INTO subproject (subprojectname, description, estimatedtime, projectid) VALUES(?,?,?,?)";
+            PreparedStatement preparedStatement = con.prepareStatement(insertSubproject, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, subproject.getProjectName());
+            preparedStatement.setString(2, subproject.getDescription());
+            preparedStatement.setInt(3, subproject.getEstimatedTime());
+            preparedStatement.setInt(4, projectid);
+            preparedStatement.executeUpdate();
+
+            ResultSet generatedKey = preparedStatement.getGeneratedKeys();
+            int subprojectid = 0;
+            if (generatedKey.next()) {
+                subprojectid = generatedKey.getInt(1);
+            }
+
+            String insertJoin = "INSERT INTO users_subprojects (userid, subprojectid) VALUES(?,?)";
+            PreparedStatement pstm = con.prepareStatement(insertJoin);
+            pstm.setInt(1,userid);
+            pstm.setInt(2, subprojectid);
+            pstm.executeUpdate();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public List<Subproject> getSubprojectByProjectId(int projectid) {
+
+        List<Subproject> subprojects = new ArrayList<>();
+
+        try (Connection con = getConnection()){
+
+            String SQL = "SELECT * FROM subproject WHERE projectID = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(SQL);
+            preparedStatement.setInt(1,projectid);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                subprojects.add(new Subproject(resultSet.getInt("subprojectid"),
+                        resultSet.getString("subprojectname"),
+                        resultSet.getString("description"),
+                        resultSet.getInt("estimatedtime"),
+                        resultSet.getInt("projectid")
+                ));
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return subprojects;
+    }
+
+    public Subproject getSubprojectById(int id) {
+
+        Subproject subproject = new Subproject();
+
+        try (Connection con = getConnection()) {
+
+            String sql = "SELECT * FROM subproject WHERE subprojectid = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                subproject.setProjectID(resultSet.getInt(1));
+                subproject.setProjectName(resultSet.getString(2));
+                subproject.setDescription(resultSet.getString(3));
+                subproject.setEstimatedTime(resultSet.getInt(4));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return subproject;
+    }
+
+    public void editSubproject(int id, Subproject editedSubproject) {
+
+        try (Connection con = getConnection()) {
+
+            String sql = "UPDATE subproject SET subprojectName = ?, description = ?, estimatedTime = ? WHERE subprojectID = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, editedSubproject.getProjectName());
+            preparedStatement.setString(2, editedSubproject.getDescription());
+            preparedStatement.setInt(3, editedSubproject.getEstimatedTime());
+            preparedStatement.setInt(4, id);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public void deleteSubproject(int id) {
+
+        try (Connection con = getConnection()){
+
+            String deleteJoin = "DELETE FROM users_subprojects WHERE subprojectid = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(deleteJoin);
+            preparedStatement.setInt(1, id);
+            preparedStatement.execute();
+
+            String deleteProject = "DELETE FROM subproject WHERE subprojectid = ?";
+            PreparedStatement pstm = con.prepareStatement(deleteProject);
+            pstm.setInt(1, id);
+            pstm.execute();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
 }
