@@ -120,7 +120,6 @@ public class MainRepository {
         }
     }
 
-
     public Project findProjectByID(int id) {
 
         Project project = null;
@@ -151,13 +150,12 @@ public class MainRepository {
 
     public void editProject(int id, Project editedProject) {
 
-
         try (Connection con = getConnection()) {
 
             // ID's
             int projectID = 0;
 
-            // find listID
+            // find projectID
             String findProjectID = "select projectID from users_projects where projectID = ?;";
             PreparedStatement pstmt = con.prepareStatement(findProjectID);
             pstmt.setInt(1, editedProject.getProjectID());
@@ -168,18 +166,17 @@ public class MainRepository {
             }
 
             //find wish and set it to editedWish
-            String sql = "UPDATE project SET projectID = ?, projectName = ?, description = ?, ImageURL = ?, " +
-                            "estimatedTime = ?, startDate = ?, endDate = ?, projectRank = ?, WHERE projectID = ?";
+            String sql = "UPDATE project SET projectName = ?, description = ?, ImageURL = ?, " +
+                            "estimatedTime = ?, startDate = ?, endDate = ?, projectRank = ? WHERE projectID = ?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
-            preparedStatement.setInt(1, projectID);
-            preparedStatement.setString(2, editedProject.getProjectName());
-            preparedStatement.setString(3, editedProject.getDescription());
-            preparedStatement.setString(4, editedProject.getImageURL());
-            preparedStatement.setInt(5, editedProject.getEstimatedTime());
-            preparedStatement.setDate(6, (Date) editedProject.getStartDate());
-            preparedStatement.setDate(7, (Date) editedProject.getEndDate());
-            preparedStatement.setInt(8, editedProject.getProjectRank());
-            preparedStatement.setInt(9, id);
+            preparedStatement.setString(1, editedProject.getProjectName());
+            preparedStatement.setString(2, editedProject.getDescription());
+            preparedStatement.setString(3, editedProject.getImageURL());
+            preparedStatement.setInt(4, editedProject.getEstimatedTime());
+            preparedStatement.setDate(5, (Date) editedProject.getStartDate());
+            preparedStatement.setDate(6, (Date) editedProject.getEndDate());
+            preparedStatement.setInt(7, editedProject.getProjectRank());
+            preparedStatement.setInt(8, id);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Update failed");
@@ -192,10 +189,15 @@ public class MainRepository {
     public void deleteProject(int id) {
 
         try (Connection con = getConnection()) {
-            String sql = "DELETE FROM project WHERE projectID = ?";
-            PreparedStatement preparedStatement = con.prepareStatement(sql);
-            preparedStatement.setInt(1, id);
-            preparedStatement.execute();
+            try (PreparedStatement pstmt = con.prepareStatement("DELETE FROM users_projects where projectID = ?")) {
+                pstmt.setInt(1, id);
+                pstmt.execute();
+            }
+
+            try (PreparedStatement pstmt2 = con.prepareStatement("DELETE FROM project where projectID = ?")) {
+                pstmt2.setInt(1, id);
+                pstmt2.execute();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

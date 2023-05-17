@@ -48,8 +48,8 @@ main {
     justify-content: center;
     align-items: center;
     height: calc(100vh - 100px);
-    width: 87%;
 }
+
 form {
     display: flex;
     flex-direction: column;

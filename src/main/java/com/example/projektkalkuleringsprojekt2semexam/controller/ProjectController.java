@@ -29,8 +29,10 @@ public class ProjectController {
         Project project = new Project();
         User user = (User) session.getAttribute("user");
 
-        model.addAttribute("projects", projectService.getProjectsByUserId(user.getUserID()));
-        model.addAttribute("project", project);
+        if (isLoggedIn(session)) {
+            model.addAttribute("projects", projectService.getProjectsByUserId(user.getUserID()));
+            model.addAttribute("project", project);
+        }
         return isLoggedIn(session) ? "frontpage" : "index";
     }
 
@@ -46,19 +48,21 @@ public class ProjectController {
         return isLoggedIn(session) ? "insideproject" : "index";
     }
 
-    /*@GetMapping("/editProject/{id}")
-    public String editProject(@PathVariable int id, Model model, HttpSession session, Project editedProject) {
-        projectService.editProject(id, editedProject);
+    @GetMapping("/editProject/{projectID}")
+    public String editProject(Model model, HttpSession session, @PathVariable int projectID) {
         User user = (User) session.getAttribute("user");
-        model.addAttribute("project", editedProject);
-        model.addAttribute("usersProjects", projectService.getProject(user.getUserID()));
-        return isLoggedIn(session) ? "frontpage" : "index";
-    }*/
 
+        if (isLoggedIn(session)) {
+            Project project = projectService.findProjectByID(projectID);
+            model.addAttribute("project", project);
 
-    @PostMapping("/editProject/{id}")
-    public String editedProject(@PathVariable int id, @ModelAttribute Project editedProject) {
-        projectService.editProject(id, editedProject);
+            model.addAttribute("usersProjects", projectService.getProjectsByUserId(user.getUserID()));
+        } return isLoggedIn(session) ? "editProject" : "index";
+    }
+
+    @PostMapping("/editProject/{projectID}")
+    public String editedProject(@PathVariable int projectID, @ModelAttribute Project editedProject) {
+        projectService.editProject(projectID, editedProject);
         return "redirect:/frontpage";
     }
 
