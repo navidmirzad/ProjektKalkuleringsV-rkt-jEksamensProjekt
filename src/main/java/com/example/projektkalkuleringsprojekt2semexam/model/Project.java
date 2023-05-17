@@ -13,7 +13,6 @@ public class Project {
     private Date endDate;
 
     public Project() {
-
     }
 
     public Project(int projectID, String projectName, String description, String imageURL,

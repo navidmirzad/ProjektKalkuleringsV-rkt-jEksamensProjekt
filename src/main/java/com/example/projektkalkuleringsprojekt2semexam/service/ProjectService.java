@@ -1,6 +1,7 @@
 package com.example.projektkalkuleringsprojekt2semexam.service;
 
 import com.example.projektkalkuleringsprojekt2semexam.model.Project;
+import com.example.projektkalkuleringsprojekt2semexam.model.Subproject;
 import com.example.projektkalkuleringsprojekt2semexam.model.User;
 import com.example.projektkalkuleringsprojekt2semexam.repository.MainRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,25 +93,27 @@ public class ProjectService {
     }
 
 
-  /*  public void createProject(int id, Project project) {
-        mainRepository.createProject(id, project);
+    //SUBPROJECTS
+
+    public void createSubproject(int userid, int projectid, Subproject subproject) {
+        mainRepository.createSubproject(userid,projectid,subproject);
     }
 
-    public Project findProjectByID(int projectID) {
-        return mainRepository.findProjectByID(projectID);
+    public List<Subproject> getSubprojectByProjectId(int projectid) {
+        return mainRepository.getSubprojectByProjectId(projectid);
     }
 
-    public List<Project> getProjects(int id) {
-        return mainRepository.getProjects(id);
+    public Subproject getSubprojectById(int id) {
+        return mainRepository.getSubprojectById(id);
     }
 
-    public void editProject(int listid, Project project) {
-        mainRepository.editProject(listid, project);
+    public void editSubproject(int id, Subproject editedSubproject) {
+        mainRepository.editSubproject(id, editedSubproject);
     }
 
-    public void deleteProject(int id) {
-        mainRepository.deleteProject(id);
-    }*/
+    public void deleteSubproject(int id) {
+        mainRepository.deleteSubproject(id);
+    }
 
 
 }
