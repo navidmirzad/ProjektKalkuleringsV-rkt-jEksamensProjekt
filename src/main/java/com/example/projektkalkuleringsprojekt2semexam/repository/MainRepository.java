@@ -26,8 +26,7 @@ public class MainRepository {
         return DriverManager.getConnection(db_url, uid, pwd);
     }
 
-
-    // Project #1
+    // Project
 
     public void createProject(Project project, int userid) {
 
@@ -84,10 +83,12 @@ public class MainRepository {
                         resultSet.getDate(7)));
             }
 
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return projects;
+
     }
 
     public List<Project> getProjects() {
@@ -112,6 +113,36 @@ public class MainRepository {
             }
             return projects;
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Method doesn't show the total sum of hours for the project. <---- TODO:
+    public int estimatedTimeForProject(int subprojectID, int taskID) {
+        int totalEstimatedTime = 0;
+
+        try (Connection con = getConnection()) {
+            String estimatedTimeSum = "SELECT SUM(estimation) AS totalEstimatedTime\n" +
+                    "FROM (SELECT subproject.estimatedTime AS estimation\n" +
+                    "FROM subproject WHERE subproject.projectID = ?\n" +
+                    "UNION ALL SELECT task.estimatedTime AS estimation\n" +
+                    "FROM task INNER JOIN subproject ON \n" +
+                    "task.subprojectID = subproject.subprojectID\n" +
+                    "WHERE subproject.projectID = ?) AS estimation_sum;";
+
+            PreparedStatement pstmt = con.prepareStatement(estimatedTimeSum);
+            pstmt.setInt(1, subprojectID);
+            pstmt.setInt(2, taskID);
+            ResultSet resultSet = pstmt.executeQuery();
+
+            while (resultSet.next()) {
+                totalEstimatedTime = resultSet.getInt("totalEstimatedTime");
+            }
+
+            System.out.println(totalEstimatedTime);
+
+            return totalEstimatedTime;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -198,6 +229,7 @@ public class MainRepository {
         }
 
     }
+
 
     // Account section
 
@@ -326,14 +358,29 @@ public class MainRepository {
 
     }
 
-    public void deleteAccount(int id) {
+    public void deleteAccount(int userID) {
 
         try (Connection con = getConnection()) {
 
-            String sqlUser = "DELETE FROM user WHERE userid = ?";
-            PreparedStatement preparedStatementUser = con.prepareStatement(sqlUser);
-            preparedStatementUser.setInt(1, id);
-            preparedStatementUser.execute();
+            String sql2 = "DELETE FROM users_projects WHERE userID = ?";
+            PreparedStatement psmt2 = con.prepareStatement(sql2);
+            psmt2.setInt(1, userID);
+            psmt2.execute();
+
+            String sql3 = "DELETE FROM users_subprojects WHERE userID = ?";
+            PreparedStatement psmt3 = con.prepareStatement(sql3);
+            psmt3.setInt(1, userID);
+            psmt3.execute();
+
+            String sql4 = "DELETE FROM users_tasks WHERE userID = ?";
+            PreparedStatement psmt4 = con.prepareStatement(sql4);
+            psmt4.setInt(1, userID);
+            psmt4.execute();
+
+            String sql1 ="DELETE FROM user WHERE userID = ?";
+            PreparedStatement psmt = con.prepareStatement(sql1);
+            psmt.setInt(1, userID);
+            psmt.execute();
 
         } catch (SQLException e) {
             e.printStackTrace();

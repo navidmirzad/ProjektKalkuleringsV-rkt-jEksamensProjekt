@@ -46,24 +46,6 @@ public class AccountController {
         return isLoggedIn(session) ? "accountinfo" : "login";
     }
 
-    @GetMapping("/deleteaccount")
-    public String deleteAccount(HttpSession session, @RequestParam("id") int id) {
-        projectService.deleteAccount(id);
-        session.invalidate();
-        return "deleteuser";
-    }
-
-    @PostMapping("/deleteaccount")
-    public String deleteAccount(@RequestParam String userName,
-                                @RequestParam String password,
-                                HttpSession session,
-                                Model model) {
-        User user = projectService.getUserByUserNameAndPassword(userName, password);
-        projectService.deleteAccount(user.getUserID());
-        session.invalidate();
-        return "redirect:/";
-    }
-
     @GetMapping("/editaccount")
     public String editAccount(HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
@@ -80,5 +62,20 @@ public class AccountController {
         return "redirect:/frontpage";
     }
 
+    @GetMapping("/deleteaccount")
+    public String deleteAccount(HttpSession session, @RequestParam("id") int userID) {
+        projectService.deleteAccount(userID);
+        return "deleteaccount";
+    }
+
+    @PostMapping("/deleteaccount")
+    public String deleteAccount(@RequestParam String userName,
+                                @RequestParam String password,
+                                HttpSession session) {
+        User user = projectService.getUserByUserNameAndPassword(userName, password);
+        projectService.deleteAccount(user.getUserID());
+        session.invalidate();
+        return "redirect:/index";
+    }
 
 }

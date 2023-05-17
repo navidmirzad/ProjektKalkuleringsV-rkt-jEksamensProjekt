@@ -27,6 +27,13 @@ public class Project {
         this.endDate = endDate;
     }
 
+    public Project(int projectID, String projectName, String description, int estimatedTime) {
+        this.projectID = projectID;
+        this.projectName = projectName;
+        this.description = description;
+        this.estimatedTime = estimatedTime;
+    }
+
     public int getProjectID() {
         return projectID;
     }

@@ -8,11 +8,11 @@
 <body>
 
 <header>
-    <h1>Delete your user</h1>
+    <h1>Delete your account</h1>
 </header>
 
 <main>
-    <form action="/deleteaccount"  method="POST">
+    <form action="#" th:action="@{/deleteaccount}" method="POST" th:object="${user}">
         <h3>Delete account</h3>
         <label for="userName">Username:</label>
         <input type="text" id="userName" name="userName">
@@ -26,7 +26,7 @@
 
 <style>
     body {
-        background-image: url("");
+        /*background-image: url();*/
         background-size: cover;
     }
     header {

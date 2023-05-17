@@ -95,9 +95,11 @@
         <th scope="col">Project Name</th>
         <th scope="col">Description</th>
         <th scope="col">Image URL</th>
-        <th scope="col">Estimated Time - Hours:</th>
         <th scope="col">Start Date</th>
-        <th scope="col">End date</th>
+        <th scope="col">End Date</th>
+        <th scope="col">Estimated Time Hours</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
     </tr>
     </thead>
 
@@ -107,14 +109,12 @@
         <td th:text="${project.description}"></td>
         <td><img th:src="${project.imageURL}" alt="Wishlist image"
                  style="max-width: 100%; max-height: 100px;"></td>
-        <td th:text="${project.estimatedTime}"></td>
         <td th:text="${project.startDate}"></td>
         <td th:text="${project.endDate}"></td>
+        <td th:text="${totalEstimatedTime}"></td>
 
         <td>
-        <td>
             <a th:href="@{/editProject/{projectID}(projectID=${project.projectID})}" class="btn btn-warning">Edit</a>
-        </td>
         </td>
 
 

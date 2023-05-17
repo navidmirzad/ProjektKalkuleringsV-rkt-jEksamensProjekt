@@ -42,8 +42,8 @@ public class ProjectService {
         mainRepository.editAccount(id, editedUser);
     }
 
-    public void deleteAccount(int id) {
-        mainRepository.deleteAccount(id);
+    public void deleteAccount(int userID) {
+        mainRepository.deleteAccount(userID);
     }
 
     public User getUserByUserNameAndPassword(String userName, String password) {
@@ -69,6 +69,11 @@ public class ProjectService {
     public List<Project> getProject() {
         return mainRepository.getProjects();
     }
+
+    // method doesn't work just yet, still shows 0 total hours;
+    /*public int getTotalEstimatedTimeForProject(int subprojectID1, int subprojectID2) {
+        return mainRepository.estimatedTimeForProject(subprojectID1, subprojectID2);
+    }*/
 
     public List<Project> getProjectsByUserId(int id) {
         return mainRepository.getProjectsByUserId(id);
