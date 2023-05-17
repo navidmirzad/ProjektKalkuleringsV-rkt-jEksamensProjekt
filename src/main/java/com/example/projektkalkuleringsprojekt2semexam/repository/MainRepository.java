@@ -118,6 +118,7 @@ public class MainRepository {
         }
     }
 
+
     // Method doesn't show the total sum of hours for the project. <---- TODO:
     public int estimatedTimeForProject(int subprojectID, int taskID) {
         int totalEstimatedTime = 0;
