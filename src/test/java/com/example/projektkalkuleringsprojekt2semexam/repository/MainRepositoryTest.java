@@ -19,7 +19,7 @@ class MainRepositoryTest {
     public void canCreateProject() {
         List<Project> projects = new ArrayList<>();
         Project project = new Project(1, "newProject", "a project", "project.com", 22,
-                Date.from(Instant.now()), Date.from(Instant.now()), 1);
+                Date.from(Instant.now()), Date.from(Instant.now()));
 
         projects.add(project);
 

@@ -34,8 +34,8 @@ public class MainRepository {
         try (Connection con = getConnection()) {
 
             String createProject = "insert into project (projectName, description, ImageURL, " +
-                                    "estimatedTime, startDate, endDate, projectRank) "
-                                     + "values(?, ?, ?, ?, ?, ?, ?);";
+                                    "estimatedTime, startDate, endDate) "
+                                     + "values(?, ?, ?, ?, ?, ?);";
 
             PreparedStatement pstmt = con.prepareStatement(createProject, Statement.RETURN_GENERATED_KEYS); // return autoincremented keys
             pstmt.setString(1, project.getProjectName());
@@ -44,7 +44,6 @@ public class MainRepository {
             pstmt.setInt(4, project.getEstimatedTime());
             pstmt.setDate(5, project.getStartDate());
             pstmt.setDate(6, project.getEndDate());
-            pstmt.setInt(7, project.getProjectRank());
             pstmt.executeUpdate();
 
             ResultSet generatedKey = pstmt.getGeneratedKeys();
@@ -82,8 +81,7 @@ public class MainRepository {
                         resultSet.getString(4),
                         resultSet.getInt(5),
                         resultSet.getDate(6),
-                        resultSet.getDate(7),
-                        resultSet.getInt(8)));
+                        resultSet.getDate(7)));
             }
 
         } catch (SQLException e) {
@@ -98,7 +96,7 @@ public class MainRepository {
 
         try (Connection con = getConnection()) {
             String sql = "SELECT projectID, projectName, description, imageURL," +
-                        "estimatedTime, startDate, endDate, projectRank FROM project";
+                        "estimatedTime, startDate, endDate FROM project";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -109,8 +107,8 @@ public class MainRepository {
                         resultSet.getString(4),
                         resultSet.getInt(5),
                         resultSet.getDate(6),
-                        resultSet.getDate(7),
-                        resultSet.getInt(8)));
+                        resultSet.getDate(7)
+                       ));
 
             }
             return projects;
@@ -139,7 +137,6 @@ public class MainRepository {
                 project.setEstimatedTime(resultSet.getInt("estimatedTime"));
                 project.setStartDate(resultSet.getDate("startDate"));
                 project.setEndDate(resultSet.getDate("endDate"));
-                project.setProjectRank(resultSet.getInt("projectRank"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -167,7 +164,7 @@ public class MainRepository {
 
             //find wish and set it to editedWish
             String sql = "UPDATE project SET projectName = ?, description = ?, ImageURL = ?, " +
-                            "estimatedTime = ?, startDate = ?, endDate = ?, projectRank = ? WHERE projectID = ?";
+                            "estimatedTime = ?, startDate = ?, endDate = ? WHERE projectID = ?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             preparedStatement.setString(1, editedProject.getProjectName());
             preparedStatement.setString(2, editedProject.getDescription());
@@ -175,8 +172,7 @@ public class MainRepository {
             preparedStatement.setInt(4, editedProject.getEstimatedTime());
             preparedStatement.setDate(5, (Date) editedProject.getStartDate());
             preparedStatement.setDate(6, (Date) editedProject.getEndDate());
-            preparedStatement.setInt(7, editedProject.getProjectRank());
-            preparedStatement.setInt(8, id);
+            preparedStatement.setInt(7, id);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Update failed");
