@@ -35,8 +35,6 @@ FOREIGN KEY (projectid) REFERENCES project(projectid)
 CREATE DATABASE projectcalculatorDB;
 USE projectcalculatorDB;
 
-DROP SCHEMA projectcalculatorDB;
-
 CREATE TABLE user (
                       userID INT PRIMARY KEY AUTO_INCREMENT,
                       firstName VARCHAR(255) NOT NULL,
@@ -89,8 +87,8 @@ CREATE table task (
                       taskName VARCHAR(255) NOT NULL,
                       description TEXT,
                       estimatedTime INT,
-                      projectID INT,
-                      FOREIGN KEY (projectID) REFERENCES project(projectID)
+                      subprojectid INT,
+                      FOREIGN KEY (subprojectid) REFERENCES subproject(subprojectID)
 );
 
 CREATE TABLE users_tasks (
