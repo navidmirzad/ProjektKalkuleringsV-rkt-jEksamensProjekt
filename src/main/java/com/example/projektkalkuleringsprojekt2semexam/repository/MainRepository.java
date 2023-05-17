@@ -2,6 +2,7 @@ package com.example.projektkalkuleringsprojekt2semexam.repository;
 
 import com.example.projektkalkuleringsprojekt2semexam.model.Project;
 import com.example.projektkalkuleringsprojekt2semexam.model.Role;
+import com.example.projektkalkuleringsprojekt2semexam.model.Subproject;
 import com.example.projektkalkuleringsprojekt2semexam.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
