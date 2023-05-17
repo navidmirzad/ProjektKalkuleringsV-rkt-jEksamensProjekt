@@ -83,8 +83,6 @@
             <label>End date:</label>
             <input type="date" th:field="*{endDate}" required/> <br/>
 
-            <label>Project rank:</label>
-            <input type="text" th:field="*{projectRank}" required/> <br/>
 
             <button type="submit" class="btn btn-dark">Create Project</button>
         </form>
@@ -97,10 +95,9 @@
         <th scope="col">Project Name</th>
         <th scope="col">Description</th>
         <th scope="col">Image URL</th>
-        <th scope="col">Estimated Time</th>
+        <th scope="col">Estimated Time - Hours:</th>
         <th scope="col">Start Date</th>
         <th scope="col">End date</th>
-        <th scope="col">Project Rank</th>
     </tr>
     </thead>
 
@@ -113,7 +110,6 @@
         <td th:text="${project.estimatedTime}"></td>
         <td th:text="${project.startDate}"></td>
         <td th:text="${project.endDate}"></td>
-        <td th:text="${project.projectRank}"></td>
 
         <td>
         <td>

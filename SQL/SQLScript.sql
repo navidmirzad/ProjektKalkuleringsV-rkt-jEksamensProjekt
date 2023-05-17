@@ -1,37 +1,3 @@
-/*CREATE DATABASE projectcalculatorDB;
-USE projectcalculatorDB;
-
-CREATE TABLE user (
-userID INT PRIMARY KEY AUTO_INCREMENT,
-firstName VARCHAR(255) NOT NULL,
-lastName VARCHAR(255) NOT NULL,
-userName VARCHAR(255) NOT NULL UNIQUE,
-userPassword VARCHAR(255) NOT NULL,
-email VARCHAR(255) NOT NULL,
-birthDate DATE NOT NULL,
-phoneNumber INT NOT NULL,
-ROLE ENUM('admin','leader','contributer')
-);
-
-CREATE TABLE project (
-projectID INT PRIMARY KEY AUTO_INCREMENT,
-projectName VARCHAR(255) NOT NULL,
-description TEXT,
-imageURL VARCHAR(255),
-estimatedTime INT,
-startDate DATE NOT NULL,
-endDate DATE NOT NULL,
-projectRank INT NOT NULL
-);
-
-CREATE TABLE users_projects (
-userID INT NOT NULL,
-projectID INT NOT NULL,
-PRIMARY KEY (userID, projectID),
-FOREIGN KEY (userid) REFERENCES user(userid),
-FOREIGN KEY (projectid) REFERENCES project(projectid)
-);*/
-
 CREATE DATABASE projectcalculatorDB;
 USE projectcalculatorDB;
 
@@ -89,8 +55,8 @@ CREATE table task (
                       taskName VARCHAR(255) NOT NULL,
                       description TEXT,
                       estimatedTime INT,
-                      projectID INT,
-                      FOREIGN KEY (projectID) REFERENCES project(projectID)
+                      subprojectID INT,
+                      FOREIGN KEY (subprojectID) REFERENCES subproject(subprojectID)
 );
 
 CREATE TABLE users_tasks (
@@ -100,4 +66,14 @@ CREATE TABLE users_tasks (
                              FOREIGN KEY (userID) REFERENCES user(userID),
                              FOREIGN KEY (taskID) REFERENCES task(taskID)
 );
+
+
+
+
+
+
+
+
+
+
 

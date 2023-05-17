@@ -11,14 +11,13 @@ public class Project {
     private int estimatedTime;
     private Date startDate;
     private Date endDate;
-    private int projectRank;
 
     public Project() {
 
     }
 
     public Project(int projectID, String projectName, String description, String imageURL,
-                   int estimatedTime, Date startDate, Date endDate, int projectRank) {
+                   int estimatedTime, Date startDate, Date endDate) {
         this.projectID = projectID;
         this.projectName = projectName;
         this.description = description;
@@ -26,7 +25,6 @@ public class Project {
         this.estimatedTime = estimatedTime;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.projectRank = projectRank;
     }
 
     public int getProjectID() {
@@ -85,13 +83,6 @@ public class Project {
         this.endDate = endDate;
     }
 
-    public int getProjectRank() {
-        return projectRank;
-    }
-
-    public void setProjectRank(int projectRank) {
-        this.projectRank = projectRank;
-    }
     @Override
     public String toString() {
         return "Project{" +
@@ -102,7 +93,6 @@ public class Project {
                 ", estimatedTime=" + estimatedTime +
                 ", startDate='" + startDate + '\'' +
                 ", endDate='" + endDate + '\'' +
-                ", projectRank=" + projectRank +
                 '}';
     }
 
