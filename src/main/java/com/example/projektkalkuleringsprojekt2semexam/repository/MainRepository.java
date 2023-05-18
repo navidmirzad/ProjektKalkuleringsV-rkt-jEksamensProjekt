@@ -1,9 +1,6 @@
 package com.example.projektkalkuleringsprojekt2semexam.repository;
 
-import com.example.projektkalkuleringsprojekt2semexam.model.Project;
-import com.example.projektkalkuleringsprojekt2semexam.model.Role;
-import com.example.projektkalkuleringsprojekt2semexam.model.Subproject;
-import com.example.projektkalkuleringsprojekt2semexam.model.User;
+import com.example.projektkalkuleringsprojekt2semexam.model.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -507,6 +504,37 @@ public class MainRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void createTask(int userid, int subprojectid, Task task) {
+
+        //insert task table
+
+        try (Connection con = getConnection()){
+            String insertTask = "INSERT INTO task (taskName, description, estimatedTime, subprojectid)" +
+                    "VALUES(?,?,?,?)";
+            PreparedStatement preparedStatement = con.prepareStatement(insertTask,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, task.getProjectName());
+            preparedStatement.setString(2, task.getDescription());
+            preparedStatement.setInt(3, task.getEstimatedTime());
+            preparedStatement.setInt(4, subprojectid);
+            preparedStatement.executeUpdate();
+
+            ResultSet generatedKey = preparedStatement.getGeneratedKeys();
+            int taskid = 0;
+            if (generatedKey.next()) {
+                taskid = generatedKey.getInt(1);
+            }
+
+            String insertJoin = "INSERT INTO users_tasks (userid, taskid) VALUES(?,?)";
+            PreparedStatement preparedStatement1 = con.prepareStatement(insertJoin);
+            preparedStatement1.setInt(1,userid);
+            preparedStatement1.setInt(2,taskid);
+            preparedStatement1.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

@@ -2,6 +2,7 @@ package com.example.projektkalkuleringsprojekt2semexam.service;
 
 import com.example.projektkalkuleringsprojekt2semexam.model.Project;
 import com.example.projektkalkuleringsprojekt2semexam.model.Subproject;
+import com.example.projektkalkuleringsprojekt2semexam.model.Task;
 import com.example.projektkalkuleringsprojekt2semexam.model.User;
 import com.example.projektkalkuleringsprojekt2semexam.repository.MainRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,9 +73,9 @@ public class ProjectService {
     }
 
     // method doesn't work just yet, still shows 0 total hours;
-    /*public int getTotalEstimatedTimeForProject(int subprojectID1, int subprojectID2) {
+    public int getTotalEstimatedTimeForProject(int subprojectID1, int subprojectID2) {
         return mainRepository.estimatedTimeForProject(subprojectID1, subprojectID2);
-    }*/
+    }
 
     public List<Project> getProjectsByUserId(int id) {
         return mainRepository.getProjectsByUserId(id);
@@ -113,6 +114,12 @@ public class ProjectService {
 
     public void deleteSubproject(int id) {
         mainRepository.deleteSubproject(id);
+    }
+
+    //TASKS
+
+    public void createTask(int userid, int subprojectid, Task task) {
+        mainRepository.createTask(userid,subprojectid,task);
     }
 
 

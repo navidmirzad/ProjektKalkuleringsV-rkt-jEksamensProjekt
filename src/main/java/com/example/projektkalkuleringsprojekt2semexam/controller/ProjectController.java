@@ -37,7 +37,7 @@ public class ProjectController {
 
         if (isLoggedIn(session)) {
             model.addAttribute("projects", projectService.getProjectsByUserId(user.getUserID()));
-         // method doesn't work yet -  model.addAttribute("totalEstimatedTime", projectService.getTotalEstimatedTimeForProject(subproject.getProjectID(),task.getSubProjectID()));
+            //model.addAttribute("totalEstimatedTime", projectService.getTotalEstimatedTimeForProject(subproject.getProjectID(),task.getSubProjectID()));
             model.addAttribute("project", project);
         }
         return isLoggedIn(session) ? "frontpage" : "index";
@@ -135,6 +135,29 @@ public class ProjectController {
         int projectid = (int) session.getAttribute("projectID");
         projectService.deleteSubproject(id);
         return "redirect:/seeproject/" + projectid;
+    }
+
+    // create task. make a button on subprojects that gives a form for tasks
+    // make a table in the table of subprojects that shows tasks of the subprojects
+    // make crud on tasks
+
+    @GetMapping("createtask/{subprojectid}")
+    public String createTask(@PathVariable("subprojectid") int subprojectid, Model model, HttpSession session) {
+        Task task = new Task();
+        model.addAttribute("task", task);
+        model.addAttribute("subprojectid", subprojectid);
+        return "createtask";
+    }
+
+    @PostMapping("createtask/{subprojectid}")
+    public String createTask(@PathVariable("subprojectid") int subprojectid, HttpSession session,
+                             @ModelAttribute Task task) {
+
+        User user = (User) session.getAttribute("user");
+        int projectID = (int) session.getAttribute("projectID");
+        projectService.createTask(user.getUserID(), subprojectid, task);
+
+        return "redirect:/seeproject/" + projectID;
     }
 
 }
