@@ -13,11 +13,11 @@ public class AccountService {
     private PasswordEncoder passwordEncoder;
     private AccountRepository accountRepository;
 
-    // Account
-
     public AccountService(AccountRepository accountRepository ) {
         this.accountRepository = accountRepository;
     }
+
+    // Account
 
     public void createUser(User user) {
         String encodedPassword = passwordEncoder.encode(user.getUserPassword());
