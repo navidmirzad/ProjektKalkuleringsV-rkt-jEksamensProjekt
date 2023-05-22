@@ -429,13 +429,34 @@ public class MainRepository {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                subprojects.add(new Subproject(resultSet.getInt("subprojectid"),
-                        resultSet.getString("subprojectname"),
-                        resultSet.getString("description"),
-                        resultSet.getInt("estimatedtime"),
-                        resultSet.getInt("projectid")
-                ));
+                Subproject subproject = new Subproject();
+                subproject.setProjectID(resultSet.getInt("subprojectID"));
+                subproject.setProjectName(resultSet.getString("subprojectName"));
+                subproject.setDescription(resultSet.getString("description"));
+                subproject.setEstimatedTime(resultSet.getInt("estimatedTime"));
+
+                String taskSql = "SELECT taskID, taskName, description, estimatedTime FROM task WHERE subprojectID = ?";
+                PreparedStatement taskStatement = con.prepareStatement(taskSql);
+                taskStatement.setInt(1, subproject.getProjectID());
+                ResultSet taskResultSet = taskStatement.executeQuery();
+
+                while (taskResultSet.next()) {
+                    Task task = new Task();
+                    task.setProjectID(taskResultSet.getInt("taskID"));
+                    task.setProjectName(taskResultSet.getString("taskName"));
+                    task.setDescription(taskResultSet.getString("description"));
+                    task.setEstimatedTime(taskResultSet.getInt("estimatedTime"));
+
+                    subproject.getTasks().add(task);
+                }
+
+                subprojects.add(subproject);
+
+
+
             }
+
+
 
 
         } catch (SQLException e) {

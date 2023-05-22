@@ -96,6 +96,11 @@ public class ProjectController {
 
         model.addAttribute("subproject",subproject);
         model.addAttribute("subprojects", subprojects);
+
+        for (Subproject subproject1 : subprojects) {
+            System.out.println(subproject1.getTasks());
+        }
+
         return "seeproject";
     }
 
