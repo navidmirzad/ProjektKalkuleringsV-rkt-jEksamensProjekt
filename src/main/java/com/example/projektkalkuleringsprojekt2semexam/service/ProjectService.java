@@ -1,10 +1,7 @@
 package com.example.projektkalkuleringsprojekt2semexam.service;
 
 import com.example.projektkalkuleringsprojekt2semexam.model.Project;
-import com.example.projektkalkuleringsprojekt2semexam.model.User;
-import com.example.projektkalkuleringsprojekt2semexam.repository.MainRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import com.example.projektkalkuleringsprojekt2semexam.repository.ProjectRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,13 +9,15 @@ import java.util.List;
 @Service
 public class ProjectService {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    private MainRepository mainRepository;
+    private ProjectRepository projectRepository;
+
+    public ProjectService(ProjectRepository projectRepository) {
+        this.projectRepository = projectRepository;
+    }
 
     // Account
 
-    public ProjectService(MainRepository mainRepository) {
+   /* public ProjectService(MainRepository mainRepository) {
         this.mainRepository = mainRepository;
     }
 
@@ -26,10 +25,6 @@ public class ProjectService {
         String encodedPassword = passwordEncoder.encode(user.getUserPassword());
         user.setUserPassword(encodedPassword);
         mainRepository.createUser(user);
-    }
-
-    public User getUser(String uid) {
-        return mainRepository.getUser(uid);
     }
 
     public User getUserById(int id) {
@@ -57,55 +52,35 @@ public class ProjectService {
             }
         }
         return null;
-    }
+    }*/
 
 
-    // Project (wish)
+    // Project
 
     public void createProject(Project project, int userid) {
-        mainRepository.createProject(project, userid);
+        projectRepository.createProject(project, userid);
     }
 
     public List<Project> getProject() {
-        return mainRepository.getProjects();
+        return projectRepository.getProjects();
     }
 
     public List<Project> getProjectsByUserId(int id) {
-        return mainRepository.getProjectsByUserId(id);
+        return projectRepository.getProjectsByUserId(id);
     }
 
     public Project findProjectByID(int id) {
-        return mainRepository.findProjectByID(id);
+        return projectRepository.findProjectByID(id);
     }
 
     public void editProject(int id, Project editedProject) {
-        mainRepository.editProject(id, editedProject);
+        projectRepository.editProject(id, editedProject);
     }
 
     public void deleteProject(int id) {
-        mainRepository.deleteProject(id);
+        projectRepository.deleteProject(id);
     }
 
-
-  /*  public void createProject(int id, Project project) {
-        mainRepository.createProject(id, project);
-    }
-
-    public Project findProjectByID(int projectID) {
-        return mainRepository.findProjectByID(projectID);
-    }
-
-    public List<Project> getProjects(int id) {
-        return mainRepository.getProjects(id);
-    }
-
-    public void editProject(int listid, Project project) {
-        mainRepository.editProject(listid, project);
-    }
-
-    public void deleteProject(int id) {
-        mainRepository.deleteProject(id);
-    }*/
 
 
 }

@@ -72,7 +72,6 @@ public class ProjectController {
         return "redirect:/frontpage";
     }
 
-
     @GetMapping("/aboutUs")
     public String aboutUs() {
         return "aboutUs";
