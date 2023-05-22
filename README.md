@@ -37,7 +37,13 @@ The Project Calculation System is a software tool designed to help break down la
 
 2. After creating an account on our create account page, you will be directed to a page that shows you your login information except for your password for security reasons. You click the back to login page, and log in.
 
-3. 
+3. Once you're logged in, the first thing you're shown are your previously created projects. However, if its a new account you will be shown an empty page, with a button "create new project". 
+
+4. Once you click the button a modal will pop out. The same modal is for creating a project.
+
+5. Once a project is created you it will be shown on the frontpage. You can click on that project.
+
+6. Once you've opened the project you can add subprojects, and tasks. Also add an hourly estimate on the tasks.
 
 
 
