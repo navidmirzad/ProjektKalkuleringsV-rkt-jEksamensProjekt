@@ -31,7 +31,13 @@ The Project Calculation System is a software tool designed to help break down la
 - Figma 107.0.0 
 - Visual Paradigm 17.1
 
+# Usage:
 
+1. You access the index page, which gives you three options. Create an account, log in to an already existing account or you can read AboutUs.
+
+2. After creating an account on our create account page, you will be directed to a page that shows you your login information except for your password for security reasons. You click the back to login page, and log in.
+
+3. 
 
 
 
