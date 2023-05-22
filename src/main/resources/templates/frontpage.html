@@ -83,8 +83,6 @@
             <label>End date:</label>
             <input type="date" th:field="*{endDate}" required/> <br/>
 
-            <label>Project rank:</label>
-            <input type="text" th:field="*{projectRank}" required/> <br/>
 
             <button type="submit" class="btn btn-dark">Create Project</button>
         </form>
@@ -97,28 +95,33 @@
         <th scope="col">Project Name</th>
         <th scope="col">Description</th>
         <th scope="col">Image URL</th>
-        <th scope="col">Estimated Time</th>
         <th scope="col">Start Date</th>
-        <th scope="col">End date</th>
-        <th scope="col">Project Rank</th>
+        <th scope="col">End Date</th>
+        <th scope="col">Estimated Time Hours</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
     </tr>
     </thead>
 
     <tbody>
     <tr th:each="project : ${projects}">
-        <td th:text="${project.projectName}"></td>
+
+        <td>
+            <a th:href="@{/seeproject/{projectID}(projectID=${project.projectID})}">
+                <span th:text="${project.projectName}"></span>
+            </a>
+        </td>
+
         <td th:text="${project.description}"></td>
         <td><img th:src="${project.imageURL}" alt="Wishlist image"
                  style="max-width: 100%; max-height: 100px;"></td>
-        <td th:text="${project.estimatedTime}"></td>
         <td th:text="${project.startDate}"></td>
         <td th:text="${project.endDate}"></td>
-        <td th:text="${project.projectRank}"></td>
+        <td th:text="${totalEstimatedTime}"></td>
+
 
         <td>
-        <td>
             <a th:href="@{/editProject/{projectID}(projectID=${project.projectID})}" class="btn btn-warning">Edit</a>
-        </td>
         </td>
 
 

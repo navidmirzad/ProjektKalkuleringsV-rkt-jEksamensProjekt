@@ -1,7 +1,10 @@
 package com.example.projektkalkuleringsprojekt2semexam.service;
 
 import com.example.projektkalkuleringsprojekt2semexam.model.Project;
-import com.example.projektkalkuleringsprojekt2semexam.repository.ProjectRepository;
+import com.example.projektkalkuleringsprojekt2semexam.model.User;
+import com.example.projektkalkuleringsprojekt2semexam.repository.MainRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,14 +20,14 @@ public class ProjectService {
 
     // Account
 
-   /* public ProjectService(MainRepository mainRepository) {
-        this.mainRepository = mainRepository;
-    }
-
     public void createUser(User user) {
         String encodedPassword = passwordEncoder.encode(user.getUserPassword());
         user.setUserPassword(encodedPassword);
         mainRepository.createUser(user);
+    }
+
+    public User getUser(String uid) {
+        return mainRepository.getUser(uid);
     }
 
     public User getUserById(int id) {
@@ -37,8 +40,8 @@ public class ProjectService {
         mainRepository.editAccount(id, editedUser);
     }
 
-    public void deleteAccount(int id) {
-        mainRepository.deleteAccount(id);
+    public void deleteAccount(int userID) {
+        mainRepository.deleteAccount(userID);
     }
 
     public User getUserByUserNameAndPassword(String userName, String password) {
@@ -52,7 +55,7 @@ public class ProjectService {
             }
         }
         return null;
-    }*/
+    }
 
 
     // Project
@@ -81,6 +84,28 @@ public class ProjectService {
         projectRepository.deleteProject(id);
     }
 
+
+    //SUBPROJECTS
+
+    public void createSubproject(int userid, int projectid, Subproject subproject) {
+        mainRepository.createSubproject(userid,projectid,subproject);
+    }
+
+    public List<Subproject> getSubprojectByProjectId(int projectid) {
+        return mainRepository.getSubprojectByProjectId(projectid);
+    }
+
+    public Subproject getSubprojectById(int id) {
+        return mainRepository.getSubprojectById(id);
+    }
+
+    public void editSubproject(int id, Subproject editedSubproject) {
+        mainRepository.editSubproject(id, editedSubproject);
+    }
+
+    public void deleteSubproject(int id) {
+        mainRepository.deleteSubproject(id);
+    }
 
 
 }

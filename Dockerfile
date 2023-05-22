@@ -14,7 +14,7 @@ RUN set -ex; \
      rm -rf /src; \
      rm -rf /pom.xml;
 
-COPY SQL/* /docker-entrypoint-initdb.d/
+COPY SQL/SQLScript.sql /docker-entrypoint-initdb.d/
 
 EXPOSE $PORT $MYSQL_PORT
 

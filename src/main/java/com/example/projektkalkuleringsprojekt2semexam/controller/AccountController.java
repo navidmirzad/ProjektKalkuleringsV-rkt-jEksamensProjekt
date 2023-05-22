@@ -2,7 +2,6 @@ package com.example.projektkalkuleringsprojekt2semexam.controller;
 
 import com.example.projektkalkuleringsprojekt2semexam.model.Role;
 import com.example.projektkalkuleringsprojekt2semexam.model.User;
-import com.example.projektkalkuleringsprojekt2semexam.service.AccountService;
 import com.example.projektkalkuleringsprojekt2semexam.service.ProjectService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -15,52 +14,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class AccountController {
 
-    private AccountService accountService;
+    private ProjectService projectService;
 
     private boolean isLoggedIn(HttpSession session) {
         return session.getAttribute("user") != null;
     }
 
-    public AccountController(AccountService accountService) {
-        this.accountService = accountService;
+    public AccountController(ProjectService projectService) {
+        this.projectService = projectService;
     }
-
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        // invalidate session and return to login page
-        session.invalidate();
-        return "index";
-    }
-
-    @GetMapping("/")
-    public String index() {
-        return "index";
-    }
-
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
-
-    @PostMapping("/login")
-    public String login(@RequestParam("userName") String userName,
-                        @RequestParam("userPassword") String userPassword,
-                        HttpSession session,
-                        Model model) {
-        // find user in repo - return loggedIn if succes
-        User user = accountService.getUserByUserNameAndPassword(userName, userPassword);
-        if (user != null) {
-
-            // create session for user and set session timeout to 30 sec (container default: 15 min)
-            session.setAttribute("user", user);
-            session.setMaxInactiveInterval(60);
-            return "redirect:/frontpage";
-        }
-        // wrong login info
-        model.addAttribute("wrongLoginInfo", true);
-        return "login";
-    }
-
 
     @GetMapping("/createuser")
     public String createUser(Model model) {
@@ -72,14 +34,14 @@ public class AccountController {
 
     @PostMapping("/createuser")
     public String createdUser(@ModelAttribute("user") User user) {
-        accountService.createUser(user);
+        projectService.createUser(user);
         return "createUserSuccess";
     }
 
     @GetMapping("/youraccount")
     public String yourAccount(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
-        user = accountService.getUserById(user.getUserID());
+        user = projectService.getUserById(user.getUserID());
         model.addAttribute("user", user);
         return isLoggedIn(session) ? "accountinfo" : "login";
     }
@@ -99,7 +61,7 @@ public class AccountController {
         User user = accountService.getUserByUserNameAndPassword(userName, password);
         accountService.deleteAccount(user.getUserID());
         session.invalidate();
-        return "redirect:/";
+        return "redirect:/index";
     }
 
     @GetMapping("/editaccount")
