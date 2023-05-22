@@ -1,12 +1,12 @@
 # Project Calculation System
-# The Project Calculation System is a software tool designed to help break down larger projects into manageable subprojects and tasks. It provides estimates for the total time required for the entire project as well as for the individual tasks and subprojects.
+The Project Calculation System is a software tool designed to help break down larger projects into manageable subprojects and tasks. It provides estimates for the total time required for the entire project as well as for the individual tasks and subprojects.
 
 # Features
-# Project Breakdown: The system allows users to break down a larger project into smaller subprojects and tasks. This hierarchical structure helps in organizing and managing the project more effectively.
+- Project Breakdown: The system allows users to break down a larger project into smaller subprojects and tasks. This hierarchical structure helps in organizing and managing the project more effectively.
 
-# Time Estimation: The system provides estimates for the time required to complete each task and subproject. These estimates are based on historical data, user input, or predefined parameters. This allows users to plan and allocate resources efficiently.
+- Time Estimation: The system provides estimates for the time required to complete each task and subproject. These estimates are based on historical data, user input, or predefined parameters. This allows users to plan and allocate resources efficiently.
 
-# Total Project Estimation: The system calculates the total time required for the entire project by aggregating the time estimates of all the subprojects and tasks. This gives users a high-level overview of the project's timeline and helps in setting realistic deadlines.
+- Total Project Estimation: The system calculates the total time required for the entire project by aggregating the time estimates of all the subprojects and tasks. This gives users a high-level overview of the project's timeline and helps in setting realistic deadlines.
 
 # Getting Started
 # Prerequisites:
