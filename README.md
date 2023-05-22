@@ -47,7 +47,7 @@ The Project Calculation System is a software tool designed to help break down la
 
 
 
-Contact
+# Contact
 For any questions or inquiries, please contact 
 - math92n@stud.kea.dk
 - navi0221@stud.kea.dk
