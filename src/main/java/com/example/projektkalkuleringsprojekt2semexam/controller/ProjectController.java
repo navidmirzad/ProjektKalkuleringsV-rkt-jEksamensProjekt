@@ -7,6 +7,7 @@ import com.example.projektkalkuleringsprojekt2semexam.model.Subproject;
 import com.example.projektkalkuleringsprojekt2semexam.model.Task;
 import com.example.projektkalkuleringsprojekt2semexam.model.Subproject;
 import com.example.projektkalkuleringsprojekt2semexam.model.User;
+import com.example.projektkalkuleringsprojekt2semexam.service.AccountService;
 import com.example.projektkalkuleringsprojekt2semexam.service.ProjectService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.boot.Banner;
@@ -20,6 +21,7 @@ import java.util.List;
 public class ProjectController {
 
     private ProjectService projectService;
+
 
     public ProjectController(ProjectService projectService) {
         this.projectService = projectService;
