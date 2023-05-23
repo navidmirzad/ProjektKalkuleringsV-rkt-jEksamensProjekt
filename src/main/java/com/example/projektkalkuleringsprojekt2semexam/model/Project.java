@@ -13,6 +13,7 @@ public class Project {
     private int estimatedTime;
     private Date startDate;
     private Date endDate;
+    private int totalEstimatedTime;
 
     public Project() {
     }
@@ -26,6 +27,18 @@ public class Project {
         this.estimatedTime = estimatedTime;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public Project(int projectID, String projectName, String description, String imageURL,
+                   int estimatedTime, Date startDate, Date endDate, int totalEstimatedTime) {
+        this.projectID = projectID;
+        this.projectName = projectName;
+        this.description = description;
+        this.imageURL = imageURL;
+        this.estimatedTime = estimatedTime;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this. totalEstimatedTime = totalEstimatedTime;
     }
 
     public Project(int projectID, String projectName, String description, int estimatedTime) {
@@ -102,5 +115,13 @@ public class Project {
                 ", startDate='" + startDate + '\'' +
                 ", endDate='" + endDate + '\'' +
                 '}';
+    }
+
+    public int getTotalEstimatedTime() {
+        return totalEstimatedTime;
+    }
+
+    public void setTotalEstimatedTime(int totalEstimatedTime) {
+        this.totalEstimatedTime = totalEstimatedTime;
     }
 }

@@ -33,14 +33,13 @@ public class ProjectController {
 
     // showProjects method or frontpage GetMapping lets us create project, make HttpSession with userID and shows projects
     @GetMapping("/frontpage")
-    public String showProjects(Model model, HttpSession session, Subproject subproject, Task task) {
+    public String showProjects(Model model, HttpSession session) {
         Project project = new Project();
         User user = (User) session.getAttribute("user");
         List<User> users = projectService.getUsers();
 
         if (isLoggedIn(session)) {
             model.addAttribute("projects", projectService.getProjectsByUserId(user.getUserID()));
-            //model.addAttribute("totalEstimatedTime", projectService.getTotalEstimatedTimeForProject(subproject.getProjectID(),task.getSubProjectID()));
             model.addAttribute("project", project);
             model.addAttribute("users", users);
         }

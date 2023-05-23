@@ -78,13 +78,16 @@ public class ProjectRepository {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                projects.add(new Project(resultSet.getInt(1),
-                        resultSet.getString(2),
-                        resultSet.getString(3),
-                        resultSet.getString(4),
-                        resultSet.getInt(5),
-                        resultSet.getDate(6),
-                        resultSet.getDate(7)));
+                Project project = new Project();
+                project.setProjectID(resultSet.getInt(1));
+                project.setProjectName(resultSet.getString(2));
+                project.setDescription(resultSet.getString(3));
+                project.setImageURL(resultSet.getString(4));
+                project.setEstimatedTime(resultSet.getInt(5));
+                project.setStartDate(resultSet.getDate(6));
+                project.setEndDate(resultSet.getDate(7));
+                project.setTotalEstimatedTime(estimatedTimeForProject(project.getProjectID()));
+                projects.add(project);
             }
 
         } catch (SQLException e) {
@@ -112,6 +115,7 @@ public class ProjectRepository {
                         resultSet.getDate(6),
                         resultSet.getDate(7)));
 
+
             }
             return projects;
 
@@ -122,21 +126,25 @@ public class ProjectRepository {
 
 
     // Method doesn't show the total sum of hours for the project. <---- TODO:
-    public int estimatedTimeForProject(int subprojectID, int taskID) {
+    public int estimatedTimeForProject(int projectid) {
         int totalEstimatedTime = 0;
 
         try (Connection con = getConnection()) {
             String estimatedTimeSum = "SELECT SUM(estimation) AS totalEstimatedTime\n" +
-                    "FROM (SELECT subproject.estimatedTime AS estimation\n" +
-                    "FROM subproject WHERE subproject.projectID = ?\n" +
-                    "UNION ALL SELECT task.estimatedTime AS estimation\n" +
-                    "FROM task INNER JOIN subproject ON \n" +
-                    "task.subprojectID = subproject.subprojectID\n" +
-                    "WHERE subproject.projectID = ?) AS estimation_sum;";
+                    "FROM (\n" +
+                    "  SELECT estimatedTime AS estimation\n" +
+                    "  FROM subproject\n" +
+                    "  WHERE projectID = ?\n" +
+                    "  UNION ALL\n" +
+                    "  SELECT task.estimatedTime\n" +
+                    "  FROM task\n" +
+                    "  INNER JOIN subproject ON task.subprojectID = subproject.subprojectID\n" +
+                    "  WHERE subproject.projectID = ?\n" +
+                    ") AS estimation_sum;";
 
             PreparedStatement pstmt = con.prepareStatement(estimatedTimeSum);
-            pstmt.setInt(1, subprojectID);
-            pstmt.setInt(2, taskID);
+            pstmt.setInt(1, projectid);
+            pstmt.setInt(2, projectid);
             ResultSet resultSet = pstmt.executeQuery();
 
             while (resultSet.next()) {
@@ -235,29 +243,6 @@ public class ProjectRepository {
 
     // Account section
 
-    public void createUser(User user) {
-
-        try (Connection con = getConnection()) {
-
-            String insertUser = "INSERT INTO user(firstName,lastName,userName,userPassword,email,birthDate,phoneNumber,role)\n" +
-                    "VALUES(?,?,?,?,?,?,?,?)";
-
-            PreparedStatement preparedStatement = con.prepareStatement(insertUser);
-            preparedStatement.setString(1, user.getFirstName());
-            preparedStatement.setString(2, user.getLastName());
-            preparedStatement.setString(3, user.getUserName());
-            preparedStatement.setString(4, user.getUserPassword());
-            preparedStatement.setString(5, user.getEmail());
-            preparedStatement.setString(6, user.getBirthDate());
-            preparedStatement.setInt(7, user.getPhoneNumber());
-            preparedStatement.setString(8, String.valueOf(user.getRole()));
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     public List<User> getUsers() {
 
@@ -432,6 +417,8 @@ public class ProjectRepository {
             e.printStackTrace();
         }
     }
+
+    // TASK SECTION
 
     public void createTask(List<Integer> listOfUsers, int subprojectid, Task task) {
 

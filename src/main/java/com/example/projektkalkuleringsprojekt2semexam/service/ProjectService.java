@@ -33,11 +33,6 @@ public class ProjectService {
         return projectRepository.getProjects();
     }
 
-    // method doesn't work just yet, still shows 0 total hours;
-    public int getTotalEstimatedTimeForProject(int subprojectID1, int subprojectID2) {
-        return projectRepository.estimatedTimeForProject(subprojectID1, subprojectID2);
-    }
-
     public List<Project> getProjectsByUserId(int id) {
         return projectRepository.getProjectsByUserId(id);
     }
