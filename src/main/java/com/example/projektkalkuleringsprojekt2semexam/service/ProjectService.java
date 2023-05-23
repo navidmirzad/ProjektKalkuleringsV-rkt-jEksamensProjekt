@@ -2,7 +2,9 @@ package com.example.projektkalkuleringsprojekt2semexam.service;
 
 import com.example.projektkalkuleringsprojekt2semexam.model.Project;
 import com.example.projektkalkuleringsprojekt2semexam.model.Subproject;
+import com.example.projektkalkuleringsprojekt2semexam.model.User;
 import com.example.projektkalkuleringsprojekt2semexam.repository.ProjectRepository;
+import com.example.projektkalkuleringsprojekt2semexam.model.Task;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,12 +20,22 @@ public class ProjectService {
 
     // Project
 
-    public void createProject(Project project, int userid) {
-        projectRepository.createProject(project, userid);
+
+    public List<User> getUsers() {
+        return projectRepository.getUsers();
+    }
+
+    public void createProject(Project project, List<Integer> listOfUsers) {
+        projectRepository.createProject(project, listOfUsers);
     }
 
     public List<Project> getProject() {
         return projectRepository.getProjects();
+    }
+
+    // method doesn't work just yet, still shows 0 total hours;
+    public int getTotalEstimatedTimeForProject(int subprojectID1, int subprojectID2) {
+        return projectRepository.estimatedTimeForProject(subprojectID1, subprojectID2);
     }
 
     public List<Project> getProjectsByUserId(int id) {
@@ -45,8 +57,8 @@ public class ProjectService {
 
     //SUBPROJECTS
 
-    public void createSubproject(int userid, int projectid, Subproject subproject) {
-        projectRepository.createSubproject(userid,projectid,subproject);
+    public void createSubproject(List<Integer> listOfUsers, int projectid, Subproject subproject) {
+        projectRepository.createSubproject(listOfUsers,projectid,subproject);
     }
 
     public List<Subproject> getSubprojectByProjectId(int projectid) {
@@ -64,6 +76,13 @@ public class ProjectService {
     public void deleteSubproject(int id) {
         projectRepository.deleteSubproject(id);
     }
+
+    //TASKS
+
+    public void createTask(List<Integer> listOfUsers, int subprojectid, Task task) {
+        projectRepository.createTask(listOfUsers,subprojectid,task);
+    }
+
 
 
 }

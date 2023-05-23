@@ -2,6 +2,7 @@ package com.example.projektkalkuleringsprojekt2semexam.repository;
 
 import com.example.projektkalkuleringsprojekt2semexam.model.Project;
 import com.example.projektkalkuleringsprojekt2semexam.model.Subproject;
+import com.example.projektkalkuleringsprojekt2semexam.model.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -28,7 +29,7 @@ public class ProjectRepository {
 
     // Project #1
 
-    public void createProject(Project project, int userid) {
+    public void createProject(Project project, List<Integer> listOfUsers) {
 
         try (Connection con = getConnection()) {
 
@@ -51,11 +52,14 @@ public class ProjectRepository {
                 projectid = generatedKey.getInt(1);
             }
 
-            String insertJoinTable = "INSERT INTO users_projects (userid,projectid) VALUES (?,?)";
-            PreparedStatement preparedStatement = con.prepareStatement(insertJoinTable);
-            preparedStatement.setInt(1, userid);
-            preparedStatement.setInt(2, projectid);
-            preparedStatement.executeUpdate();
+            String insertSelectedUsers = "INSERT INTO users_projects (userID, projectID) VALUES (?, ?)";
+            PreparedStatement selectedUsersStatement = con.prepareStatement(insertSelectedUsers);
+
+            for (Integer userid : listOfUsers) {
+                selectedUsersStatement.setInt(1, userid);
+                selectedUsersStatement.setInt(2, projectid);
+                selectedUsersStatement.executeUpdate();
+            }
 
 
 
@@ -115,6 +119,7 @@ public class ProjectRepository {
             throw new RuntimeException(e);
         }
     }
+
 
     // Method doesn't show the total sum of hours for the project. <---- TODO:
     public int estimatedTimeForProject(int subprojectID, int taskID) {
@@ -228,10 +233,66 @@ public class ProjectRepository {
 
     }
 
+    // Account section
+
+    public void createUser(User user) {
+
+        try (Connection con = getConnection()) {
+
+            String insertUser = "INSERT INTO user(firstName,lastName,userName,userPassword,email,birthDate,phoneNumber,role)\n" +
+                    "VALUES(?,?,?,?,?,?,?,?)";
+
+            PreparedStatement preparedStatement = con.prepareStatement(insertUser);
+            preparedStatement.setString(1, user.getFirstName());
+            preparedStatement.setString(2, user.getLastName());
+            preparedStatement.setString(3, user.getUserName());
+            preparedStatement.setString(4, user.getUserPassword());
+            preparedStatement.setString(5, user.getEmail());
+            preparedStatement.setString(6, user.getBirthDate());
+            preparedStatement.setInt(7, user.getPhoneNumber());
+            preparedStatement.setString(8, String.valueOf(user.getRole()));
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public List<User> getUsers() {
+
+        List<User> users = new ArrayList<>();
+
+        try (Connection con = getConnection()) {
+
+            String sql = "SELECT * FROM user";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            String enumValue;
+            while (resultSet.next()) {
+                enumValue = resultSet.getString("role").toUpperCase();
+                users.add(new User(resultSet.getInt("userid"),
+                        resultSet.getString("userName"),
+                        resultSet.getString("userPassword"),
+                        resultSet.getString("firstName"),
+                        resultSet.getString("lastName"),
+                        resultSet.getString("birthDate"),
+                        Role.valueOf(enumValue),
+                        resultSet.getString("email"),
+                        resultSet.getInt("phoneNumber")));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return users;
+    }
+
 
     // Subproject
 
-    public void createSubproject(int userid, int projectid, Subproject subproject) {
+    public void createSubproject(List<Integer> listOfUsers, int projectid, Subproject subproject) {
 
         try (Connection con = getConnection()) {
             String insertSubproject = "INSERT INTO subproject (subprojectname, description, estimatedtime, projectid) VALUES(?,?,?,?)";
@@ -250,9 +311,12 @@ public class ProjectRepository {
 
             String insertJoin = "INSERT INTO users_subprojects (userid, subprojectid) VALUES(?,?)";
             PreparedStatement pstm = con.prepareStatement(insertJoin);
-            pstm.setInt(1,userid);
-            pstm.setInt(2, subprojectid);
-            pstm.executeUpdate();
+
+            for (Integer userid : listOfUsers) {
+                pstm.setInt(1, userid);
+                pstm.setInt(2, subprojectid);
+                pstm.executeUpdate();
+            }
 
 
         } catch (SQLException e) {
@@ -273,12 +337,31 @@ public class ProjectRepository {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                subprojects.add(new Subproject(resultSet.getInt("subprojectid"),
-                        resultSet.getString("subprojectname"),
-                        resultSet.getString("description"),
-                        resultSet.getInt("estimatedtime"),
-                        resultSet.getInt("projectid")
-                ));
+                Subproject subproject = new Subproject();
+                subproject.setProjectID(resultSet.getInt("subprojectID"));
+                subproject.setProjectName(resultSet.getString("subprojectName"));
+                subproject.setDescription(resultSet.getString("description"));
+                subproject.setEstimatedTime(resultSet.getInt("estimatedTime"));
+
+                String taskSql = "SELECT taskID, taskName, description, estimatedTime FROM task WHERE subprojectID = ?";
+                PreparedStatement taskStatement = con.prepareStatement(taskSql);
+                taskStatement.setInt(1, subproject.getProjectID());
+                ResultSet taskResultSet = taskStatement.executeQuery();
+
+                while (taskResultSet.next()) {
+                    Task task = new Task();
+                    task.setProjectID(taskResultSet.getInt("taskID"));
+                    task.setProjectName(taskResultSet.getString("taskName"));
+                    task.setDescription(taskResultSet.getString("description"));
+                    task.setEstimatedTime(taskResultSet.getInt("estimatedTime"));
+
+                    subproject.getTasks().add(task);
+                }
+
+                subprojects.add(subproject);
+
+
+
             }
 
 
@@ -329,6 +412,7 @@ public class ProjectRepository {
 
     }
 
+
     public void deleteSubproject(int id) {
 
         try (Connection con = getConnection()){
@@ -347,6 +431,39 @@ public class ProjectRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void createTask(List<Integer> listOfUsers, int subprojectid, Task task) {
+
+        //insert task table
+
+        try (Connection con = getConnection()){
+            String insertTask = "INSERT INTO task (taskName, description, estimatedTime, subprojectid)" +
+                    "VALUES(?,?,?,?)";
+            PreparedStatement preparedStatement = con.prepareStatement(insertTask,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, task.getProjectName());
+            preparedStatement.setString(2, task.getDescription());
+            preparedStatement.setInt(3, task.getEstimatedTime());
+            preparedStatement.setInt(4, subprojectid);
+            preparedStatement.executeUpdate();
+
+            ResultSet generatedKey = preparedStatement.getGeneratedKeys();
+            int taskid = 0;
+            if (generatedKey.next()) {
+                taskid = generatedKey.getInt(1);
+            }
+
+            String insertJoin = "INSERT INTO users_tasks (userid, taskid) VALUES(?,?)";
+            PreparedStatement preparedStatement1 = con.prepareStatement(insertJoin);
+            for (Integer userid : listOfUsers) {
+                preparedStatement1.setInt(1, userid);
+                preparedStatement1.setInt(2, taskid);
+                preparedStatement1.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
