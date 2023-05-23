@@ -34,19 +34,23 @@ public class ProjectController {
     public String showProjects(Model model, HttpSession session, Subproject subproject, Task task) {
         Project project = new Project();
         User user = (User) session.getAttribute("user");
+        List<User> users = projectService.getUsers();
 
         if (isLoggedIn(session)) {
             model.addAttribute("projects", projectService.getProjectsByUserId(user.getUserID()));
-         // method doesn't work yet -  model.addAttribute("totalEstimatedTime", projectService.getTotalEstimatedTimeForProject(subproject.getProjectID(),task.getSubProjectID()));
+            //model.addAttribute("totalEstimatedTime", projectService.getTotalEstimatedTimeForProject(subproject.getProjectID(),task.getSubProjectID()));
             model.addAttribute("project", project);
+            model.addAttribute("users", users);
         }
         return isLoggedIn(session) ? "frontpage" : "index";
     }
 
     @PostMapping("/insideproject")
-    public String createProject(@ModelAttribute("project") Project project, HttpSession session) {
+    public String createProject(@ModelAttribute("project") Project project,
+                                HttpSession session,
+                                @RequestParam List<Integer> listOfUsers) {
         User user = (User) session.getAttribute("user");
-        projectService.createProject(project, user.getUserID());
+        projectService.createProject(project, listOfUsers);
         return "redirect:/createdProject";
     }
 
@@ -92,19 +96,23 @@ public class ProjectController {
         session.setAttribute("projectID", projectID);
         Subproject subproject = new Subproject();
         List<Subproject> subprojects = projectService.getSubprojectByProjectId(projectID);
+        List<User> users = projectService.getUsers();
 
         model.addAttribute("subproject",subproject);
         model.addAttribute("subprojects", subprojects);
+        model.addAttribute("users", users);
+
         return "seeproject";
     }
 
     @PostMapping("/createsubproject")
     public String createSubproject(@ModelAttribute("subproject") Subproject subproject,
-                                   HttpSession session) {
+                                   HttpSession session,
+                                   @RequestParam List<Integer> listOfUsers) {
         User user = (User) session.getAttribute("user");
         int projectID = (int) session.getAttribute("projectID");
 
-        projectService.createSubproject(user.getUserID(), projectID, subproject);
+        projectService.createSubproject(listOfUsers, projectID, subproject);
 
         return "redirect:/seeproject/" + projectID;
     }
@@ -134,6 +142,33 @@ public class ProjectController {
         int projectid = (int) session.getAttribute("projectID");
         projectService.deleteSubproject(id);
         return "redirect:/seeproject/" + projectid;
+    }
+
+    // create task. make a button on subprojects that gives a form for tasks
+    // make a table in the table of subprojects that shows tasks of the subprojects
+    // make crud on tasks
+
+    @GetMapping("createtask/{subprojectid}")
+    public String createTask(@PathVariable("subprojectid") int subprojectid, Model model, HttpSession session) {
+        Task task = new Task();
+        List<User> users = projectService.getUsers();
+        model.addAttribute("task", task);
+        model.addAttribute("subprojectid", subprojectid);
+        model.addAttribute("users", users);
+        return "createtask";
+    }
+
+    @PostMapping("createtask/{subprojectid}")
+    public String createTask(@PathVariable("subprojectid") int subprojectid, HttpSession session,
+                             @ModelAttribute Task task,
+                             @RequestParam List<Integer> listOfUsers) {
+
+        User user = (User) session.getAttribute("user");
+        int projectID = (int) session.getAttribute("projectID");
+
+        projectService.createTask(listOfUsers, subprojectid, task);
+
+        return "redirect:/seeproject/" + projectID;
     }
 
 }

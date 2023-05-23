@@ -1,6 +1,8 @@
 package com.example.projektkalkuleringsprojekt2semexam.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Project {
 
@@ -101,5 +103,4 @@ public class Project {
                 ", endDate='" + endDate + '\'' +
                 '}';
     }
-
 }

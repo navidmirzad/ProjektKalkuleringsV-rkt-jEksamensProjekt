@@ -3,6 +3,11 @@ package com.example.projektkalkuleringsprojekt2semexam.service;
 import com.example.projektkalkuleringsprojekt2semexam.model.Project;
 import com.example.projektkalkuleringsprojekt2semexam.model.Subproject;
 import com.example.projektkalkuleringsprojekt2semexam.repository.ProjectRepository;
+import com.example.projektkalkuleringsprojekt2semexam.model.Task;
+import com.example.projektkalkuleringsprojekt2semexam.model.User;
+import com.example.projektkalkuleringsprojekt2semexam.repository.MainRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,10 +25,19 @@ public class ProjectService {
 
     public void createProject(Project project, int userid) {
         projectRepository.createProject(project, userid);
+
+
+    public void createProject(Project project, List<Integer> listOfUsers) {
+        mainRepository.createProject(project, listOfUsers);
     }
 
     public List<Project> getProject() {
         return projectRepository.getProjects();
+    }
+
+    // method doesn't work just yet, still shows 0 total hours;
+    public int getTotalEstimatedTimeForProject(int subprojectID1, int subprojectID2) {
+        return mainRepository.estimatedTimeForProject(subprojectID1, subprojectID2);
     }
 
     public List<Project> getProjectsByUserId(int id) {
@@ -45,8 +59,8 @@ public class ProjectService {
 
     //SUBPROJECTS
 
-    public void createSubproject(int userid, int projectid, Subproject subproject) {
-        projectRepository.createSubproject(userid,projectid,subproject);
+    public void createSubproject(List<Integer> listOfUsers, int projectid, Subproject subproject) {
+        mainRepository.createSubproject(listOfUsers,projectid,subproject);
     }
 
     public List<Subproject> getSubprojectByProjectId(int projectid) {
@@ -64,6 +78,13 @@ public class ProjectService {
     public void deleteSubproject(int id) {
         projectRepository.deleteSubproject(id);
     }
+
+    //TASKS
+
+    public void createTask(List<Integer> listOfUsers, int subprojectid, Task task) {
+        mainRepository.createTask(listOfUsers,subprojectid,task);
+    }
+
 
 
 }

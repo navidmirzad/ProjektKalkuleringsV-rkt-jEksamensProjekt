@@ -1,8 +1,12 @@
 package com.example.projektkalkuleringsprojekt2semexam.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Subproject extends Project {
 
     private int superProjectID;
+    private List<Task> tasks = new ArrayList<>();
 
     public Subproject() {
     }
@@ -20,6 +24,8 @@ public class Subproject extends Project {
         this.superProjectID = superProjectID;
     }
 
-
+    public List<Task> getTasks() {
+        return tasks;
+    }
 
 }
