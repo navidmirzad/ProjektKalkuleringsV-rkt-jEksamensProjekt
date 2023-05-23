@@ -9,9 +9,8 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    position: absolute;
-    top: 12px;
-    left: 22px;
+    position: relative; /* Change the position to relative */
+    z-index: 1; /* Add a higher z-index to ensure it appears above other elements */
     color: white;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
