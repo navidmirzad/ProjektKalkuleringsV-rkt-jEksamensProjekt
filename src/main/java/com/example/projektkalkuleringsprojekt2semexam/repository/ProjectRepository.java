@@ -151,8 +151,6 @@ public class ProjectRepository {
                 totalEstimatedTime = resultSet.getInt("totalEstimatedTime");
             }
 
-            System.out.println(totalEstimatedTime);
-
             return totalEstimatedTime;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -226,19 +224,38 @@ public class ProjectRepository {
     public void deleteProject(int id) {
 
         try (Connection con = getConnection()) {
-            try (PreparedStatement pstmt = con.prepareStatement("DELETE FROM users_projects where projectID = ?")) {
-                pstmt.setInt(1, id);
-                pstmt.execute();
+            try (PreparedStatement pstmt1 = con.prepareStatement("DELETE FROM users_tasks WHERE taskID IN (SELECT taskID FROM task WHERE subprojectID IN (SELECT subprojectID FROM subproject WHERE projectID = ?))")) {
+                pstmt1.setInt(1, id);
+                pstmt1.executeUpdate();
             }
 
-            try (PreparedStatement pstmt2 = con.prepareStatement("DELETE FROM project where projectID = ?")) {
+            try (PreparedStatement pstmt2 = con.prepareStatement("DELETE FROM task WHERE subprojectID IN (SELECT subprojectID FROM subproject WHERE projectID = ?)")) {
                 pstmt2.setInt(1, id);
-                pstmt2.execute();
+                pstmt2.executeUpdate();
+            }
+
+            try (PreparedStatement pstmt3 = con.prepareStatement("DELETE FROM users_subprojects WHERE subprojectID IN (SELECT subprojectID FROM subproject WHERE projectID = ?)")) {
+                pstmt3.setInt(1, id);
+                pstmt3.executeUpdate();
+            }
+
+            try (PreparedStatement pstmt4 = con.prepareStatement("DELETE FROM subproject WHERE projectID = ?")) {
+                pstmt4.setInt(1, id);
+                pstmt4.executeUpdate();
+            }
+
+            try (PreparedStatement pstmt5 = con.prepareStatement("DELETE FROM users_projects WHERE projectID = ?")) {
+                pstmt5.setInt(1, id);
+                pstmt5.executeUpdate();
+            }
+
+            try (PreparedStatement pstmt6 = con.prepareStatement("DELETE FROM project WHERE projectID = ?")) {
+                pstmt6.setInt(1, id);
+                pstmt6.executeUpdate();
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     // Account section
@@ -400,23 +417,31 @@ public class ProjectRepository {
 
     public void deleteSubproject(int id) {
 
-        try (Connection con = getConnection()){
+        try (Connection con = getConnection()) {
+            try (PreparedStatement pstmt1 = con.prepareStatement("DELETE FROM users_tasks WHERE taskID IN (SELECT taskID FROM task WHERE subprojectID = ?)")) {
+                pstmt1.setInt(1, id);
+                pstmt1.executeUpdate();
+            }
 
-            String deleteJoin = "DELETE FROM users_subprojects WHERE subprojectid = ?";
-            PreparedStatement preparedStatement = con.prepareStatement(deleteJoin);
-            preparedStatement.setInt(1, id);
-            preparedStatement.execute();
+            try (PreparedStatement pstmt2 = con.prepareStatement("DELETE FROM task WHERE subprojectID = ?")) {
+                pstmt2.setInt(1, id);
+                pstmt2.executeUpdate();
+            }
 
-            String deleteProject = "DELETE FROM subproject WHERE subprojectid = ?";
-            PreparedStatement pstm = con.prepareStatement(deleteProject);
-            pstm.setInt(1, id);
-            pstm.execute();
+            try (PreparedStatement pstmt3 = con.prepareStatement("DELETE FROM users_subprojects WHERE subprojectID = ?")) {
+                pstmt3.setInt(1, id);
+                pstmt3.executeUpdate();
+            }
 
-
+            try (PreparedStatement pstmt4 = con.prepareStatement("DELETE FROM subproject WHERE subprojectID = ?")) {
+                pstmt4.setInt(1, id);
+                pstmt4.executeUpdate();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
     // TASK SECTION
 
