@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.StyleContext;
 import java.util.List;
 
 @Service
@@ -30,8 +31,13 @@ public class ProjectService {
         mainRepository.createUser(user);
     }
 
+
     public User getUser(String uid) {
         return mainRepository.getUser(uid);
+    }
+
+    public List<User> getUsers() {
+        return mainRepository.getUsers();
     }
 
     public User getUserById(int id) {
@@ -64,8 +70,8 @@ public class ProjectService {
 
     // Project (wish)
 
-    public void createProject(Project project, int userid) {
-        mainRepository.createProject(project, userid);
+    public void createProject(Project project, List<Integer> listOfUsers) {
+        mainRepository.createProject(project, listOfUsers);
     }
 
     public List<Project> getProject() {
@@ -96,8 +102,8 @@ public class ProjectService {
 
     //SUBPROJECTS
 
-    public void createSubproject(int userid, int projectid, Subproject subproject) {
-        mainRepository.createSubproject(userid,projectid,subproject);
+    public void createSubproject(List<Integer> listOfUsers, int projectid, Subproject subproject) {
+        mainRepository.createSubproject(listOfUsers,projectid,subproject);
     }
 
     public List<Subproject> getSubprojectByProjectId(int projectid) {
@@ -118,8 +124,8 @@ public class ProjectService {
 
     //TASKS
 
-    public void createTask(int userid, int subprojectid, Task task) {
-        mainRepository.createTask(userid,subprojectid,task);
+    public void createTask(List<Integer> listOfUsers, int subprojectid, Task task) {
+        mainRepository.createTask(listOfUsers,subprojectid,task);
     }
 
 

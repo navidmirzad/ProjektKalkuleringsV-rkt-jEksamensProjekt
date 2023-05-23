@@ -27,7 +27,7 @@ public class MainRepository {
 
     // Project #1
 
-    public void createProject(Project project, int userid) {
+    public void createProject(Project project, List<Integer> listOfUsers) {
 
         try (Connection con = getConnection()) {
 
@@ -50,11 +50,14 @@ public class MainRepository {
                 projectid = generatedKey.getInt(1);
             }
 
-            String insertJoinTable = "INSERT INTO users_projects (userid,projectid) VALUES (?,?)";
-            PreparedStatement preparedStatement = con.prepareStatement(insertJoinTable);
-            preparedStatement.setInt(1, userid);
-            preparedStatement.setInt(2, projectid);
-            preparedStatement.executeUpdate();
+            String insertSelectedUsers = "INSERT INTO users_projects (userID, projectID) VALUES (?, ?)";
+            PreparedStatement selectedUsersStatement = con.prepareStatement(insertSelectedUsers);
+
+            for (Integer userid : listOfUsers) {
+                selectedUsersStatement.setInt(1, userid);
+                selectedUsersStatement.setInt(2, projectid);
+                selectedUsersStatement.executeUpdate();
+            }
 
 
 
@@ -210,6 +213,7 @@ public class MainRepository {
         }
     }
 
+
     public void deleteProject(int id) {
 
         try (Connection con = getConnection()) {
@@ -252,6 +256,36 @@ public class MainRepository {
             e.printStackTrace();
         }
 
+    }
+
+    public List<User> getUsers() {
+
+        List<User> users = new ArrayList<>();
+
+        try (Connection con = getConnection()) {
+
+            String sql = "SELECT * FROM user";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            String enumValue;
+            while (resultSet.next()) {
+                enumValue = resultSet.getString("role").toUpperCase();
+                users.add(new User(resultSet.getInt("userid"),
+                        resultSet.getString("userName"),
+                        resultSet.getString("userPassword"),
+                        resultSet.getString("firstName"),
+                        resultSet.getString("lastName"),
+                        resultSet.getString("birthDate"),
+                        Role.valueOf(enumValue),
+                        resultSet.getString("email"),
+                        resultSet.getInt("phoneNumber")));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return users;
     }
 
     public User getUser(String userName) {
@@ -387,7 +421,7 @@ public class MainRepository {
 
     // Subproject
 
-    public void createSubproject(int userid, int projectid, Subproject subproject) {
+    public void createSubproject(List<Integer> listOfUsers, int projectid, Subproject subproject) {
 
         try (Connection con = getConnection()) {
             String insertSubproject = "INSERT INTO subproject (subprojectname, description, estimatedtime, projectid) VALUES(?,?,?,?)";
@@ -406,9 +440,12 @@ public class MainRepository {
 
             String insertJoin = "INSERT INTO users_subprojects (userid, subprojectid) VALUES(?,?)";
             PreparedStatement pstm = con.prepareStatement(insertJoin);
-            pstm.setInt(1,userid);
-            pstm.setInt(2, subprojectid);
-            pstm.executeUpdate();
+
+            for (Integer userid : listOfUsers) {
+                pstm.setInt(1, userid);
+                pstm.setInt(2, subprojectid);
+                pstm.executeUpdate();
+            }
 
 
         } catch (SQLException e) {
@@ -527,7 +564,7 @@ public class MainRepository {
         }
     }
 
-    public void createTask(int userid, int subprojectid, Task task) {
+    public void createTask(List<Integer> listOfUsers, int subprojectid, Task task) {
 
         //insert task table
 
@@ -549,9 +586,11 @@ public class MainRepository {
 
             String insertJoin = "INSERT INTO users_tasks (userid, taskid) VALUES(?,?)";
             PreparedStatement preparedStatement1 = con.prepareStatement(insertJoin);
-            preparedStatement1.setInt(1,userid);
-            preparedStatement1.setInt(2,taskid);
-            preparedStatement1.executeUpdate();
+            for (Integer userid : listOfUsers) {
+                preparedStatement1.setInt(1, userid);
+                preparedStatement1.setInt(2, taskid);
+                preparedStatement1.executeUpdate();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

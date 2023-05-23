@@ -52,6 +52,14 @@
 
     <div class="form-row">
 
+      <label>Select Users:</label><br/>
+      <div th:each="user : ${users}">
+        <label>
+          <input type="checkbox" name="listOfUsers" th:value="${user.userID}" />
+          <span th:text="${user.userName}"></span>
+        </label>
+      </div> <br/>
+
       <button type="submit">Create task</button>
 
 

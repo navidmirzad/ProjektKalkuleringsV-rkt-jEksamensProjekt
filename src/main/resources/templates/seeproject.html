@@ -26,14 +26,6 @@
         integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
-  <style>
-    .task-details {
-      display: none;
-    }
-    .task-details.show {
-      display: table-row;
-    }
-  </style>
 
 </head>
 <body>
@@ -85,6 +77,13 @@
       <label>Estimated time:</label>
       <input type="text" th:field="*{estimatedTime}" required/> <br/>
 
+      <label>Select Users:</label><br/>
+      <div th:each="user : ${users}">
+        <label>
+          <input type="checkbox" name="listOfUsers" th:value="${user.userID}" />
+          <span th:text="${user.userName}"></span>
+        </label>
+      </div> <br/>
 
       <button type="submit" class="btn btn-dark">Create subproject</button>
     </form>
@@ -94,9 +93,10 @@
 <table class="table table-dark">
   <thead>
   <tr>
-    <th scope="col">Project Name</th>
+    <th scope="col">Subproject Name</th>
     <th scope="col">Description</th>
     <th scope="col">Estimated Time</th>
+    <th scope="col">Task</th>
   </tr>
   </thead>
 
@@ -106,6 +106,8 @@
     <td th:text="${subproject.projectName}"></td>
     <td th:text="${subproject.description}"></td>
     <td th:text="${subproject.estimatedTime}"></td>
+    <td th:text="${subproject.tasks}"></td>
+
     <td>
       <a th:href="@{/createtask/{subprojectid}(subprojectid=${subproject.projectID})}" class="btn btn-primary">Create Task</a>
     </td>
@@ -122,7 +124,7 @@
 
   <tr>
     <td colspan="6">
-      <table class="nested-table">
+      <table class="table table-striped">
         <thead>
         <tr>
           <th scope="col">Task Name</th>
@@ -131,7 +133,6 @@
         </tr>
         </thead>
         <tbody>
-        <!-- Add a new row for each task within the subproject -->
         <tr th:each="task : ${subproject.tasks}">
           <td th:text="${task.projectName}"></td>
           <td th:text="${task.description}"></td>
