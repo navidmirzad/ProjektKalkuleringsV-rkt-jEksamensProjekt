@@ -59,7 +59,7 @@
 
 </div>
 
-<button onclick="openModal()">Create Project</button>
+<button onclick="openModal()">Create Subproject</button>
 
 <div id="CreateProject" class="modal">
   <!-- Modal content -->
@@ -74,7 +74,7 @@
       <input type="text" th:field="*{description}" required/> <br/>
 
 
-      <label>Estimated time:</label>
+      <label>Estimated time (hours):</label>
       <input type="text" th:field="*{estimatedTime}" required/> <br/>
 
       <label>Select Users:</label><br/>
@@ -95,36 +95,28 @@
   <tr>
     <th scope="col">Subproject Name</th>
     <th scope="col">Description</th>
-    <th scope="col">Estimated Time</th>
+    <th scope="col">Your estimated time</th>
+    <th scope="col">Calculated time for subproject</th>
+    <th scope="col">Time differential</th>
     <th scope="col">Task</th>
+    <th scope="col">Create task</th>
+    <th scope="col">Edit subproject</th>
+    <th scope="col">Delete subproject</th>
   </tr>
   </thead>
 
   <tbody>
   <tr th:each="subproject : ${subprojects}">
-
     <td th:text="${subproject.projectName}"></td>
     <td th:text="${subproject.description}"></td>
-    <td th:text="${subproject.estimatedTime}"></td>
-    <td th:text="${subproject.tasks}"></td>
+    <td th:text="${subproject.estimatedTime} + ' hours'"></td>
+    <td th:text="${subproject.totalEstimatedTime} + ' hours'"></td>
+    <td th:class="${subproject.getTimeDif()} &lt; 0 ? 'text-danger' : 'text-success'">
+      <span th:text="${subproject.getTimeDif()} + ' hours'"></span>
+    </td>
 
     <td>
-      <a th:href="@{/createtask/{subprojectid}(subprojectid=${subproject.projectID})}" class="btn btn-primary">Create Task</a>
-    </td>
-    <td>
-      <a th:href="@{/editsubproject/{id}(id=${subproject.projectID})}" class="btn btn-warning">Edit</a>
-    </td>
-    <td>
-      <form action="#" th:action="@{/deletesubproject}" method="post">
-        <input type="hidden" th:name="id" th:value="${subproject.projectID}"/>
-        <button type="submit" class="btn btn-danger">Delete</button>
-      </form>
-    </td>
-  </tr>
-
-  <tr>
-    <td colspan="6">
-      <table class="table table-striped">
+      <table class="table table-dark">
         <thead>
         <tr>
           <th scope="col">Task Name</th>
@@ -136,10 +128,22 @@
         <tr th:each="task : ${subproject.tasks}">
           <td th:text="${task.projectName}"></td>
           <td th:text="${task.description}"></td>
-          <td th:text="${task.estimatedTime}"></td>
+          <td th:text="${task.estimatedTime} + ' hours'"></td>
         </tr>
         </tbody>
       </table>
+    </td>
+    <td>
+      <a th:href="@{/createtask/{subprojectid}(subprojectid=${subproject.projectID})}" class="btn btn-primary">Create Task</a>
+    </td>
+    <td>
+      <a th:href="@{/editsubproject/{id}(id=${subproject.projectID})}" class="btn btn-warning">Edit</a>
+    </td>
+    <td>
+      <form action="#" th:action="@{/deletesubproject}" method="post">
+        <input type="hidden" th:name="id" th:value="${subproject.projectID}"/>
+        <button type="submit" class="btn btn-danger">Delete</button>
+      </form>
     </td>
   </tr>
   </tbody>

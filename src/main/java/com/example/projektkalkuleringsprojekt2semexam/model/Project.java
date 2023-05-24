@@ -104,6 +104,10 @@ public class Project {
         this.endDate = endDate;
     }
 
+    public int getTimeDif() {
+        return estimatedTime - totalEstimatedTime;
+    }
+
     @Override
     public String toString() {
         return "Project{" +

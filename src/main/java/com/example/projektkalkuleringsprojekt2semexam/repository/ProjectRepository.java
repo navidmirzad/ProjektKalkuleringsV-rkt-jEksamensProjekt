@@ -125,36 +125,13 @@ public class ProjectRepository {
     }
 
 
-    // Method doesn't show the total sum of hours for the project. <---- TODO:
     public int estimatedTimeForProject(int projectid) {
         int totalEstimatedTime = 0;
-
-        try (Connection con = getConnection()) {
-            String estimatedTimeSum = "SELECT SUM(estimation) AS totalEstimatedTime\n" +
-                    "FROM (\n" +
-                    "  SELECT estimatedTime AS estimation\n" +
-                    "  FROM subproject\n" +
-                    "  WHERE projectID = ?\n" +
-                    "  UNION ALL\n" +
-                    "  SELECT task.estimatedTime\n" +
-                    "  FROM task\n" +
-                    "  INNER JOIN subproject ON task.subprojectID = subproject.subprojectID\n" +
-                    "  WHERE subproject.projectID = ?\n" +
-                    ") AS estimation_sum;";
-
-            PreparedStatement pstmt = con.prepareStatement(estimatedTimeSum);
-            pstmt.setInt(1, projectid);
-            pstmt.setInt(2, projectid);
-            ResultSet resultSet = pstmt.executeQuery();
-
-            while (resultSet.next()) {
-                totalEstimatedTime = resultSet.getInt("totalEstimatedTime");
-            }
-
-            return totalEstimatedTime;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        List<Subproject> subprojects = getSubprojectByProjectId(projectid);
+        for (Subproject subproject : subprojects) {
+            totalEstimatedTime += subproject.getTotalEstimatedTime();
         }
+        return totalEstimatedTime;
     }
 
     public Project findProjectByID(int id) {
@@ -327,6 +304,30 @@ public class ProjectRepository {
 
     }
 
+    public int getEstimatedTimeForSubproject(int subprojectid) {
+
+        int estimatedTime = 0;
+
+        try(Connection con = getConnection()) {
+
+            String sql = "SELECT SUM(task.estimatedTime) AS totalEstimatedTime " +
+                    "FROM subproject " +
+                    "JOIN task ON subproject.subprojectID = task.subprojectID " +
+                    "WHERE subproject.subprojectID = ? " +
+                    "GROUP BY subproject.subprojectID, subproject.subprojectName;";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setInt(1,subprojectid);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                estimatedTime = resultSet.getInt("totalEstimatedTime");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return estimatedTime;
+    }
+
     public List<Subproject> getSubprojectByProjectId(int projectid) {
 
         List<Subproject> subprojects = new ArrayList<>();
@@ -344,6 +345,7 @@ public class ProjectRepository {
                 subproject.setProjectName(resultSet.getString("subprojectName"));
                 subproject.setDescription(resultSet.getString("description"));
                 subproject.setEstimatedTime(resultSet.getInt("estimatedTime"));
+                subproject.setTotalEstimatedTime(getEstimatedTimeForSubproject(subproject.getProjectID()));
 
                 String taskSql = "SELECT taskID, taskName, description, estimatedTime FROM task WHERE subprojectID = ?";
                 PreparedStatement taskStatement = con.prepareStatement(taskSql);

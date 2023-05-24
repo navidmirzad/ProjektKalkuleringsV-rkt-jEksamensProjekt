@@ -74,7 +74,7 @@
             <label>Image URL:</label>
             <input type="text" th:field="*{imageURL}"> <br/>
 
-            <label>Estimated time:</label>
+            <label>Estimated time (in hours):</label>
             <input type="text" th:field="*{estimatedTime}" required/> <br/>
 
             <label>Start date:</label>
@@ -105,7 +105,9 @@
         <th scope="col">Image URL</th>
         <th scope="col">Start Date</th>
         <th scope="col">End Date</th>
-        <th scope="col">Estimated Time Hours</th>
+        <th scope="col">Your estimated time</th>
+        <th scope="col">Calculated time for project</th>
+        <th scope="col">Time differential</th>
         <th scope="col"></th>
         <th scope="col"></th>
     </tr>
@@ -125,7 +127,12 @@
                  style="max-width: 100%; max-height: 100px;"></td>
         <td th:text="${project.startDate}"></td>
         <td th:text="${project.endDate}"></td>
-        <td th:text="${project.totalEstimatedTime}"></td>
+        <td th:text="${project.estimatedTime} + ' hours'"></td>
+        <td th:text="${project.totalEstimatedTime} + ' hours'"></td>
+
+        <td th:class="${project.getTimeDif()} &lt; 0 ? 'text-danger' : 'text-success'">
+            <span th:text="${project.getTimeDif()} + ' hours'"></span>
+        </td>
 
 
         <td>
