@@ -132,6 +132,29 @@ public class AccountRepository {
 
         try (Connection con = getConnection()) {
 
+            //users_tasks
+
+            String sqlTasks = "DELETE FROM users_tasks WHERE userid = ?";
+            PreparedStatement preparedStatementTasks = con.prepareStatement(sqlTasks);
+            preparedStatementTasks.setInt(1,id);
+            preparedStatementTasks.execute();
+
+            //users_subprojects
+
+            String sqlSubprojects = "DELETE FROM users_subprojects WHERE userid = ?";
+            PreparedStatement preparedStatementSubprojects = con.prepareStatement(sqlSubprojects);
+            preparedStatementSubprojects.setInt(1,id);
+            preparedStatementSubprojects.execute();
+
+            //users_projects
+
+            String sqlProjects = "DELETE FROM users_projects WHERE userid = ?";
+            PreparedStatement preparedStatementProjects = con.prepareStatement(sqlProjects);
+            preparedStatementProjects.setInt(1,id);
+            preparedStatementProjects.execute();
+
+            //user
+
             String sqlUser = "DELETE FROM user WHERE userid = ?";
             PreparedStatement preparedStatementUser = con.prepareStatement(sqlUser);
             preparedStatementUser.setInt(1, id);

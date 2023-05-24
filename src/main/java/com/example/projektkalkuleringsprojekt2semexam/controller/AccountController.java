@@ -85,22 +85,20 @@ public class AccountController {
     }
 
     @GetMapping("/deleteaccount")
-    public String deleteAccount(HttpSession session, @RequestParam("id") int id) {
-        accountService.deleteAccount(id);
-        session.invalidate();
-        return "deleteuser";
-    }
-
-    @PostMapping("/deleteaccount")
-    public String deleteAccount(@RequestParam String userName,
-                                @RequestParam String password,
-                                HttpSession session,
-                                Model model) {
-        User user = accountService.getUserByUserNameAndPassword(userName, password);
+    public String deleteAccount(HttpSession session) {
+        User user = (User) session.getAttribute("user");
         accountService.deleteAccount(user.getUserID());
         session.invalidate();
-        return "redirect:/index";
+        return "redirect:/";
     }
+
+    /*@PostMapping("/deleteaccount")
+    public String deleteAccount(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        accountService.deleteAccount(user.getUserID());
+        session.invalidate();
+        return "redirect:/";
+    }*/
 
     @GetMapping("/editaccount")
     public String editAccount(HttpSession session, Model model) {
