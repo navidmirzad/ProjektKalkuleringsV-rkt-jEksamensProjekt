@@ -131,7 +131,7 @@
         <td th:text="${project.totalEstimatedTime} + ' hours'"></td>
 
         <td th:class="${project.getTimeDif()} &lt; 0 ? 'text-danger' : 'text-success'">
-            <span th:text="${project.getTimeDif()} + ' hours'"></span>
+            <span th:text="${project.getTimeDif() &lt; 0 ? project.getTimeDif() + ' hours' : '+' + project.getTimeDif() + ' hours'}"></span>
         </td>
 
 

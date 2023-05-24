@@ -161,24 +161,42 @@ public class ProjectRepository {
         return project;
     }
 
-    public void editProject(int id, Project editedProject) {
+    public int getProjectIdBySubprojectId(int subprojectId) {
+        int projectId = 0;
+
+        try (Connection con = getConnection()) {
+            String getSubprojectIdQuery = "SELECT projectId FROM subproject WHERE subprojectId = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(getSubprojectIdQuery);
+            preparedStatement.setInt(1, subprojectId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                projectId = resultSet.getInt("projectid");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return projectId;
+    }
+
+    public void editProject(int id, Project editedProject, List<Integer> listOfUsers) {
 
         try (Connection con = getConnection()) {
 
-            // ID's
-            int projectID = 0;
+            String deleteExistingRows = "DELETE FROM users_projects WHERE projectid = ?";
+            PreparedStatement deleteStatement = con.prepareStatement(deleteExistingRows);
+            deleteStatement.setInt(1, id);
+            deleteStatement.executeUpdate();
 
-            // find projectID
-            String findProjectID = "select projectID from users_projects where projectID = ?;";
-            PreparedStatement pstmt = con.prepareStatement(findProjectID);
-            pstmt.setInt(1, editedProject.getProjectID());
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                projectID = rs.getInt("projectID");
+            for (Integer userid : listOfUsers) {
+                String updateUsersSubprojects = "INSERT INTO users_projects (userid, projectid) VALUES (?,?)";
+                PreparedStatement preparedStatement = con.prepareStatement(updateUsersSubprojects);
+                preparedStatement.setInt(1, userid);
+                preparedStatement.setInt(2, id);
+                preparedStatement.executeUpdate();
             }
 
-            //find wish and set it to editedWish
             String sql = "UPDATE project SET projectName = ?, description = ?, ImageURL = ?, " +
                             "estimatedTime = ?, startDate = ?, endDate = ? WHERE projectID = ?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
@@ -265,6 +283,68 @@ public class ProjectRepository {
             e.printStackTrace();
         }
 
+        return users;
+    }
+
+    public List<User> getUsersByProjectId(int projectId) {
+
+        List<User> users = new ArrayList<>();
+
+        try (Connection con = getConnection()) {
+
+            String sql = "SELECT * FROM user INNER JOIN users_projects ON user.userid = users_projects.userid WHERE projectid = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setInt(1, projectId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            String enumValue;
+            while (resultSet.next()) {
+                enumValue = resultSet.getString("role").toUpperCase();
+                users.add(new User(resultSet.getInt("userid"),
+                        resultSet.getString("userName"),
+                        resultSet.getString("userPassword"),
+                        resultSet.getString("firstName"),
+                        resultSet.getString("lastName"),
+                        resultSet.getString("birthDate"),
+                        Role.valueOf(enumValue),
+                        resultSet.getString("email"),
+                        resultSet.getInt("phoneNumber")));
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+    public List<User> getUsersBySubprojectId(int subprojectId) {
+
+        List<User> users = new ArrayList<>();
+
+        try (Connection con = getConnection()) {
+
+            String sql = "SELECT * FROM user INNER JOIN users_subprojects ON user.userid = users_subprojects.userid WHERE subprojectid = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setInt(1, subprojectId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            String enumValue;
+            while (resultSet.next()) {
+                enumValue = resultSet.getString("role").toUpperCase();
+                users.add(new User(resultSet.getInt("userid"),
+                        resultSet.getString("userName"),
+                        resultSet.getString("userPassword"),
+                        resultSet.getString("firstName"),
+                        resultSet.getString("lastName"),
+                        resultSet.getString("birthDate"),
+                        Role.valueOf(enumValue),
+                        resultSet.getString("email"),
+                        resultSet.getInt("phoneNumber")));
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return users;
     }
 
@@ -398,9 +478,41 @@ public class ProjectRepository {
         return subproject;
     }
 
-    public void editSubproject(int id, Subproject editedSubproject) {
+    public int getSubprojectIdByTaskId(int taskId) {
+        int subprojectId = 0;
 
         try (Connection con = getConnection()) {
+            String getSubprojectIdQuery = "SELECT subprojectID FROM task WHERE taskID = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(getSubprojectIdQuery);
+            preparedStatement.setInt(1, taskId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                subprojectId = resultSet.getInt("subprojectID");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return subprojectId;
+    }
+
+    public void editSubproject(int id, Subproject editedSubproject, List<Integer> listOfUsers) {
+
+        try (Connection con = getConnection()) {
+
+            String deleteExistingRows = "DELETE FROM users_subprojects WHERE subprojectid = ?";
+            PreparedStatement deleteStatement = con.prepareStatement(deleteExistingRows);
+            deleteStatement.setInt(1, id);
+            deleteStatement.executeUpdate();
+
+            for (Integer userid : listOfUsers) {
+                String updateUsersSubprojects = "INSERT INTO users_subprojects (userid, subprojectid) VALUES (?,?)";
+                PreparedStatement preparedStatement = con.prepareStatement(updateUsersSubprojects);
+                preparedStatement.setInt(1, userid);
+                preparedStatement.setInt(2, id);
+                preparedStatement.executeUpdate();
+            }
 
             String sql = "UPDATE subproject SET subprojectName = ?, description = ?, estimatedTime = ? WHERE subprojectID = ?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
@@ -474,6 +586,82 @@ public class ProjectRepository {
                 preparedStatement1.setInt(2, taskid);
                 preparedStatement1.executeUpdate();
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void deleteTask(int taskid) {
+
+        try (Connection con = getConnection()){
+
+            String sqlJoin = "DELETE FROM users_tasks WHERE taskid = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(sqlJoin);
+            preparedStatement.setInt(1,taskid);
+            preparedStatement.executeUpdate();
+
+            String sqlTable = "DELETE FROM task WHERE taskid = ?";
+            PreparedStatement preparedStatement1 = con.prepareStatement(sqlTable);
+            preparedStatement1.setInt(1,taskid);
+            preparedStatement1.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public Task getTaskById(int taskId) {
+
+        try (Connection con = getConnection()){
+
+            String sql = "SELECT * FROM task WHERE taskid = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setInt(1,taskId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return new Task(resultSet.getInt("taskid"),
+                        resultSet.getString("taskName"),
+                        resultSet.getString("description"),
+                        resultSet.getInt("estimatedTime"),
+                        resultSet.getInt("subprojectid"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void editTask(int taskId, Task editedTask, List<Integer> listOfUsers) {
+
+        try (Connection con = getConnection()) {
+
+            String deleteExistingRows = "DELETE FROM users_tasks WHERE taskid = ?";
+            PreparedStatement deleteStatement = con.prepareStatement(deleteExistingRows);
+            deleteStatement.setInt(1, taskId);
+            deleteStatement.executeUpdate();
+
+            for (Integer userid : listOfUsers) {
+                String updateUsersSubprojects = "INSERT INTO users_tasks (userid, taskid) VALUES (?,?)";
+                PreparedStatement preparedStatement = con.prepareStatement(updateUsersSubprojects);
+                preparedStatement.setInt(1, userid);
+                preparedStatement.setInt(2, taskId);
+                preparedStatement.executeUpdate();
+            }
+
+            String updateTask = "UPDATE task SET taskname = ?, description = ?, estimatedtime = ? WHERE taskID = ?";
+            PreparedStatement preparedStatement1 = con.prepareStatement(updateTask);
+            preparedStatement1.setString(1, editedTask.getProjectName());
+            preparedStatement1.setString(2, editedTask.getDescription());
+            preparedStatement1.setInt(3, editedTask.getEstimatedTime());
+            preparedStatement1.setInt(4, taskId);
+            preparedStatement1.executeUpdate();
+
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

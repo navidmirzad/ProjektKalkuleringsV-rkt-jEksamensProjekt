@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<h1>Create task</h1>
+<h1>Edit Task</h1>
 
 <nav>
   <ul>
@@ -29,12 +29,12 @@
 
 <main>
 
-  <form action="#" th:action="@{/createtask/{subprojectid}(subprojectid=${subprojectid})}" method="post" th:object="${task}">
+  <form action="#" th:action="@{/edittask/{taskId}(taskId=${taskId})}" method="post" th:object="${task}">
 
     <div class="form-row">
       <div class="form-column">
 
-        <label>Subproject Name:</label>
+        <label>Task Name:</label>
         <input type="text" th:field="*{projectName}" required/> <br/>
 
         <label>Description:</label>
@@ -60,7 +60,7 @@
         </label>
       </div> <br/>
 
-      <button type="submit">Create task</button>
+      <button type="submit">Edit task</button>
 
 
     </div>

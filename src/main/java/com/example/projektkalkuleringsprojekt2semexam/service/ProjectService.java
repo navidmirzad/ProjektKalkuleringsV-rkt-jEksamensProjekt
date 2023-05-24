@@ -41,12 +41,24 @@ public class ProjectService {
         return projectRepository.findProjectByID(id);
     }
 
-    public void editProject(int id, Project editedProject) {
-        projectRepository.editProject(id, editedProject);
+    public void editProject(int id, Project editedProject, List<Integer> listOfUsers) {
+        projectRepository.editProject(id, editedProject, listOfUsers);
     }
 
     public void deleteProject(int id) {
         projectRepository.deleteProject(id);
+    }
+
+    public List<User> getUsersByProjectId(int projectId) {
+        return projectRepository.getUsersByProjectId(projectId);
+    }
+
+    public List<User> getUsersBySubpojectId(int subprojectId) {
+        return projectRepository.getUsersBySubprojectId(subprojectId);
+    }
+
+    public int getProjectIdBySubprojectId(int subprojectId) {
+        return projectRepository.getProjectIdBySubprojectId(subprojectId);
     }
 
 
@@ -64,12 +76,16 @@ public class ProjectService {
         return projectRepository.getSubprojectById(id);
     }
 
-    public void editSubproject(int id, Subproject editedSubproject) {
-        projectRepository.editSubproject(id, editedSubproject);
+    public void editSubproject(int id, Subproject editedSubproject, List<Integer> listOfUsers) {
+        projectRepository.editSubproject(id, editedSubproject, listOfUsers);
     }
 
     public void deleteSubproject(int id) {
         projectRepository.deleteSubproject(id);
+    }
+
+    public int getSubprojectIdByTaskId(int taskId) {
+        return projectRepository.getSubprojectIdByTaskId(taskId);
     }
 
     //TASKS
@@ -78,6 +94,17 @@ public class ProjectService {
         projectRepository.createTask(listOfUsers,subprojectid,task);
     }
 
+    public void deleteTask(int taskid) {
+        projectRepository.deleteTask(taskid);
+    }
+
+    public Task getTaskById(int taskId) {
+        return projectRepository.getTaskById(taskId);
+    }
+
+    public void editTask(int taskId, Task editedTask, List<Integer> listOfUsers) {
+        projectRepository.editTask(taskId, editedTask, listOfUsers);
+    }
 
 
 }

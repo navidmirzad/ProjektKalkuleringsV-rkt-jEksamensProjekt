@@ -62,6 +62,14 @@
           <label>End date:</label>
           <input type="date" th:field="*{endDate}" required/> <br/>
 
+          <label>Select Users:</label><br/>
+          <div th:each="user : ${users}">
+              <label>
+                  <input type="checkbox" name="listOfUsers" th:value="${user.userID}" />
+                  <span th:text="${user.userName}"></span>
+              </label>
+          </div> <br/>
+
       </div>
     </div>
 
