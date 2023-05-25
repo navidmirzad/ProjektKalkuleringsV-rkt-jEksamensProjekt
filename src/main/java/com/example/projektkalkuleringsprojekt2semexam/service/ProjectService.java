@@ -3,8 +3,10 @@ package com.example.projektkalkuleringsprojekt2semexam.service;
 import com.example.projektkalkuleringsprojekt2semexam.model.Project;
 import com.example.projektkalkuleringsprojekt2semexam.model.Subproject;
 import com.example.projektkalkuleringsprojekt2semexam.model.User;
-import com.example.projektkalkuleringsprojekt2semexam.repository.ProjectRepository;
+import com.example.projektkalkuleringsprojekt2semexam.repository.IProjectRepository;
 import com.example.projektkalkuleringsprojekt2semexam.model.Task;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,10 +14,10 @@ import java.util.List;
 @Service
 public class ProjectService {
 
-    private ProjectRepository projectRepository;
+    private IProjectRepository projectRepository;
 
-    public ProjectService(ProjectRepository projectRepository) {
-        this.projectRepository = projectRepository;
+    public ProjectService(ApplicationContext context, @Value("${project.repository.impl}") String impl) {
+        projectRepository = (IProjectRepository) context.getBean(impl);
     }
 
     // Project

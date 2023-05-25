@@ -60,7 +60,7 @@ public class ProjectController {
         return isLoggedIn(session) ? "insideproject" : "index";
     }
 
-    @GetMapping("/editProject/{projectID}")
+    @GetMapping("/editproject/{projectID}")
     public String editProject(Model model, HttpSession session, @PathVariable int projectID) {
         User user = (User) session.getAttribute("user");
         List<User> users = projectService.getUsers();
@@ -70,10 +70,10 @@ public class ProjectController {
             model.addAttribute("project", project);
             model.addAttribute("users", users);
             model.addAttribute("usersProjects", projectService.getProjectsByUserId(user.getUserID()));
-        } return isLoggedIn(session) ? "editProject" : "index";
+        } return isLoggedIn(session) ? "editproject" : "index";
     }
 
-    @PostMapping("/editProject/{projectID}")
+    @PostMapping("/editproject/{projectID}")
     public String editedProject(@PathVariable int projectID, @ModelAttribute Project editedProject,
                                 @RequestParam List<Integer> listOfUsers) {
         projectService.editProject(projectID, editedProject, listOfUsers);

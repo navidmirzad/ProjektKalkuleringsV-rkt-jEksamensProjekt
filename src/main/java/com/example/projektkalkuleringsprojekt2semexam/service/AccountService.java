@@ -1,8 +1,12 @@
 package com.example.projektkalkuleringsprojekt2semexam.service;
 
+import com.example.projektkalkuleringsprojekt2semexam.Application;
 import com.example.projektkalkuleringsprojekt2semexam.model.User;
 import com.example.projektkalkuleringsprojekt2semexam.repository.AccountRepository;
+import com.example.projektkalkuleringsprojekt2semexam.repository.IAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +15,10 @@ public class AccountService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-    private AccountRepository accountRepository;
+    private IAccountRepository accountRepository;
 
-    public AccountService(AccountRepository accountRepository ) {
-        this.accountRepository = accountRepository;
+    public AccountService(ApplicationContext context, @Value("${account.repository.impl}") String impl) {
+        accountRepository = (IAccountRepository) context.getBean(impl);
     }
 
     // Account

@@ -3,35 +3,24 @@ package com.example.projektkalkuleringsprojekt2semexam.repository;
 import com.example.projektkalkuleringsprojekt2semexam.model.Project;
 import com.example.projektkalkuleringsprojekt2semexam.model.Subproject;
 import com.example.projektkalkuleringsprojekt2semexam.model.*;
-import org.springframework.beans.factory.annotation.Value;
+import com.example.projektkalkuleringsprojekt2semexam.repository.util.DatabaseCon;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
-public class ProjectRepository {
-
-    @Value("${spring.datasource.url}")
-    private String db_url;
-
-    @Value("${spring.datasource.username}")
-    private String uid;
-
-    @Value("${spring.datasource.password}")
-    private String pwd;
-
-    private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(db_url, uid, pwd);
-    }
-
+@Repository("mysqldb-project")
+public class ProjectRepository implements IProjectRepository {
 
     // Project #1
 
+    @Override
     public void createProject(Project project, List<Integer> listOfUsers) {
 
-        try (Connection con = getConnection()) {
+        try {
+            Connection con = DatabaseCon.getConnection();
+            con.setAutoCommit(false);
 
             String createProject = "insert into project (projectName, description, ImageURL, " +
                                     "estimatedTime, startDate, endDate) "
@@ -61,17 +50,19 @@ public class ProjectRepository {
                 selectedUsersStatement.executeUpdate();
             }
 
-
+            con.commit();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
+    @Override
     public List<Project> getProjectsByUserId(int id) {
         List<Project> projects = new ArrayList<>();
 
-        try (Connection con = getConnection()) {
+        try {
+            Connection con = DatabaseCon.getConnection();
 
             String SQL = "SELECT * FROM project INNER JOIN users_projects on project.projectid = users_projects.projectid WHERE users_projects.userid = ?";
             PreparedStatement preparedStatement = con.prepareStatement(SQL);
@@ -96,11 +87,14 @@ public class ProjectRepository {
         return projects;
     }
 
+    @Override
     public List<Project> getProjects() {
 
         List<Project> projects = new ArrayList<>();
 
-        try (Connection con = getConnection()) {
+        try {
+            Connection con = DatabaseCon.getConnection();
+
             String sql = "SELECT projectID, projectName, description, imageURL," +
                         "estimatedTime, startDate, endDate FROM project";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
@@ -125,6 +119,7 @@ public class ProjectRepository {
     }
 
 
+    @Override
     public int estimatedTimeForProject(int projectid) {
         int totalEstimatedTime = 0;
         List<Subproject> subprojects = getSubprojectByProjectId(projectid);
@@ -134,11 +129,13 @@ public class ProjectRepository {
         return totalEstimatedTime;
     }
 
+    @Override
     public Project findProjectByID(int id) {
 
         Project project = null;
 
-        try (Connection con = getConnection()) {
+        try {
+            Connection con = DatabaseCon.getConnection();
             String sql = "SELECT * FROM project WHERE projectID = ?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             preparedStatement.setInt(1, id);
@@ -161,10 +158,12 @@ public class ProjectRepository {
         return project;
     }
 
+    @Override
     public int getProjectIdBySubprojectId(int subprojectId) {
         int projectId = 0;
 
-        try (Connection con = getConnection()) {
+        try {
+            Connection con = DatabaseCon.getConnection();
             String getSubprojectIdQuery = "SELECT projectId FROM subproject WHERE subprojectId = ?";
             PreparedStatement preparedStatement = con.prepareStatement(getSubprojectIdQuery);
             preparedStatement.setInt(1, subprojectId);
@@ -180,9 +179,12 @@ public class ProjectRepository {
         return projectId;
     }
 
+    @Override
     public void editProject(int id, Project editedProject, List<Integer> listOfUsers) {
 
-        try (Connection con = getConnection()) {
+        try {
+            Connection con = DatabaseCon.getConnection();
+            con.setAutoCommit(false);
 
             String deleteExistingRows = "DELETE FROM users_projects WHERE projectid = ?";
             PreparedStatement deleteStatement = con.prepareStatement(deleteExistingRows);
@@ -207,6 +209,9 @@ public class ProjectRepository {
             preparedStatement.setDate(5, (Date) editedProject.getStartDate());
             preparedStatement.setDate(6, (Date) editedProject.getEndDate());
             preparedStatement.setInt(7, id);
+
+            con.commit();
+
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Update failed");
@@ -216,9 +221,14 @@ public class ProjectRepository {
         }
     }
 
+    @Override
     public void deleteProject(int id) {
 
-        try (Connection con = getConnection()) {
+        try {
+
+            Connection con = DatabaseCon.getConnection();
+            con.setAutoCommit(false);
+
             try (PreparedStatement pstmt1 = con.prepareStatement("DELETE FROM users_tasks WHERE taskID IN (SELECT taskID FROM task WHERE subprojectID IN (SELECT subprojectID FROM subproject WHERE projectID = ?))")) {
                 pstmt1.setInt(1, id);
                 pstmt1.executeUpdate();
@@ -248,6 +258,9 @@ public class ProjectRepository {
                 pstmt6.setInt(1, id);
                 pstmt6.executeUpdate();
             }
+
+            con.commit();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -255,12 +268,14 @@ public class ProjectRepository {
 
     // Account section
 
-
+    @Override
     public List<User> getUsers() {
 
         List<User> users = new ArrayList<>();
 
-        try (Connection con = getConnection()) {
+        try {
+
+            Connection con = DatabaseCon.getConnection();
 
             String sql = "SELECT * FROM user";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
@@ -286,11 +301,13 @@ public class ProjectRepository {
         return users;
     }
 
+    @Override
     public List<User> getUsersByProjectId(int projectId) {
 
         List<User> users = new ArrayList<>();
 
-        try (Connection con = getConnection()) {
+        try {
+            Connection con = DatabaseCon.getConnection();
 
             String sql = "SELECT * FROM user INNER JOIN users_projects ON user.userid = users_projects.userid WHERE projectid = ?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
@@ -317,11 +334,14 @@ public class ProjectRepository {
         return users;
     }
 
+    @Override
     public List<User> getUsersBySubprojectId(int subprojectId) {
 
         List<User> users = new ArrayList<>();
 
-        try (Connection con = getConnection()) {
+        try {
+
+            Connection con = DatabaseCon.getConnection();
 
             String sql = "SELECT * FROM user INNER JOIN users_subprojects ON user.userid = users_subprojects.userid WHERE subprojectid = ?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
@@ -351,9 +371,14 @@ public class ProjectRepository {
 
     // Subproject
 
+    @Override
     public void createSubproject(List<Integer> listOfUsers, int projectid, Subproject subproject) {
 
-        try (Connection con = getConnection()) {
+        try {
+
+            Connection con = DatabaseCon.getConnection();
+            con.setAutoCommit(false);
+
             String insertSubproject = "INSERT INTO subproject (subprojectname, description, estimatedtime, projectid) VALUES(?,?,?,?)";
             PreparedStatement preparedStatement = con.prepareStatement(insertSubproject, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, subproject.getProjectName());
@@ -377,6 +402,8 @@ public class ProjectRepository {
                 pstm.executeUpdate();
             }
 
+            con.commit();
+
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -384,11 +411,14 @@ public class ProjectRepository {
 
     }
 
+    @Override
     public int getEstimatedTimeForSubproject(int subprojectid) {
 
         int estimatedTime = 0;
 
-        try(Connection con = getConnection()) {
+        try {
+
+            Connection con = DatabaseCon.getConnection();
 
             String sql = "SELECT SUM(task.estimatedTime) AS totalEstimatedTime " +
                     "FROM subproject " +
@@ -408,11 +438,14 @@ public class ProjectRepository {
         return estimatedTime;
     }
 
+    @Override
     public List<Subproject> getSubprojectByProjectId(int projectid) {
 
         List<Subproject> subprojects = new ArrayList<>();
 
-        try (Connection con = getConnection()){
+        try {
+
+            Connection con = DatabaseCon.getConnection();
 
             String SQL = "SELECT * FROM subproject WHERE projectID = ?";
             PreparedStatement preparedStatement = con.prepareStatement(SQL);
@@ -455,11 +488,14 @@ public class ProjectRepository {
         return subprojects;
     }
 
+    @Override
     public Subproject getSubprojectById(int id) {
 
         Subproject subproject = new Subproject();
 
-        try (Connection con = getConnection()) {
+        try {
+
+            Connection con = DatabaseCon.getConnection();
 
             String sql = "SELECT * FROM subproject WHERE subprojectid = ?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
@@ -478,10 +514,14 @@ public class ProjectRepository {
         return subproject;
     }
 
+    @Override
     public int getSubprojectIdByTaskId(int taskId) {
         int subprojectId = 0;
 
-        try (Connection con = getConnection()) {
+        try {
+
+            Connection con = DatabaseCon.getConnection();
+
             String getSubprojectIdQuery = "SELECT subprojectID FROM task WHERE taskID = ?";
             PreparedStatement preparedStatement = con.prepareStatement(getSubprojectIdQuery);
             preparedStatement.setInt(1, taskId);
@@ -497,9 +537,13 @@ public class ProjectRepository {
         return subprojectId;
     }
 
+    @Override
     public void editSubproject(int id, Subproject editedSubproject, List<Integer> listOfUsers) {
 
-        try (Connection con = getConnection()) {
+        try {
+
+            Connection con = DatabaseCon.getConnection();
+            con.setAutoCommit(false);
 
             String deleteExistingRows = "DELETE FROM users_subprojects WHERE subprojectid = ?";
             PreparedStatement deleteStatement = con.prepareStatement(deleteExistingRows);
@@ -522,16 +566,22 @@ public class ProjectRepository {
             preparedStatement.setInt(4, id);
             preparedStatement.executeUpdate();
 
+            con.commit();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
     }
 
-
+    @Override
     public void deleteSubproject(int id) {
 
-        try (Connection con = getConnection()) {
+        try {
+
+            Connection con = DatabaseCon.getConnection();
+            con.setAutoCommit(false);
+
             try (PreparedStatement pstmt1 = con.prepareStatement("DELETE FROM users_tasks WHERE taskID IN (SELECT taskID FROM task WHERE subprojectID = ?)")) {
                 pstmt1.setInt(1, id);
                 pstmt1.executeUpdate();
@@ -551,6 +601,9 @@ public class ProjectRepository {
                 pstmt4.setInt(1, id);
                 pstmt4.executeUpdate();
             }
+
+            con.commit();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -559,11 +612,16 @@ public class ProjectRepository {
 
     // TASK SECTION
 
+    @Override
     public void createTask(List<Integer> listOfUsers, int subprojectid, Task task) {
 
         //insert task table
 
-        try (Connection con = getConnection()){
+        try {
+
+            Connection con = DatabaseCon.getConnection();
+            con.setAutoCommit(false);
+
             String insertTask = "INSERT INTO task (taskName, description, estimatedTime, subprojectid)" +
                     "VALUES(?,?,?,?)";
             PreparedStatement preparedStatement = con.prepareStatement(insertTask,Statement.RETURN_GENERATED_KEYS);
@@ -586,15 +644,22 @@ public class ProjectRepository {
                 preparedStatement1.setInt(2, taskid);
                 preparedStatement1.executeUpdate();
             }
+
+            con.commit();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
     }
 
+    @Override
     public void deleteTask(int taskid) {
 
-        try (Connection con = getConnection()){
+        try {
+
+            Connection con = DatabaseCon.getConnection();
+            con.setAutoCommit(false);
 
             String sqlJoin = "DELETE FROM users_tasks WHERE taskid = ?";
             PreparedStatement preparedStatement = con.prepareStatement(sqlJoin);
@@ -606,15 +671,20 @@ public class ProjectRepository {
             preparedStatement1.setInt(1,taskid);
             preparedStatement1.executeUpdate();
 
+            con.commit();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
     }
 
+    @Override
     public Task getTaskById(int taskId) {
 
-        try (Connection con = getConnection()){
+        try {
+
+            Connection con = DatabaseCon.getConnection();
 
             String sql = "SELECT * FROM task WHERE taskid = ?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
@@ -635,9 +705,13 @@ public class ProjectRepository {
         return null;
     }
 
+    @Override
     public void editTask(int taskId, Task editedTask, List<Integer> listOfUsers) {
 
-        try (Connection con = getConnection()) {
+        try {
+
+            Connection con = DatabaseCon.getConnection();
+            con.setAutoCommit(false);
 
             String deleteExistingRows = "DELETE FROM users_tasks WHERE taskid = ?";
             PreparedStatement deleteStatement = con.prepareStatement(deleteExistingRows);
@@ -660,6 +734,7 @@ public class ProjectRepository {
             preparedStatement1.setInt(4, taskId);
             preparedStatement1.executeUpdate();
 
+            con.commit();
 
 
         } catch (SQLException e) {
