@@ -96,7 +96,8 @@ public class ProjectController {
 
     @GetMapping("/seeproject/{projectID}")
     public String seeProject(@PathVariable int projectID, Model model, HttpSession session) {
-        session.setAttribute("projectID", projectID);
+        Project project = projectService.findProjectByID(projectID);
+        session.setAttribute("project", project);
         Subproject subproject = new Subproject();
         List<Subproject> subprojects = projectService.getSubprojectByProjectId(projectID);
         List<User> users = projectService.getUsersByProjectId(projectID);
@@ -113,7 +114,8 @@ public class ProjectController {
                                    HttpSession session,
                                    @RequestParam List<Integer> listOfUsers) {
         User user = (User) session.getAttribute("user");
-        int projectID = (int) session.getAttribute("projectID");
+        Project project = (Project) session.getAttribute("project");
+        int projectID = project.getProjectID();
 
         projectService.createSubproject(listOfUsers, projectID, subproject);
 
@@ -140,14 +142,16 @@ public class ProjectController {
                                  HttpSession session,
                                  @RequestParam List<Integer> listOfUsers) {
         projectService.editSubproject(id, editedSubproject,listOfUsers);
-        int projectid = (int) session.getAttribute("projectID");
+        Project project = (Project) session.getAttribute("project");
+        int projectid = project.getProjectID();
 
         return "redirect:/seeproject/" + projectid;
     }
 
     @PostMapping("/deletesubproject")
     public String deleteSubproject(@RequestParam("id") int id, HttpSession session) {
-        int projectid = (int) session.getAttribute("projectID");
+        Project project = (Project) session.getAttribute("project");
+        int projectid = project.getProjectID();
         projectService.deleteSubproject(id);
         return "redirect:/seeproject/" + projectid;
     }
@@ -168,7 +172,8 @@ public class ProjectController {
                              @RequestParam List<Integer> listOfUsers) {
 
         User user = (User) session.getAttribute("user");
-        int projectID = (int) session.getAttribute("projectID");
+        Project project = (Project) session.getAttribute("project");
+        int projectID = project.getProjectID();
 
         projectService.createTask(listOfUsers, subprojectid, task);
 
@@ -178,7 +183,8 @@ public class ProjectController {
     @PostMapping("/deletetask")
     public String deleteTask(@RequestParam("taskId") int taskId,
                              HttpSession session) {
-        int projectID = (int) session.getAttribute("projectID");
+        Project project = (Project) session.getAttribute("project");
+        int projectID = project.getProjectID();
         projectService.deleteTask(taskId);
         return "redirect:/seeproject/" + projectID;
     }
@@ -201,7 +207,8 @@ public class ProjectController {
                            HttpSession session,
                            @RequestParam List<Integer> listOfUsers) {
 
-        int projectID = (int) session.getAttribute("projectID");
+        Project project = (Project) session.getAttribute("project");
+        int projectID = project.getProjectID();
 
         projectService.editTask(taskId, editedTask, listOfUsers);
 
