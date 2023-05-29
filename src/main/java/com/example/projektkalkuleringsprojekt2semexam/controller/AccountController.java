@@ -51,9 +51,9 @@ public class AccountController {
         User user = accountService.getUserByUserNameAndPassword(userName, userPassword);
         if (user != null) {
 
-            // create session for user and set session timeout to 30 sec (container default: 15 min)
+            // create session for user and set session timeout to 15min (container default: 15 min)
             session.setAttribute("user", user);
-            session.setMaxInactiveInterval(60);
+            session.setMaxInactiveInterval(900);
             return "redirect:/frontpage";
         }
         // wrong login info
