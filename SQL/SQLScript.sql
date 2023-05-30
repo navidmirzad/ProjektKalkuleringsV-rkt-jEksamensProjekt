@@ -1,8 +1,6 @@
 CREATE DATABASE projectcalculatorDB;
 USE projectcalculatorDB;
 
-DROP SCHEMA projectcalculatorDB;
-
 CREATE TABLE user (
                       userID INT PRIMARY KEY AUTO_INCREMENT,
                       firstName VARCHAR(255) NOT NULL,
