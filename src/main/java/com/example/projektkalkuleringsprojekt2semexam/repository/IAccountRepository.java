@@ -12,6 +12,7 @@ public interface IAccountRepository {
 
     User getUserById(int id);
 
+    boolean doesUsernameExist(String userName);
     void editAccount(int id, User editedUser);
 
     void deleteAccount(int id);

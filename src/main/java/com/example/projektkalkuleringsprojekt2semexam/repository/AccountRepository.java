@@ -100,6 +100,24 @@ public class AccountRepository implements IAccountRepository {
     }
 
     @Override
+    public boolean doesUsernameExist(String userName) {
+
+        try {
+            Connection con = DatabaseCon.getConnection();
+            String SQL = "SELECT userName FROM user WHERE userName = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(SQL);
+            preparedStatement.setString(1, userName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
     public void editAccount(int id, User editedUser) {
 
         try {

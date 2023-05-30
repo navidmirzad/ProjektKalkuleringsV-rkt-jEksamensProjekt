@@ -33,6 +33,10 @@ public class AccountService {
         return accountRepository.getUserById(id);
     }
 
+    public boolean doesUsernameExist(String userName) {
+        return accountRepository.doesUsernameExist(userName);
+    }
+
     public void editAccount(int id, User editedUser) {
         String encodedPassword = passwordEncoder.encode(editedUser.getUserPassword());
         editedUser.setUserPassword(encodedPassword);

@@ -71,9 +71,16 @@ public class AccountController {
     }
 
     @PostMapping("/createuser")
-    public String createdUser(@ModelAttribute("user") User user) {
-        accountService.createUser(user);
-        return "createUserSuccess";
+    public String createdUser(@ModelAttribute("user") User user, Model model) {
+        String userName = user.getUserName();
+        if (accountService.doesUsernameExist(userName)) {
+            model.addAttribute("userNameExists", true);
+            model.addAttribute("roles", Role.values());
+            return "createUser";
+        } else {
+            accountService.createUser(user);
+            return "createUserSuccess";
+        }
     }
 
     @GetMapping("/youraccount")

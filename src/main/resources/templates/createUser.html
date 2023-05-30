@@ -62,7 +62,12 @@
       </div>
     </div>
 
+    <div th:if="${userNameExists}" class="error-message">
+      Username already exists.
+    </div>
+
     <div class="form-row">
+
 
       <button type="submit">Create Account</button>
 
