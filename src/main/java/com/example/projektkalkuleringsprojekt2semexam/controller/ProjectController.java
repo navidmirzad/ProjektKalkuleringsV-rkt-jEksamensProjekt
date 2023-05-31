@@ -22,7 +22,6 @@ public class ProjectController {
 
     private ProjectService projectService;
 
-
     public ProjectController(ProjectService projectService) {
         this.projectService = projectService;
     }
@@ -48,17 +47,11 @@ public class ProjectController {
 
     @PostMapping("/insideproject")
     public String createProject(@ModelAttribute("project") Project project,
-                                HttpSession session,
                                 @RequestParam List<Integer> listOfUsers) {
-        User user = (User) session.getAttribute("user");
         projectService.createProject(project, listOfUsers);
-        return "redirect:/createdProject";
+        return "redirect:/frontpage";
     }
 
-    @GetMapping("/createdProject")
-    public String insideCreatedProject(HttpSession session) {
-        return isLoggedIn(session) ? "insideproject" : "index";
-    }
 
     @GetMapping("/editproject/{projectID}")
     public String editProject(Model model, HttpSession session, @PathVariable int projectID) {
@@ -113,10 +106,8 @@ public class ProjectController {
     public String createSubproject(@ModelAttribute("subproject") Subproject subproject,
                                    HttpSession session,
                                    @RequestParam List<Integer> listOfUsers) {
-        User user = (User) session.getAttribute("user");
         Project project = (Project) session.getAttribute("project");
         int projectID = project.getProjectID();
-
         projectService.createSubproject(listOfUsers, projectID, subproject);
 
         return "redirect:/seeproject/" + projectID;
@@ -132,7 +123,6 @@ public class ProjectController {
         model.addAttribute("users", users);
         model.addAttribute("subproject", subproject);
 
-
         return "editsubproject";
     }
 
@@ -143,31 +133,31 @@ public class ProjectController {
                                  @RequestParam List<Integer> listOfUsers) {
         projectService.editSubproject(id, editedSubproject,listOfUsers);
         Project project = (Project) session.getAttribute("project");
-        int projectid = project.getProjectID();
+        int projectID = project.getProjectID();
 
-        return "redirect:/seeproject/" + projectid;
+        return "redirect:/seeproject/" + projectID;
     }
 
     @PostMapping("/deletesubproject")
     public String deleteSubproject(@RequestParam("id") int id, HttpSession session) {
         Project project = (Project) session.getAttribute("project");
-        int projectid = project.getProjectID();
+        int projectID = project.getProjectID();
         projectService.deleteSubproject(id);
-        return "redirect:/seeproject/" + projectid;
+        return "redirect:/seeproject/" + projectID;
     }
 
-    @GetMapping("createtask/{subprojectid}")
-    public String createTask(@PathVariable("subprojectid") int subprojectid, Model model, HttpSession session) {
+    @GetMapping("createtask/{subprojectID}")
+    public String createTask(@PathVariable("subprojectID") int subprojectID, Model model, HttpSession session) {
         Task task = new Task();
-        List<User> users = projectService.getUsersBySubpojectId(subprojectid);
+        List<User> users = projectService.getUsersBySubpojectId(subprojectID);
         model.addAttribute("task", task);
-        model.addAttribute("subprojectid", subprojectid);
+        model.addAttribute("subprojectID", subprojectID);
         model.addAttribute("users", users);
         return "createtask";
     }
 
-    @PostMapping("createtask/{subprojectid}")
-    public String createTask(@PathVariable("subprojectid") int subprojectid, HttpSession session,
+    @PostMapping("createtask/{subprojectID}")
+    public String createTask(@PathVariable("subprojectID") int subprojectID, HttpSession session,
                              @ModelAttribute Task task,
                              @RequestParam List<Integer> listOfUsers) {
 
@@ -175,25 +165,25 @@ public class ProjectController {
         Project project = (Project) session.getAttribute("project");
         int projectID = project.getProjectID();
 
-        projectService.createTask(listOfUsers, subprojectid, task);
+        projectService.createTask(listOfUsers, subprojectID, task);
 
         return "redirect:/seeproject/" + projectID;
     }
 
     @PostMapping("/deletetask")
-    public String deleteTask(@RequestParam("taskId") int taskId,
+    public String deleteTask(@RequestParam("taskID") int taskID,
                              HttpSession session) {
         Project project = (Project) session.getAttribute("project");
         int projectID = project.getProjectID();
-        projectService.deleteTask(taskId);
+        projectService.deleteTask(taskID);
         return "redirect:/seeproject/" + projectID;
     }
 
-    @GetMapping("/edittask/{taskId}")
-    public String editTask(@PathVariable("taskId") int taskId, Model model) {
+    @GetMapping("/edittask/{taskID}")
+    public String editTask(@PathVariable("taskID") int taskID, Model model) {
 
-        Task task = projectService.getTaskById(taskId);
-        int subprojectId = projectService.getSubprojectIdByTaskId(taskId);
+        Task task = projectService.getTaskById(taskID);
+        int subprojectId = projectService.getSubprojectIdByTaskId(taskID);
         List<User> users = projectService.getUsersBySubpojectId(subprojectId);
         model.addAttribute("task", task);
         model.addAttribute("users", users);
@@ -201,8 +191,8 @@ public class ProjectController {
         return "edittask";
     }
 
-    @PostMapping("edittask/{taskId}")
-    public String editTask(@PathVariable int taskId,
+    @PostMapping("edittask/{taskID}")
+    public String editTask(@PathVariable int taskID,
                            @ModelAttribute Task editedTask,
                            HttpSession session,
                            @RequestParam List<Integer> listOfUsers) {
@@ -210,7 +200,7 @@ public class ProjectController {
         Project project = (Project) session.getAttribute("project");
         int projectID = project.getProjectID();
 
-        projectService.editTask(taskId, editedTask, listOfUsers);
+        projectService.editTask(taskID, editedTask, listOfUsers);
 
         return "redirect:/seeproject/" + projectID;
     }

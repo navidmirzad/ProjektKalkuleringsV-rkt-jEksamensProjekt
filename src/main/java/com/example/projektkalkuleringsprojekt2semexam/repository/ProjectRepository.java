@@ -118,7 +118,6 @@ public class ProjectRepository implements IProjectRepository {
         }
     }
 
-
     @Override
     public int estimatedTimeForProject(int projectid) {
         int totalEstimatedTime = 0;

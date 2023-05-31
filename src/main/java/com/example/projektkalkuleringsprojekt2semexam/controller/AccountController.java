@@ -17,12 +17,12 @@ public class AccountController {
 
     private AccountService accountService;
 
-    private boolean isLoggedIn(HttpSession session) {
-        return session.getAttribute("user") != null;
-    }
-
     public AccountController(AccountService accountService) {
         this.accountService = accountService;
+    }
+
+    private boolean isLoggedIn(HttpSession session) {
+        return session.getAttribute("user") != null;
     }
 
     @GetMapping("/logout")
@@ -83,14 +83,6 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/youraccount")
-    public String yourAccount(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        user = accountService.getUserById(user.getUserID());
-        model.addAttribute("user", user);
-        return isLoggedIn(session) ? "accountinfo" : "login";
-    }
-
     @GetMapping("/deleteaccount")
     public String deleteAccount(HttpSession session) {
         User user = (User) session.getAttribute("user");
@@ -98,14 +90,6 @@ public class AccountController {
         session.invalidate();
         return "redirect:/";
     }
-
-    /*@PostMapping("/deleteaccount")
-    public String deleteAccount(HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        accountService.deleteAccount(user.getUserID());
-        session.invalidate();
-        return "redirect:/";
-    }*/
 
     @GetMapping("/editaccount")
     public String editAccount(HttpSession session, Model model) {

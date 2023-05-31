@@ -1,9 +1,7 @@
 package com.example.projektkalkuleringsprojekt2semexam.repository;
 
 import com.example.projektkalkuleringsprojekt2semexam.model.*;
-import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
 import java.util.List;
 
 public interface IProjectRepository {

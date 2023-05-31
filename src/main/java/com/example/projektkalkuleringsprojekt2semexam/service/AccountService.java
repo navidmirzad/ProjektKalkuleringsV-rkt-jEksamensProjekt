@@ -1,8 +1,6 @@
 package com.example.projektkalkuleringsprojekt2semexam.service;
 
-import com.example.projektkalkuleringsprojekt2semexam.Application;
 import com.example.projektkalkuleringsprojekt2semexam.model.User;
-import com.example.projektkalkuleringsprojekt2semexam.repository.AccountRepository;
 import com.example.projektkalkuleringsprojekt2semexam.repository.IAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

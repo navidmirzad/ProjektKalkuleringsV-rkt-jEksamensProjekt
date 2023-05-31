@@ -1,8 +1,5 @@
 package com.example.projektkalkuleringsprojekt2semexam.repository;
 import com.example.projektkalkuleringsprojekt2semexam.model.User;
-import org.springframework.stereotype.Repository;
-
-import java.sql.Connection;
 
 public interface IAccountRepository {
 
@@ -14,7 +11,6 @@ public interface IAccountRepository {
 
     boolean doesUsernameExist(String userName);
     void editAccount(int id, User editedUser);
-
     void deleteAccount(int id);
 
 }
