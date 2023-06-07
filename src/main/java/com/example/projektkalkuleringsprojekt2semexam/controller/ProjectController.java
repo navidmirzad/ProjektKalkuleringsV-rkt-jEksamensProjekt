@@ -1,5 +1,3 @@
-
-
 package com.example.projektkalkuleringsprojekt2semexam.controller;
 
 import com.example.projektkalkuleringsprojekt2semexam.model.Project;
@@ -20,23 +18,33 @@ import java.util.List;
 @Controller
 public class ProjectController {
 
+    // opretter et projectservice objekt, så vi kan få adgang til metoderne i klassen
     private ProjectService projectService;
 
 
+    // konstruktør for at oprette en instans af projectservice
     public ProjectController(ProjectService projectService) {
         this.projectService = projectService;
     }
 
+    // Boolean metode der checker på om man er logget ind med en parameteren HttpSession session
     private boolean isLoggedIn(HttpSession session) {
+        // session.getAttribute("user") henter den værdi der er gemt i HttpSession objektet under attribute navnet "user".
+        // hvis user ikke er null
         return session.getAttribute("user") != null;
     }
 
     // showProjects method or frontpage GetMapping lets us create project, make HttpSession with userID and shows projects
+    //GetMapping("/frontpage) = indikerer en GetMapping request til /frontpage:
     @GetMapping("/frontpage")
-    public String showProjects(Model model, HttpSession session) {
-        Project project = new Project();
+    public String showProjects(Model model, HttpSession session) { // giver Model, og HttpSession med som parameter
+        Project project = new Project(); // opretter en ny instans af Project
+        // Her henter vi værdien gemt i HttpSession under attribut navnet "user". Og den går ud fra at objektet er en User og caster den til User.
         User user = (User) session.getAttribute("user");
+        // Vi har en liste med objektet User kaldt users, og kalder så metoden getUsers fra projectService,
+        // som viderekalder til projectRepository.getUsers som så henter en liste af vores brugere fra databasen
         List<User> users = projectService.getUsers();
+
 
         if (isLoggedIn(session)) {
             model.addAttribute("projects", projectService.getProjectsByUserId(user.getUserID()));
