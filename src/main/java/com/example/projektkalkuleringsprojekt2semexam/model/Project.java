@@ -1,8 +1,6 @@
 package com.example.projektkalkuleringsprojekt2semexam.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class Project {
 
@@ -102,6 +100,10 @@ public class Project {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public int getTimeDif() {
+        return estimatedTime - totalEstimatedTime;
     }
 
     @Override

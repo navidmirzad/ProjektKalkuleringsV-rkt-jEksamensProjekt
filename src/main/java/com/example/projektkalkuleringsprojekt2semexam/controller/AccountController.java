@@ -85,39 +85,28 @@ public class AccountController {
         model.addAttribute("roles", Role.values()); // vi tilføjer vores enum klasse Roles værdier, (Role.values() returnerer et array af værdierne 'Role')
         // da det fungerer som en dropdown i programmet når man opretter en bruger og skal vises
         return "createUser"; // henter templaten "/createUser" så man kan oprette en bruger og viser model - user + role.values
-    }
+    } // dette er den gamle metode
 
-
+    // den her er den nye
     @PostMapping("/createuser")
-    public String createdUser(@ModelAttribute("user") User user) { // vi giver @ModelAttribute("user") User user med for at binde den submittede data til den oprettede User
-        accountService.createUser(user); // kalder til accountService.createUser, hvor der så oprettes en bruger
-        return "createUserSuccess"; // returner os til siden der viser os account info - set bort fra password.
-    }
-
-    @GetMapping("/youraccount")
-    public String yourAccount(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        user = accountService.getUserById(user.getUserID());
-        model.addAttribute("user", user);
-        return isLoggedIn(session) ? "accountinfo" : "login";
+    public String createdUser(@ModelAttribute("user") User user, Model model) {
+        String userName = user.getUserName();
+        if (accountService.doesUsernameExist(userName)) {
+            model.addAttribute("userNameExists", true);
+            model.addAttribute("roles", Role.values());
+            return "createUser";
+        } else {
+            accountService.createUser(user);
+            return "createUserSuccess";
+        }
     }
 
     @GetMapping("/deleteaccount")
-    public String deleteAccount(HttpSession session, @RequestParam("id") int id) {
-        accountService.deleteAccount(id);
-        session.invalidate();
-        return "deleteuser";
-    }
-
-    @PostMapping("/deleteaccount")
-    public String deleteAccount(@RequestParam String userName,
-                                @RequestParam String password,
-                                HttpSession session,
-                                Model model) {
-        User user = accountService.getUserByUserNameAndPassword(userName, password);
+    public String deleteAccount(HttpSession session) {
+        User user = (User) session.getAttribute("user");
         accountService.deleteAccount(user.getUserID());
         session.invalidate();
-        return "redirect:/index";
+        return "redirect:/";
     }
 
     @GetMapping("/editaccount")

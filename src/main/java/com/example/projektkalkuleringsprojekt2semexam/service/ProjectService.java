@@ -3,8 +3,10 @@ package com.example.projektkalkuleringsprojekt2semexam.service;
 import com.example.projektkalkuleringsprojekt2semexam.model.Project;
 import com.example.projektkalkuleringsprojekt2semexam.model.Subproject;
 import com.example.projektkalkuleringsprojekt2semexam.model.User;
-import com.example.projektkalkuleringsprojekt2semexam.repository.ProjectRepository;
+import com.example.projektkalkuleringsprojekt2semexam.repository.IProjectRepository;
 import com.example.projektkalkuleringsprojekt2semexam.model.Task;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,10 +14,10 @@ import java.util.List;
 @Service
 public class ProjectService {
 
-    private ProjectRepository projectRepository;
+    private IProjectRepository projectRepository;
 
-    public ProjectService(ProjectRepository projectRepository) {
-        this.projectRepository = projectRepository;
+    public ProjectService(ApplicationContext context, @Value("${project.repository.impl}") String impl) {
+        projectRepository = (IProjectRepository) context.getBean(impl);
     }
 
     // Project
@@ -41,12 +43,24 @@ public class ProjectService {
         return projectRepository.findProjectByID(id);
     }
 
-    public void editProject(int id, Project editedProject) {
-        projectRepository.editProject(id, editedProject);
+    public void editProject(int id, Project editedProject, List<Integer> listOfUsers) {
+        projectRepository.editProject(id, editedProject, listOfUsers);
     }
 
     public void deleteProject(int id) {
         projectRepository.deleteProject(id);
+    }
+
+    public List<User> getUsersByProjectId(int projectId) {
+        return projectRepository.getUsersByProjectId(projectId);
+    }
+
+    public List<User> getUsersBySubpojectId(int subprojectId) {
+        return projectRepository.getUsersBySubprojectId(subprojectId);
+    }
+
+    public int getProjectIdBySubprojectId(int subprojectId) {
+        return projectRepository.getProjectIdBySubprojectId(subprojectId);
     }
 
 
@@ -64,12 +78,16 @@ public class ProjectService {
         return projectRepository.getSubprojectById(id);
     }
 
-    public void editSubproject(int id, Subproject editedSubproject) {
-        projectRepository.editSubproject(id, editedSubproject);
+    public void editSubproject(int id, Subproject editedSubproject, List<Integer> listOfUsers) {
+        projectRepository.editSubproject(id, editedSubproject, listOfUsers);
     }
 
     public void deleteSubproject(int id) {
         projectRepository.deleteSubproject(id);
+    }
+
+    public int getSubprojectIdByTaskId(int taskId) {
+        return projectRepository.getSubprojectIdByTaskId(taskId);
     }
 
     //TASKS
@@ -78,6 +96,17 @@ public class ProjectService {
         projectRepository.createTask(listOfUsers,subprojectid,task);
     }
 
+    public void deleteTask(int taskid) {
+        projectRepository.deleteTask(taskid);
+    }
+
+    public Task getTaskById(int taskId) {
+        return projectRepository.getTaskById(taskId);
+    }
+
+    public void editTask(int taskId, Task editedTask, List<Integer> listOfUsers) {
+        projectRepository.editTask(taskId, editedTask, listOfUsers);
+    }
 
 
 }

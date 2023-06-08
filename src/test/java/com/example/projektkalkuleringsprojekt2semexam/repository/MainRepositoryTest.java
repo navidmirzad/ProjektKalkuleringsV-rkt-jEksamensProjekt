@@ -1,9 +1,7 @@
 package com.example.projektkalkuleringsprojekt2semexam.repository;
 
-import com.example.projektkalkuleringsprojekt2semexam.controller.AccountController;
 import com.example.projektkalkuleringsprojekt2semexam.model.Project;
-import com.example.projektkalkuleringsprojekt2semexam.model.Role;
-import com.example.projektkalkuleringsprojekt2semexam.model.User;
+
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;

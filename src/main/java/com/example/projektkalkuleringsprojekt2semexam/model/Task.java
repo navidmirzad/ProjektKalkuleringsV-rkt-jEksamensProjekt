@@ -20,9 +20,6 @@ public class Task extends Project {
         this.subProjectID = subProjectID;
     }
 
-    public String toString() {
-        return "Task name: " + getProjectName() + "\nDescription: " + getDescription() + "\nEstimated time: " + getEstimatedTime() + "\n";
-    }
 
 
 

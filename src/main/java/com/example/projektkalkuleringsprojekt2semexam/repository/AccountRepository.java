@@ -2,30 +2,20 @@ package com.example.projektkalkuleringsprojekt2semexam.repository;
 
 import com.example.projektkalkuleringsprojekt2semexam.model.Role;
 import com.example.projektkalkuleringsprojekt2semexam.model.User;
-import org.springframework.beans.factory.annotation.Value;
+import com.example.projektkalkuleringsprojekt2semexam.repository.util.DatabaseCon;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 
-@Repository
-public class AccountRepository {
+@Repository("mysqldb-account")
+public class AccountRepository implements IAccountRepository {
 
-    @Value("${spring.datasource.url}")
-    private String db_url;
-
-    @Value("${spring.datasource.username}")
-    private String uid;
-
-    @Value("${spring.datasource.password}")
-    private String pwd;
-
-    private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(db_url, uid, pwd);
-    }
-
+    @Override
     public void createUser(User user) {
 
-        try (Connection con = getConnection()) {
+        try {
+
+            Connection con = DatabaseCon.getConnection();
 
             String insertUser = "INSERT INTO user(firstName,lastName,userName,userPassword,email,birthDate,phoneNumber,role)\n" +
                     "VALUES(?,?,?,?,?,?,?,?)";
@@ -47,10 +37,13 @@ public class AccountRepository {
 
     }
 
+    @Override
     public User getUser(String userName) {
-        // User user = new User();
 
-        try (Connection con = getConnection()) {
+
+        try {
+            Connection con = DatabaseCon.getConnection();
+
             String SQL = "SELECT userid, userName, userPassword from user where userName = ?";
             PreparedStatement preparedStatement = con.prepareStatement(SQL);
             preparedStatement.setString(1, userName);
@@ -72,9 +65,13 @@ public class AccountRepository {
         return null;
     }
 
+    @Override
     public User getUserById(int id) {
 
-        try (Connection con = getConnection()) {
+        try {
+
+            Connection con = DatabaseCon.getConnection();
+
             String sql = "SELECT * FROM user WHERE userid = ?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             preparedStatement.setInt(1, id);
@@ -102,11 +99,31 @@ public class AccountRepository {
         return null;
     }
 
+    @Override
+    public boolean doesUsernameExist(String userName) {
+
+        try {
+            Connection con = DatabaseCon.getConnection();
+            String SQL = "SELECT userName FROM user WHERE userName = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(SQL);
+            preparedStatement.setString(1, userName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
     public void editAccount(int id, User editedUser) {
 
-        try (Connection con = getConnection()) {
+        try {
 
-            //find wish and set it to editedWish
+            Connection con = DatabaseCon.getConnection();
+
             String sql = "UPDATE user SET firstName = ?, lastName = ?, userName = ?, userPassword = ?, email = ?, birthDate = ?, phoneNumber = ?, role = ? WHERE userid = ?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             preparedStatement.setString(1, editedUser.getFirstName());
@@ -128,14 +145,43 @@ public class AccountRepository {
 
     }
 
+    @Override
     public void deleteAccount(int id) {
 
-        try (Connection con = getConnection()) {
+        try {
+
+            Connection con = DatabaseCon.getConnection();
+            con.setAutoCommit(false);
+
+            //users_tasks
+
+            String sqlTasks = "DELETE FROM users_tasks WHERE userid = ?";
+            PreparedStatement preparedStatementTasks = con.prepareStatement(sqlTasks);
+            preparedStatementTasks.setInt(1,id);
+            preparedStatementTasks.execute();
+
+            //users_subprojects
+
+            String sqlSubprojects = "DELETE FROM users_subprojects WHERE userid = ?";
+            PreparedStatement preparedStatementSubprojects = con.prepareStatement(sqlSubprojects);
+            preparedStatementSubprojects.setInt(1,id);
+            preparedStatementSubprojects.execute();
+
+            //users_projects
+
+            String sqlProjects = "DELETE FROM users_projects WHERE userid = ?";
+            PreparedStatement preparedStatementProjects = con.prepareStatement(sqlProjects);
+            preparedStatementProjects.setInt(1,id);
+            preparedStatementProjects.execute();
+
+            //user
 
             String sqlUser = "DELETE FROM user WHERE userid = ?";
             PreparedStatement preparedStatementUser = con.prepareStatement(sqlUser);
             preparedStatementUser.setInt(1, id);
             preparedStatementUser.execute();
+
+            con.commit();
 
         } catch (SQLException e) {
             e.printStackTrace();
