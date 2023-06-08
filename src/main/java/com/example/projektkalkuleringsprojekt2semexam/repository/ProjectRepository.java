@@ -449,7 +449,7 @@ public class ProjectRepository implements IProjectRepository {
 
             String SQL = "SELECT * FROM subproject WHERE projectID = ?";
             PreparedStatement preparedStatement = con.prepareStatement(SQL);
-            preparedStatement.setInt(1,projectid);
+            preparedStatement.setInt(1, projectid);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {

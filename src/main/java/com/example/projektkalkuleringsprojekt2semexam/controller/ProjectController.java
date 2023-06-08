@@ -98,41 +98,40 @@ public class ProjectController {
     //subproject
 
     @GetMapping("/seeproject/{projectID}")
-    public String seeProject(@PathVariable int projectID, Model model, HttpSession session) {
-        Project project = projectService.findProjectByID(projectID);
-        session.setAttribute("project", project);
-        Subproject subproject = new Subproject();
-        List<Subproject> subprojects = projectService.getSubprojectByProjectId(projectID);
-        List<User> users = projectService.getUsersByProjectId(projectID);
+    public String seeProject(@PathVariable int projectID, Model model, HttpSession session) { // @PathVariable int projectID får sin værdi fra {projectID}, model + session
+        Project project = projectService.findProjectByID(projectID); // project, kalder projectService.FindProjectByID(projectID) - som er værdien vi får med fra vores @PathVariable
+        session.setAttribute("project", project); // her sørger vi for at project objektet kommer med i vores session
+        Subproject subproject = new Subproject(); // her opretter vi et subproject
+        List<Subproject> subprojects = projectService.getSubprojectByProjectId(projectID); //Her har vi en liste med alle de subprojekter der hører til det projectID vi fik i vores @PathVariable
+        List<User> users = projectService.getUsersByProjectId(projectID); // En liste med User objekter, kalder projectService som henter alle users tilhørende det projectID
 
-        model.addAttribute("subproject",subproject);
-        model.addAttribute("subprojects", subprojects);
-        model.addAttribute("users", users);
-
+        model.addAttribute("subproject",subproject); // tilføjer subproject til model, så subprojects når man opretter det kan vises
+        model.addAttribute("subprojects", subprojects); // tilføjer subprojects til model, så subprojects kan vises inde på seeproject endpointet
+        model.addAttribute("users", users); // spørg Mathias/Enes hvorfor vi tilføjer users til model her
         return "seeproject";
     }
 
     @PostMapping("/createsubproject")
-    public String createSubproject(@ModelAttribute("subproject") Subproject subproject,
+    public String createSubproject(@ModelAttribute("subproject") Subproject subproject, // @ModelAttribute bruges til at binde det oprettede "subproject" Subproject objektet subproject.
                                    HttpSession session,
-                                   @RequestParam List<Integer> listOfUsers) {
-        Project project = (Project) session.getAttribute("project");
-        int projectID = project.getProjectID();
-        projectService.createSubproject(listOfUsers, projectID, subproject);
-
+                                   @RequestParam List<Integer> listOfUsers) { // her binder vi listen af brugere der er tilføjet/ikke tilføjet til projektet til listOfUsers.
+        Project project = (Project) session.getAttribute("project"); // her tager vi vores Project object ud af session
+        int projectID = project.getProjectID(); // her gør vi så brug af vores project object - da vi skal bruge projectID'et på det project vi er inde i
+        projectService.createSubproject(listOfUsers, projectID, subproject); // her opretter vi så et subproject, og til det skal vi bruge
+                                                                            // (listen af brugere der er tilføjet til det subproject, projectID
+                                                                            // Spørgs Mathias/Enes hvad egenskaben bag subproject her er
         return "redirect:/seeproject/" + projectID;
     }
 
     @GetMapping("/editsubproject/{id}")
-    public String editSubproject(@PathVariable int id,
+    public String editSubproject(@PathVariable int id, // int id, får sin værdi fra {id} fra URL'en.
                                  Model model) {
-        Subproject subproject = projectService.getSubprojectById(id);
-        int projectId = projectService.getProjectIdBySubprojectId(id);
+        Subproject subproject = projectService.getSubprojectById(id); // vi henter det subproject der er relateret til det id (subprojectID) vi får fra URL'en.
+        int projectId = projectService.getProjectIdBySubprojectId(id); // her henter vi det projectID som tilhører det subproject vi vil ændrer
         List<User> users = projectService.getUsersByProjectId(projectId);
 
-        model.addAttribute("users", users);
-        model.addAttribute("subproject", subproject);
-
+        model.addAttribute("users", users); // tilføjer til model, så vi kan vise listen users, så man kan tilføje/fjerne medlemmer
+        model.addAttribute("subproject", subproject); // tilføjer subproject til model, så vi kan se subprojectets værdier/info så man ved hvad man ændrer
         return "editsubproject";
     }
 
