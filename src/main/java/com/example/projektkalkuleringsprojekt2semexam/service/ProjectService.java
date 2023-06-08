@@ -22,7 +22,6 @@ public class ProjectService {
 
     // Project
 
-
     public List<User> getUsers() {
         return projectRepository.getUsers();
     }

@@ -35,7 +35,6 @@ public class ProjectController {
     }
 
     // showProjects method or frontpage GetMapping lets us create project, make HttpSession with userID and shows projects
-    //GetMapping("/frontpage) = indikerer en GetMapping request til /frontpage:
     @GetMapping("/frontpage")
     public String showProjects(Model model, HttpSession session) { // giver Model, og HttpSession med som parameter
         Project project = new Project(); // opretter en ny instans af Project
@@ -45,47 +44,49 @@ public class ProjectController {
         // som viderekalder til projectRepository.getUsers som så henter en liste af vores brugere fra databasen
         List<User> users = projectService.getUsers();
 
-
-        if (isLoggedIn(session)) {
-            model.addAttribute("projects", projectService.getProjectsByUserId(user.getUserID()));
-            model.addAttribute("project", project);
-            model.addAttribute("users", users);
+        if (isLoggedIn(session)) { // her tjekker vi om vi er logget ind, og hvis vi er så får vi session paramteren med. For at få adgang til user
+            model.addAttribute("projects", projectService.getProjectsByUserId(user.getUserID())); // tilføjer alle de projekter tilhørende til det userID vi får med fra sessions. Så de kan blive vist på frontpage
+            model.addAttribute("project", project); // her tilføjer vi de nye oprettede projekter til model, så de kan blive vist. På siden
+            model.addAttribute("users", users); // Her tilføjer vi listen af brugere (users) med labelet "users" til model, så når man opretter et projekt kan tilføje medlemmer
         }
         return isLoggedIn(session) ? "frontpage" : "index";
     }
 
-    @PostMapping("/insideproject")
-    public String createProject(@ModelAttribute("project") Project project,
-                                @RequestParam List<Integer> listOfUsers) {
-        projectService.createProject(project, listOfUsers);
-        return "redirect:/frontpage";
-    }
-
 
     @GetMapping("/editproject/{projectID}")
-    public String editProject(Model model, HttpSession session, @PathVariable int projectID) {
-        User user = (User) session.getAttribute("user");
-        List<User> users = projectService.getUsers();
+    public String editProject(Model model, HttpSession session, @PathVariable int projectID) { //@PathVariable annotation bruger vores URi url {projectID} til at give
+                                                                                            // int projectID'et dens værdi.
+        User user = (User) session.getAttribute("user"); // tager user med i vores session attribut så vi kan få adgang til User objektet.
+        List<User> users = projectService.getUsers(); // henter en liste af alle brugere i vores program.
 
         if (isLoggedIn(session)) {
-            Project project = projectService.findProjectByID(projectID);
-            model.addAttribute("project", project);
-            model.addAttribute("users", users);
-            model.addAttribute("usersProjects", projectService.getProjectsByUserId(user.getUserID()));
+            Project project = projectService.findProjectByID(projectID); // her kalder vi på projectService.findProjectByID og giver (projectID) med i paramteren
+                                                                        // her henter vi ID'et på det enkelte project, så vi senere i vores repository metode
+                                                                        // ved hvilken et af projekterne der skal edites i
+            // {projectID} sætter @PathVariable int projectID værdi. Det gør vi vha. thymeleaf,
+            // som finder {projectID} ud fra vores link = <a th:href="@{/editproject/{projectID}(projectID=${project.projectID})}"
+            model.addAttribute("project", project); // også fordi vi tilføjer det project til model, så vi kan se og vise informationen om projektet
+            model.addAttribute("users", users); // her tilføjer vi listen af users til model, så vi vi kan tilføje og fravælge hvem der skal kunne se projektet
+            model.addAttribute("usersProjects", projectService.getProjectsByUserId(user.getUserID())); // her laver vi en attribut kaldt "usersProjects"
+                                                                    // som kalder på projectService og kalder en metode der henter alle de projects der hører til
+                                                                    // det userID som vi er logget ind med, og fået fra HttpSession.
         } return isLoggedIn(session) ? "editproject" : "index";
     }
 
     @PostMapping("/editproject/{projectID}")
-    public String editedProject(@PathVariable int projectID, @ModelAttribute Project editedProject,
-                                @RequestParam List<Integer> listOfUsers) {
-        projectService.editProject(projectID, editedProject, listOfUsers);
+    public String editedProject(@PathVariable int projectID, @ModelAttribute Project editedProject, // @PathVariable int projectID får sin værdi fra {projectID} URL'en
+                                // @ModelAttribute Project editedProject, binder den data vi ændrer i Project objected "editedProject"
+                                @RequestParam List<Integer> listOfUsers) { // @RequestParam sørger for at binde de brugere vi har tilføjet/fjernet fra projektet
+                                                                        // til vores list<Integer> listOfUsers
+        projectService.editProject(projectID, editedProject, listOfUsers); // her kalder vi projectService.editProject, og giver den parameterne, projectID,
+                                                                            // det ændrede Project object "editedProject", og den opdaterede liste af users på projektet.
         return "redirect:/frontpage";
     }
 
 
     @PostMapping("/deleteProject")
-    public String deleteProject(@RequestParam("id") int id) {
-        projectService.deleteProject(id);
+    public String deleteProject(@RequestParam("id") int id) { // annotationen bruges til at binde @RequestParam "id", til int id.
+        projectService.deleteProject(id); // kalder vi projectService metoden, deleteProject og giver den (id)'et med som parameter
         return "redirect:/frontpage";
     }
 

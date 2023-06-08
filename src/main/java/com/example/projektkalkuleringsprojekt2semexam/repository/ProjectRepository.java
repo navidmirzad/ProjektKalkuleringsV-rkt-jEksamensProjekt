@@ -16,10 +16,11 @@ public class ProjectRepository implements IProjectRepository {
     // Project #1
 
     @Override
-    public void createProject(Project project, List<Integer> listOfUsers) {
-
+    public void createProject(Project project, List<Integer> listOfUsers) { // vi giver Project objektet med i paramteren, og en liste af users.
+                                                                        // Listen af users indeholder deres userID som brugeres til at tilføje dem til projektet.
+            // opstiller en try catch på hele metoden
         try {
-            Connection con = DatabaseCon.getConnection();
+            Connection con = DatabaseCon.getConnection(); // tjekker om vi kan få forbindelse til databasen
             con.setAutoCommit(false);
 
             String createProject = "insert into project (projectName, description, ImageURL, " +
