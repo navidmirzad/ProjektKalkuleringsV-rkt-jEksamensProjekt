@@ -36,9 +36,10 @@ public class AccountService {
     }
 
     public void editAccount(int id, User editedUser) {
-        String encodedPassword = passwordEncoder.encode(editedUser.getUserPassword());
-        editedUser.setUserPassword(encodedPassword);
-        accountRepository.editAccount(id, editedUser);
+        String encodedPassword = passwordEncoder.encode(editedUser.getUserPassword()); // opretter en String kaldt encodedPassword, som kalder interface klassen passwordEncoder
+        editedUser.setUserPassword(encodedPassword); // og encoder så user.getUserPassword. // Herefter sætter vi så brugeren (editedUser) kodeord til at være det encodedePassword
+        accountRepository.editAccount(id, editedUser); // kalder accountRepository.editAccount og giver metoden den brugers userID med,
+        // så den ved hvad for en acc der skal ændres og User objektet (editedUser) som indeholder den ændrede data om User objektet.
     }
 
     public void deleteAccount(int id) {

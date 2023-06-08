@@ -92,38 +92,49 @@ public class AccountController {
     //GetMapping request til "/createuser"
     @PostMapping("/createuser")
     public String createdUser(@ModelAttribute("user") User user, Model model) {
-        String userName = user.getUserName();
-        if (accountService.doesUsernameExist(userName)) {
-            model.addAttribute("userNameExists", true);
-            model.addAttribute("roles", Role.values());
-            return "createUser";
+        // @ModelAttribute annotationen bruges til at binde den submittede form data (oprettelse af bruger) til User objektet.
+        // "user" matcher attributnavnet for User objektet user, så de bindes.
+        // grunden til vi bruger @ModelAttribute og ikke @RequestParam er nemlig fordi @MA tillader os at binde flere parametre til et model objekt hvorimod en @RP kun tager 1.
+        String userName = user.getUserName(); // opretter en string userName, beder den om at hente den user vi opretters userName
+        if (accountService.doesUsernameExist(userName)) { // og tjekker her på om det brugernavn vi lige har tastet ind for at oprette en ny bruger allerede eksisterer.
+            model.addAttribute("userNameExists", true); // så bliver beskeden "userNameExists" sat til at være true, og printer så beskeden ud.
+            model.addAttribute("roles", Role.values()); // vi tilføjer vores enum klasse Roles værdier, (Role.values() returnerer et array af værdierne 'Role')
+            // da det fungerer som en dropdown i programmet når man opretter en bruger og skal vises.
+            return "createUser"; // vi returnes, og bedes om at prøve igen med et nyt brugernavn
         } else {
-            accountService.createUser(user);
+            accountService.createUser(user); // hvis ikke brugernavnet eksisterer, så oprettes brugeren og man dirigeres videre til "createUserSuccess"
             return "createUserSuccess";
         }
     }
 
     @GetMapping("/deleteaccount")
     public String deleteAccount(HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        accountService.deleteAccount(user.getUserID());
-        session.invalidate();
-        return "redirect:/";
+        User user = (User) session.getAttribute("user"); // vi det vi har gemt/sendt med i sessions. Her er det så User objektet.
+        accountService.deleteAccount(user.getUserID()); // tager det userID der er autogeneret og bundet til den user som vi har givet med i den session
+                                                        // man har været logget på med, også sletter den ved hjælp af det.
+                                                        // den kalder på accountService.deleteAccount og får userID'et med. Og derefter slettes den
+                                                        // inde i vores database ved hjælp af vores repository.
+        session.invalidate(); // invaliderer sessionen
+        return "redirect:/"; // redirectes til index/startside
     }
 
     @GetMapping("/editaccount")
     public String editAccount(HttpSession session, Model model) {
-        User user = (User) session.getAttribute("user");
-        user = accountService.getUserById(user.getUserID());
-        model.addAttribute("user", user);
-        model.addAttribute("roles", Role.values());
+        User user = (User) session.getAttribute("user"); // vi det vi har gemt/sendt med i sessions. Her er det så User objektet.
+        user = accountService.getUserById(user.getUserID()); // fra det User objekt vi fik med i sessions. Så får vi det userID bundet til den user vi gav med i sessions
+                                                            // hvilket er den vi loggede ind med. Så vores
+        model.addAttribute("user", user); // Vi tilføjer vores user som vi fik med fra vores session til model, da vi skal vise alt dataen der hører til den bruger
+                                            // da det er editAccount og man skal kunne se de informationer man evt. vil ændre.
+        model.addAttribute("roles", Role.values()); // (Role.values() returnerer et array af værdierne 'Role') for at vise rollerne hvis man vil ændre dem.
         return "editaccount";
     }
 
     @PostMapping("editaccount")
     public String editedAccount(HttpSession session, User editedUser) {
-        User user = (User) session.getAttribute("user");
-        accountService.editAccount(user.getUserID(), editedUser);
+        User user = (User) session.getAttribute("user"); // her tager vi det User objekt vi sendte med i sessions tidligere.
+        accountService.editAccount(user.getUserID(), editedUser); // vi returner også den nye User som editedUser
+        // Her kalder metoden til accountService.editAccount og beder den om at ændre brugeren
+        // med det userID der er forbundet til den bruger vi er logget ind med. Muligt pga. sessions.
         return "redirect:/frontpage";
     }
 
