@@ -20,9 +20,9 @@ public class AccountService {
     // Account
 
     public void createUser(User user) {
-        String encodedPassword = passwordEncoder.encode(user.getUserPassword());
-        user.setUserPassword(encodedPassword);
-        accountRepository.createUser(user);
+        String encodedPassword = passwordEncoder.encode(user.getUserPassword()); // opretter en String kaldt encodedPassword, som kalder interface klassen passwordEncoder
+        user.setUserPassword(encodedPassword);  // og encoder så user.getUserPassword. // Herefter sætter vi så brugerens (user) kodeord til at være det encodedePassword
+        accountRepository.createUser(user); // kalder til repository, og opretter brugeren og giver den med i paramteren.
     }
 
     public User getUserById(int id) {
