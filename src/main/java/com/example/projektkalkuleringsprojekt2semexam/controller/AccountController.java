@@ -87,7 +87,9 @@ public class AccountController {
         return "createUser"; // henter templaten "/createUser" så man kan oprette en bruger og viser model - user + role.values
     } // dette er den gamle metode
 
-    // den her er den nye
+
+    // den her er den nye og den vi skal bruge
+    //GetMapping request til "/createuser"
     @PostMapping("/createuser")
     public String createdUser(@ModelAttribute("user") User user, Model model) {
         String userName = user.getUserName();

@@ -1,5 +1,3 @@
-
-
 package com.example.projektkalkuleringsprojekt2semexam.controller;
 
 import com.example.projektkalkuleringsprojekt2semexam.model.Project;
