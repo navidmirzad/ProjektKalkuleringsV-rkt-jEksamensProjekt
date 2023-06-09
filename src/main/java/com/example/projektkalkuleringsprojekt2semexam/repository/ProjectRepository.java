@@ -21,7 +21,7 @@ public class ProjectRepository implements IProjectRepository {
             // opstiller en try catch på hele metoden
         try {
             Connection con = DatabaseCon.getConnection(); // tjekker om vi kan få forbindelse til databasen
-            con.setAutoCommit(false);
+            con.setAutoCommit(false); // sørger for at den ikke skubber createProject query ind, men venter med at commit den helt til sidst
 
             String createProject = "insert into project (projectName, description, ImageURL, " +
                                     "estimatedTime, startDate, endDate) "

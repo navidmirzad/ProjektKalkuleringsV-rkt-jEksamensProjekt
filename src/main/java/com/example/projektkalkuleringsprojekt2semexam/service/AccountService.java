@@ -11,12 +11,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountService {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    @Autowired // Autowired er en annotation der tillader at man kan injecte (depency injection) - så slipper man for at lave et nyt objekt og skrive "new"
+    private PasswordEncoder passwordEncoder; // er en interface klasse med tre metoder, vi får brug for en af dem senere. Encode
     private IAccountRepository accountRepository;
 
-    public AccountService(ApplicationContext context, @Value("${account.repository.impl}") String impl) {
-        accountRepository = (IAccountRepository) context.getBean(impl);
+
+    public AccountService(ApplicationContext context, @Value("${account.repository.impl}") String impl) { // @Value annotationen bruges til at injecte en en værdi fra acc.repo.impl til impl
+        accountRepository = (IAccountRepository) context.getBean(impl); // her kalder vi accountRepo som vi caster til Interface AccountRepo.
+        // context.getBean(impl) henter derefter en instans af værdien impl som er vores bean.
     }
 
     // Account

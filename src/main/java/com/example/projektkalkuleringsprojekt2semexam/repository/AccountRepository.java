@@ -14,7 +14,6 @@ public class AccountRepository implements IAccountRepository {
     public void createUser(User user) {
 
         try {
-
             Connection con = DatabaseCon.getConnection();
 
             String insertUser = "INSERT INTO user(firstName,lastName,userName,userPassword,email,birthDate,phoneNumber,role)\n" +
@@ -47,7 +46,7 @@ public class AccountRepository implements IAccountRepository {
             String SQL = "SELECT userid, userName, userPassword from user where userName = ?";
             PreparedStatement preparedStatement = con.prepareStatement(SQL);
             preparedStatement.setString(1, userName);
-            ResultSet resultSet = preparedStatement.executeQuery();
+            ResultSet resultSet = preparedStatement.executeQuery(); // resultset er med til at hente data ud fra databasen
 
 
             if (resultSet.next()) {
@@ -69,7 +68,6 @@ public class AccountRepository implements IAccountRepository {
     public User getUserById(int id) {
 
         try {
-
             Connection con = DatabaseCon.getConnection();
 
             String sql = "SELECT * FROM user WHERE userid = ?";
@@ -149,7 +147,6 @@ public class AccountRepository implements IAccountRepository {
     public void deleteAccount(int id) {
 
         try {
-
             Connection con = DatabaseCon.getConnection();
             con.setAutoCommit(false);
 

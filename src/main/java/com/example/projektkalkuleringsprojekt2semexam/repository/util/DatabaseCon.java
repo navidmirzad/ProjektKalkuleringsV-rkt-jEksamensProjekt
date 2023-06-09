@@ -10,6 +10,10 @@ import java.sql.SQLException;
 @Component
 public class DatabaseCon {
 
+    // Metoden er static, da den hører til klassen selv og ikke en bestemt instans, af klassen.
+    // Dette gør, at mange instanser af klassen kan have den samme connection,
+    // og gør at vi ikke behøver at oprette en ny connection for hver instans.
+
     private static Connection con;
     private static String URL;
     private static String USERNAME;

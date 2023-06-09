@@ -81,15 +81,13 @@ public class AccountController {
     @GetMapping("/createuser")
     public String createUser(Model model) {
         User user = new User(); // vi opretter et nyt User objekt (en ny bruger)
-        model.addAttribute("user", user); // det oprettede user objekt gemmes som "user" i model.
+        model.addAttribute("user", user); // for at få adgang til en brugers attributer
         model.addAttribute("roles", Role.values()); // vi tilføjer vores enum klasse Roles værdier, (Role.values() returnerer et array af værdierne 'Role')
         // da det fungerer som en dropdown i programmet når man opretter en bruger og skal vises
         return "createUser"; // henter templaten "/createUser" så man kan oprette en bruger og viser model - user + role.values
     } // dette er den gamle metode
 
 
-    // den her er den nye og den vi skal bruge
-    //GetMapping request til "/createuser"
     @PostMapping("/createuser")
     public String createdUser(@ModelAttribute("user") User user, Model model) {
         // @ModelAttribute annotationen bruges til at binde den submittede form data (oprettelse af bruger) til User objektet.

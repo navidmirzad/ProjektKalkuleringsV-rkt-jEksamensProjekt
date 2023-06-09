@@ -52,6 +52,13 @@ public class ProjectController {
         return isLoggedIn(session) ? "frontpage" : "index";
     }
 
+    @PostMapping("/insideproject")
+    public String createProject(@ModelAttribute("project") Project project,
+                                @RequestParam List<Integer> listOfUsers) {
+        projectService.createProject(project, listOfUsers);
+        return "redirect:/frontpage";
+    }
+
 
     @GetMapping("/editproject/{projectID}")
     public String editProject(Model model, HttpSession session, @PathVariable int projectID) { //@PathVariable annotation bruger vores URi url {projectID} til at give
@@ -86,7 +93,9 @@ public class ProjectController {
 
     @PostMapping("/deleteProject")
     public String deleteProject(@RequestParam("id") int id) { // annotationen bruges til at binde @RequestParam "id", til int id.
-        projectService.deleteProject(id); // kalder vi projectService metoden, deleteProject og giver den (id)'et med som parameter
+       // <form action="#" th:action="@{/deleteProject}" method="post">
+             //   <input type="hidden" th:name="id" th:value="${project.projectID}"/>
+        projectService.deleteProject(id); // kalder vi projectService metoden, deleteProject og den får id'et fra vores knap i vores frontpage, som binder det til vores int id.
         return "redirect:/frontpage";
     }
 
