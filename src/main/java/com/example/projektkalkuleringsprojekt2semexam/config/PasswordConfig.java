@@ -8,9 +8,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class PasswordConfig {
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    @Bean // vi ser til spring at den skal behandle den her metode som en bean
+    public PasswordEncoder passwordEncoder() { // vi implemeneterer PasswordEncoder interfacet
+        return new BCryptPasswordEncoder(); // vi opretter en instans af BCryptPasswordEncoder interfacet,
+        // som er en specifik implementation der sørger for vores værdi bliver krypteret ved en BCrypt hashing alrogitme.
     }
 
 

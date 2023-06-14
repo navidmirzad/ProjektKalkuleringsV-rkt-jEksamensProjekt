@@ -11,14 +11,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountService {
 
-    @Autowired // Autowired er en annotation der tillader at man kan injecte (depency injection) - så slipper man for at lave et nyt objekt og skrive "new"
-    private PasswordEncoder passwordEncoder; // er en interface klasse med tre metoder, vi får brug for en af dem senere. Encode
-    private IAccountRepository accountRepository;
+    @Autowired // Autowired er en annotation der tillader at man kan injecte (depency injection) - og som automatisk forbinder alle de klasser der skal være bundet
+    // i stedet for vi selv gør det, så gør vi brug af IoC og lader spring frameworket tage over den del. @Autowired forbinder dermed PasswordEncoder og IAccountRepository for os.
+    private PasswordEncoder passwordEncoder;
+    private IAccountRepository accountRepository; // Vi opretter en instans af det repository vi vil bruge
 
 
-    public AccountService(ApplicationContext context, @Value("${account.repository.impl}") String impl) { // @Value annotationen bruges til at injecte en en værdi fra acc.repo.impl til impl
-        accountRepository = (IAccountRepository) context.getBean(impl); // her kalder vi accountRepo som vi caster til Interface AccountRepo.
-        // context.getBean(impl) henter derefter en instans af værdien impl som er vores bean.
+    public AccountService(ApplicationContext context, @Value("${account.repository.impl}") String impl) {
+        // @Value gemmer (acc.repo.impl) i String impl, som siger til AccountService hvilken implementation af vores accountRepository vi gerne vil bruge.
+        // Constructor injection (ApplicationContext context), bean creation, dependency injection, sørger for AccountService klassen kan interagere med ApplicationContext.
+        accountRepository = (IAccountRepository) context.getBean(impl);
+        // vi kalder context.getBean(impl) for at få en instans af IAccountRepository bean, fra appContext baseret på den implementation der står i (impl).
+        // på den måde kan vi dynamisk ændre den implementation af Repository i AccountService.
     }
 
     // Account

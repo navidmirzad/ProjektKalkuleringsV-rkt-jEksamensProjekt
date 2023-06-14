@@ -1,108 +1,58 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy JAR app to Azure Web App - estimateas
+name: Build and deploy JAR app to Azure Web App - estimateas # vi kalder den for - name:
 
 on:
   push:
-    branches:
+    branches: # når der bliver pushet til main så trigger
       - main
-  workflow_dispatch:
+  workflow_dispatch: # den bliver manuelt triggeret også via workflow_dispatch som er Github Actions
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-latest # vi kører jobbet på den seneste version af windows på en virtuel maskine
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2 # @v2 henter kun den seneste commit i modsætning til @v3, men til gengæld er hurtigere, da vi arbejder med deployment
 
-      - name: Set up Java version
-        uses: actions/setup-java@v1
+      - name: Set up Java version # sætter Java Development Kit op
+        uses: actions/setup-java@v1 # vi beder den om at køre JDK version 17
         with:
           java-version: '17'
 
-      - name: Build with Maven
-        run: mvn clean install
+      - name: Build with Maven # her beder vi den om at køre maven, så den kører vores pom.xml fil og sørger for vi alle har dependencies nødvendigt
+        run: mvn clean install  # clean install sørger for at JAR filen bliver bygget fra scratch, så den gamle bliver skiftet ud med den nye
 
       - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v2 # den her linje lader os uploade et artifakt - altså vores JAR fil
         with:
           name: java-app
-          path: '${{ github.workspace }}/target/*.jar'
+          path: '${{ github.workspace }}/target/*.jar' # Her specificerer vi hvor JAR filen ligger, så den ved hvad den skal uploade
+
 
   deploy:
-    runs-on: windows-latest
-    needs: build
+    runs-on: windows-latest # vi kører jobbet på den seneste version af windows på en virtuel maskine
+    needs: build # build jobbet skal være succesfuldt for at deploy skal køre
     environment:
       name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }} # vi gemmer dette URL i vores enviroment variable kaldt 'Production'
 
-    steps:
+    steps: # her downloader vi artifacten/filen fra java-app i build jobbet.
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
           name: java-app
 
-      - name: Deploy to Azure Web App
+      - name: Deploy to Azure Web App # det her step sørger for at vi deployer JAR artifact/filen til azure/webapps-deploy action
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v2 # ved at bruge azure/webapps-deploy@v2
         with:
-          app-name: 'estimateas'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8037F2DC2CB842F081EAD0D5EA408312 }}
-          package: '*.jar'
-=======
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
+          app-name: 'estimateas' # navnet på vores app / i URL'en
+          slot-name: 'Production' # det er til produktion
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8037F2DC2CB842F081EAD0D5EA408312 }} # det her er en public kode som azure skal bruge for at kunne deploy.
+                                                                                                          # der er også en hemmelig kode, some er sikkert gemt i Github Actions
+          package: '*.jar' # den skal tage alt i vores '.jar' fil
 
-name: Build and deploy JAR app to Azure Web App - estimateas
-
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: windows-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Set up Java version
-        uses: actions/setup-java@v1
-        with:
-          java-version: '17'
-
-      - name: Build with Maven
-        run: mvn clean install
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
-        with:
-          name: java-app
-          path: '${{ github.workspace }}/target/*.jar'
-
-  deploy:
-    runs-on: windows-latest
-    needs: build
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v2
-        with:
-          name: java-app
-
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'estimateas'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8037F2DC2CB842F081EAD0D5EA408312 }}
-          package: '*.jar'
-
+          #This step deploys the downloaded JAR artifact to the Azure Web App using the azure/webapps-deploy action.
+          # The specific configurations for the deployment are provided as inputs to the action:

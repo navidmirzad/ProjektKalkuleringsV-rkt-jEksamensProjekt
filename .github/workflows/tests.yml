@@ -1,25 +1,25 @@
-name: Unit tests
+name: Unit tests # Vi kalder github actions workflowet for ->> Unit Tests
 
-on:
+on: # Vi beder workflowet om at trigger når der bliver pushet i repository
   push
   
-jobs:
+jobs: # Vi kalder jobbet for "build-and-test", som kører på en virtuel maskine, som kører ubuntus seneste version
   build-and-test:
     runs-on: ubuntu-latest
     
-    steps:
+    steps: # kalder det her step for "checkout code"
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v3 # her giver vi github actions adgang til vores repository
       
     - name: Setup JDK
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v3 # vi specificerer at yaml filen skal benytte sig af JDK version 17
       with:
         java-version: '17'
-        distribution: 'temurin'
-        cache: maven
-        
+        distribution: 'temurin' # produktionsklar version af JDK 17 som vi beder den om at bruge
+        cache: maven # Beder den om at samle alle vores maven dependencies, så vi slipper for at skulle downloade dem
+
     - name: Build with maven
-      run: mvn -B package --file pom.xml
+      run: mvn -B package --file pom.xml # vi beder den om at bygge programmet ved at køre vores pom.xml fil som indeholder alle vores dependencies
       
-    - name: Run unit tests
+    - name: Run unit tests # vi beder den om at køre alle vores unit tests ved at køre maven. Som trigger ved 'mvn test'
       run: mvn test
