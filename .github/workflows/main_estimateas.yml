@@ -7,7 +7,8 @@ on:
   push:
     branches: # når der bliver pushet til main så trigger
       - main
-  workflow_dispatch: # den bliver manuelt triggeret også via workflow_dispatch som er Github Actions
+  workflow_dispatch: # når vi implementerer WF_DP så gør vi det muligt at trigger det her workflow fra Github actions manuelt
+
 
 jobs:
   build:
